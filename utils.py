@@ -4,19 +4,30 @@ from hashlib import blake2b
 import math
 
 
-# returns the pandas structure of the dataset
+# returns the pandas structure of the dataset and its primary key
 def import_dataset(dataset_name):
     filepath = "datasets/" + dataset_name + ".csv"
     relation = pd.read_csv(filepath)
     print("Dataset: " + filepath)
 
-    # number of tuples
-    num_of_tuples = len(relation.select_dtypes(exclude='object'))
     # detect primary key
     primary_key = relation[relation.columns[0]]
-    # bit range for encoding the primary key
-    primary_key_len = math.floor(math.log(max(primary_key), 2)) + 1
-    return relation, primary_key, primary_key_len
+    return relation, primary_key
+
+
+def import_fingerprinted_dataset(scheme_string, dataset_name, gamma, xi, real_buyer_id):
+    filepath = scheme_string + "/fingerprinted_datasets/" \
+               + dataset_name + "_" \
+               + str(gamma) + "_" \
+               + str(xi) + "_" \
+               + str(real_buyer_id) \
+               + ".csv"
+    relation = pd.read_csv(filepath)
+    print("Dataset: " + filepath)
+
+    # detect primary key
+    primary_key = relation[relation.columns[0]]
+    return relation, primary_key
 
 
 # returns the fingerprint (BitArray)
@@ -62,3 +73,23 @@ def write_dataset(fingerprinted_relation, scheme_string, dataset_name, gamma, xi
                dataset_name + "_" + str(gamma) + "_" + str(xi) + "_" + str(buyer_id) + ".csv"
     fingerprinted_relation.to_csv(new_path, index=False)
     print("\tfingerprinted dataset written to: " + new_path)
+
+
+def detect_potential_traitor(fingerprint, secret_key, fingerprint_length, number_of_buyers):
+    shift = 10
+    # for each buyer
+    for buyer_id in range(number_of_buyers):
+        buyer_seed = (secret_key << shift) + buyer_id
+        b = blake2b(key=buyer_seed.to_bytes(6, 'little'), digest_size=int(fingerprint_length / 8))
+        buyer_fp = BitArray(hex=b.hexdigest())
+        buyer_fp = buyer_fp.bin
+        if buyer_fp == fingerprint:
+            return buyer_id
+    return -1
+
+
+def list_to_string(l):
+    s = ""
+    for el in l:
+        s += str(el)
+    return s
