@@ -1,7 +1,6 @@
 import random
 import sys
 import time
-import math
 from utils import *
 
 
@@ -77,27 +76,19 @@ class AK:
     def detection(self, dataset_name):
         print("Start AK detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
-        relation, primary_key = import_dataset(dataset_name)
+        relation, primary_key = import_fingerprinted_dataset(scheme_string="AK", dataset_name=dataset_name,
+                                                             gamma=self.gamma, xi=self.xi, real_buyer_id=self.buyer_id)
         start = time.time()
         # number of numerical attributes minus primary key
         num_of_attributes = len(relation.select_dtypes(exclude='object').columns) - 1
-        # number of tuples
-        num_of_tuples = len(relation.select_dtypes(exclude='object'))
-        # detect primary key
-        primary_key = relation[relation.columns[0]]
-        #print(primary_key)
-        # bit range for encoding the primary key
-        primary_key_len = math.floor(math.log(max(primary_key), 2)) + 1
-        #print(primary_key_len)
+
         # init fingerprint template and counts
         # for each of the fingerprint bit the votes if it is 0 or 1
         count = [[0, 0] for x in range(self.fingerprint_bit_length)]
 
-        cnt = 0
         # scan all tuples and obtain counts for each fingerprint bit
         for r in relation.select_dtypes(exclude='object').iterrows():
-            # seed = concat(secret_key, primary_key)
-            seed = (self.secret_key << primary_key_len) + r[1][0]
+            seed = (self.secret_key << self.primary_key_len) + r[1][0]
             random.seed(seed)
 
             # this tuple was marked
@@ -107,9 +98,6 @@ class AK:
                 attribute_val = r[1][attr_idx]
                 # this LS bit was marked
                 bit_idx = random.randint(0, sys.maxsize) % self.xi
-                # if the LSB doesn't exist(?) then skip to the next tuple
-                # marked bit is the bit at position bit_idx
-                    # bit_idx last bit of attribute val
                 # take care of negative values
                 if attribute_val < 0:
                     attribute_val = -attribute_val
@@ -126,18 +114,12 @@ class AK:
         fingerprint_template = [2] * self.fingerprint_bit_length
         # recover fingerprint
         for i in range(self.fingerprint_bit_length):
-            if count[i][0] + count[i][1] == 0:
-                print("1. None suspected")
-                exit()
             # certainty of a fingerprint value
             T = 0.50
             if count[i][0]/(count[i][0] + count[i][1]) > T:
                 fingerprint_template[i] = 0
             elif count[i][1]/(count[i][0] + count[i][1]) > T:
                 fingerprint_template[i] = 1
-            else:
-                print("2. None suspected")
-                exit()
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Fingerprint detected: " + list_to_string(fingerprint_template))
@@ -149,4 +131,4 @@ class AK:
         else:
             print("None suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
-        return()
+        return(buyer_no)
