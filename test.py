@@ -1,5 +1,6 @@
 import unittest
 from ak_scheme.ak_scheme import AKScheme
+from block_scheme.block_scheme import BlockScheme
 from utils import *
 
 
@@ -60,6 +61,24 @@ class TestAKScheme(unittest.TestCase):
         scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3], secret_key=data[4])
         scheme.insertion(dataset_name=data[5], buyer_id=data[6])
         result = scheme.detection("covtype_data_int", real_buyer_id=data[6])
+        self.assertEqual(result, 0)
+
+
+class TestBlockScheme(unittest.TestCase):
+    def test_insertion_algorithm(self):
+        scheme = BlockScheme(beta=4, xi=2, fingerprint_bit_length=16, number_of_buyers=10, secret_key=333)
+        result = scheme.insertion(dataset_name="covtype_data_int_sample", buyer_id=0)
+        self.assertTrue(result)
+
+    def test_detection_algorithm(self):
+        scheme = BlockScheme(beta=4, xi=2, fingerprint_bit_length=16, number_of_buyers=10, secret_key=333)
+        result = scheme.detection(dataset_name="covtype_data_int_sample", real_buyer_id=0)
+        self.assertEqual(result, 0)
+
+    def test_insertion_detection_big_dataset(self):
+        scheme = BlockScheme(beta=7, xi=1, fingerprint_bit_length=96, number_of_buyers=10, secret_key=333)
+        scheme.insertion(dataset_name="covtype_data_int", buyer_id=0)
+        result = scheme.detection(dataset_name="covtype_data_int", real_buyer_id=0)
         self.assertEqual(result, 0)
 
 
