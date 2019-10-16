@@ -1,5 +1,6 @@
 import unittest
-from AK.AK import *
+from ak_scheme.ak_scheme import AKScheme
+from utils import *
 
 
 class TestUtils(unittest.TestCase):
@@ -44,10 +45,10 @@ class TestAKScheme(unittest.TestCase):
         Test if the insertion algorithm finds the correct suspicious buyer after the
         insertion algorithm with the same parameters.
         """
-        data = [5, 1, 16, 10, 0, 333, "covtype_data_int_sample"]
-        scheme = AK(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3], buyer_id=data[4], secret_key=data[5])
-        scheme.insertion(data[6])
-        result = scheme.detection("covtype_data_int_sample")
+        data = [5, 1, 16, 10, 333, "covtype_data_int_sample", 0]
+        scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3], secret_key=data[4])
+        scheme.insertion(dataset_name=data[5], buyer_id=data[6])
+        result = scheme.detection("covtype_data_int_sample", real_buyer_id=data[6])
         self.assertEqual(result, 0)
 
     def test_detection_unmodified(self):
@@ -55,11 +56,10 @@ class TestAKScheme(unittest.TestCase):
         Test if the insertion algorithm finds the correct suspicious buyer after the
         insertion algorithm with the same parameters.
         """
-        data = [10, 1, 96, 10, 0, 333, "covtype_data_int"]
-        scheme = AK(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3],
-                    buyer_id=data[4], secret_key=data[5])
-        scheme.insertion(data[6])
-        result = scheme.detection("covtype_data_int")
+        data = [10, 1, 96, 10, 333, "covtype_data_int", 0]
+        scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3], secret_key=data[4])
+        scheme.insertion(dataset_name=data[5], buyer_id=data[6])
+        result = scheme.detection("covtype_data_int", real_buyer_id=data[6])
         self.assertEqual(result, 0)
 
 
