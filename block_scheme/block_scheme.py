@@ -2,6 +2,7 @@ from scheme import Scheme
 import time
 from utils import *
 from hashlib import blake2b
+from bitstring import BitArray
 import random
 
 
@@ -12,31 +13,31 @@ class BlockScheme(Scheme):
         self.xi = xi
         super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
 
-        self.relation = None
+        self.original_relation = None
         self.binary_image = None
 
     def insertion(self, dataset_name, buyer_id):
         print("Start Block Scheme insertion algorithm...")
         print("\tbeta: " + str(self.beta) + "\n\txi: " + str(self.xi))
         # it is assumed that the first column in the dataset is the primary key
-        self.relation, primary_key = import_dataset(dataset_name)
-        num_of_attributes = len(self.relation.select_dtypes(exclude='object').columns) - 1  # number of numerical attributes minus primary key
+        self.original_relation, primary_key = import_dataset(dataset_name)
+        num_of_attributes = len(self.original_relation.select_dtypes(exclude='object').columns) - 1  # number of numerical attributes minus primary key
 
         fingerprint = super().create_fingerprint(buyer_id)
         print("\nGenerated fingerprint for buyer " + str(buyer_id) + ": " + fingerprint.bin)
         print("Inserting the fingerprint...\n")
 
-        fingerprinted_relation = self.relation.copy()
+        fingerprinted_relation = self.original_relation.copy()
         start = time.time()
 
-        self.binary_image = self.create_image()
+        self.binary_image = self.create_image(self.original_relation)
         shift = 10
         r0 = (self.secret_key << shift) + buyer_id  # threshold for pseudo random number generator
         hash_generator = blake2b()  # cryptographic hash function for generating random numbers
         j = 0  # fingerprint index
 
         # for each block make image in a form of list of blocks (block - list of elements)
-        image_blocks = self.block_image()
+        image_blocks = self.block_image(self.binary_image)
         print("Number of blocks: " + str(len(image_blocks)))
         print("\nInserting the fingerprint...\n")
         changes = []
@@ -114,8 +115,8 @@ class BlockScheme(Scheme):
         #progress = 0
         for x, y, lsbit in changes_ds:
             # +1 for skipping the primary key
-            col = self.relation.columns[y + 1]
-            val = self.relation[col][x]
+            col = self.original_relation.columns[y + 1]
+            val = self.original_relation[col][x]
             val_bin = []
             val_temp = val
             if val < 0:
@@ -145,9 +146,79 @@ class BlockScheme(Scheme):
         return True
 
     def detection(self, dataset_name, real_buyer_id):
-        pass
+        print("Start Block Scheme detection algorithm...")
+        print("\tbeta: " + str(self.beta) + "\n\txi: " + str(self.xi))
+        suspicious_relation, primary_key = import_fingerprinted_dataset(scheme_string="block_scheme", dataset_name=dataset_name,
+                                                             gamma=self.beta, xi=self.xi, real_buyer_id=real_buyer_id)
+        if self.original_relation is None:
+            self.original_relation, orig_primary_key = import_dataset(dataset_name)
+            if self.binary_image is None:
+                self.binary_image = self.create_image(self.original_relation)
 
-    def create_image(self):
+        start = time.time()
+
+        suspicious_image = self.create_image(suspicious_relation)
+        original_image = self.binary_image
+        if original_image is None:
+            original_image = self.create_image(self.original_relation)
+
+        suspicious_block_img = self.block_image(suspicious_image)
+        original_block_img = self.block_image(original_image)
+        for buyer_id in range(self.number_of_buyers):
+            hash_generator = blake2b()
+            # for each buyer retrieve the corresponding r0
+            shift = 10
+            seed = (self.secret_key << shift) + buyer_id
+            r0 = seed
+            # # for each block
+            f = []
+            # counts for fingerprint bits
+            count = [[0, 0] for x in range(self.fingerprint_bit_length)]
+            for i, block in enumerate(suspicious_block_img):
+                random.seed(r0)
+                r1 = random.getrandbits(32)
+                hash_generator.update(((r1 << shift) + buyer_id).to_bytes(6, 'little'))
+                x = int(hash_generator.hexdigest(), 32) % self.beta
+                # r2 = random(r1)
+                random.seed(r1)
+                r2 = random.getrandbits(32)
+                # y = H(r2, buyer_id) mod beta
+                hash_generator.update(((r2 << shift) + buyer_id).to_bytes(6, 'little'))
+                y = int(hash_generator.hexdigest(), 32) % self.beta
+
+                marking_bit = (int(block[x][y]) + int(original_block_img[i][x][y])) % 2
+                f.append(marking_bit)
+                count[i % self.fingerprint_bit_length][marking_bit] += 1
+                r0 = r2
+
+            # number of times the fingerprint is embedded
+            omega = len(f) / self.fingerprint_bit_length
+            fingerprint_template = [2] * self.fingerprint_bit_length
+            # recover fingerprint
+            for i in range(self.fingerprint_bit_length):
+                if count[i][0] + count[i][1] == 0:
+                    print("1. None suspected")
+                    exit()
+                # certainty of a fingerprint value
+                T = 0.80
+                if count[i][0] / (count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 0
+                elif count[i][1] / (count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 1
+                else:
+                    print("2. None suspected")
+                    exit()
+
+            b = blake2b(key=seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
+            fingerprint = BitArray(hex=b.hexdigest())
+            # from BitArray to normal array
+            fingerprint_arr = [1 if bit else 0 for bit in fingerprint]
+            if fingerprint_template == fingerprint_arr:
+                print("Suspected buyer: " + str(buyer_id))
+                break
+        return buyer_id
+
+    def create_image(self, dataset):
         """
         Creates a binary image - the collection of bits that can be modified
         :param dataset:
@@ -155,7 +226,7 @@ class BlockScheme(Scheme):
         """
         print("Creating image...")
         image = []
-        for r in self.relation.select_dtypes(exclude='object').iterrows():
+        for r in dataset.select_dtypes(exclude='object').iterrows():
             row = 0
             for attr in r[1][1:]:
                 # take xi bits and append to bit row
@@ -172,18 +243,17 @@ class BlockScheme(Scheme):
                 print("Something went wrong with creating the binary image.")
                 print(len(row))
             image.append(row)
-        if len(image) != len(self.relation):
+        if len(image) != len(dataset):
             print("Something went wrong with creating the binary image.")
         print("Image created!")
         return image
 
-    def block_image(self):
+    def block_image(self, image):
         """
         creates a blocked representation of the image
         list of blocks (blocks - list of its elements)
         :return: list of blocks
         """
-        image = self.binary_image
         block_img = []
         for idx in range(self.get_number_of_blocks()):
             elements = []
