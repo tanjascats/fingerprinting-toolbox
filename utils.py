@@ -16,7 +16,7 @@ def import_dataset(dataset_name):
 def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, real_buyer_id):
     params_string = ""
     for param in scheme_params:
-        params_string = str(param) + "_"
+        params_string += str(param) + "_"
     filepath = scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
                str(real_buyer_id) + ".csv"
     relation = pd.read_csv(filepath)
@@ -53,7 +53,7 @@ def set_bit(val, idx, mark):
 def write_dataset(fingerprinted_relation, scheme_string, dataset_name, scheme_params, buyer_id):
     params_string = ""
     for param in scheme_params:
-        params_string = str(param) + "_"
+        params_string += str(param) + "_"
     new_path = scheme_string + "/fingerprinted_datasets/" + \
                dataset_name + "_" + params_string + str(buyer_id) + ".csv"
     fingerprinted_relation.to_csv(new_path, index=False)
