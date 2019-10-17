@@ -141,7 +141,7 @@ class BlockScheme(Scheme):
 
         print("Fingerprint inserted.")
         print("\tsingle fingerprint bit embedded " + str(cnt) + " times")
-        write_dataset(fingerprinted_relation, "block_scheme", dataset_name, self.beta, self.xi, buyer_id)
+        write_dataset(fingerprinted_relation, "block_scheme", dataset_name, [self.beta, self.xi], buyer_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return True
 
@@ -149,7 +149,7 @@ class BlockScheme(Scheme):
         print("Start Block Scheme detection algorithm...")
         print("\tbeta: " + str(self.beta) + "\n\txi: " + str(self.xi))
         suspicious_relation, primary_key = import_fingerprinted_dataset(scheme_string="block_scheme", dataset_name=dataset_name,
-                                                             gamma=self.beta, xi=self.xi, real_buyer_id=real_buyer_id)
+                                                             scheme_params=[self.beta, self.xi], real_buyer_id=real_buyer_id)
         if self.original_relation is None:
             self.original_relation, orig_primary_key = import_dataset(dataset_name)
             if self.binary_image is None:

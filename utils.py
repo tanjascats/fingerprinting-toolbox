@@ -13,13 +13,12 @@ def import_dataset(dataset_name):
     return relation, primary_key
 
 
-def import_fingerprinted_dataset(scheme_string, dataset_name, gamma, xi, real_buyer_id):
-    filepath = scheme_string + "/fingerprinted_datasets/" \
-               + dataset_name + "_" \
-               + str(gamma) + "_" \
-               + str(xi) + "_" \
-               + str(real_buyer_id) \
-               + ".csv"
+def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, real_buyer_id):
+    params_string = ""
+    for param in scheme_params:
+        params_string += str(param) + "_"
+    filepath = scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
+               str(real_buyer_id) + ".csv"
     relation = pd.read_csv(filepath)
     print("Dataset: " + filepath)
 
@@ -51,9 +50,12 @@ def set_bit(val, idx, mark):
     return val
 
 
-def write_dataset(fingerprinted_relation, scheme_string, dataset_name, gamma, xi, buyer_id):
+def write_dataset(fingerprinted_relation, scheme_string, dataset_name, scheme_params, buyer_id):
+    params_string = ""
+    for param in scheme_params:
+        params_string += str(param) + "_"
     new_path = scheme_string + "/fingerprinted_datasets/" + \
-               dataset_name + "_" + str(gamma) + "_" + str(xi) + "_" + str(buyer_id) + ".csv"
+               dataset_name + "_" + params_string + str(buyer_id) + ".csv"
     fingerprinted_relation.to_csv(new_path, index=False)
     print("\tfingerprinted dataset written to: " + new_path)
 
