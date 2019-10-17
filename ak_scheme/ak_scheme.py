@@ -60,14 +60,14 @@ class AKScheme(Scheme):
         print("Fingerprint inserted.")
         print("\tmarked tuples: ~" + str((count / len(relation)) * 100) + "%")
         print("\tsingle fingerprint bit embedded " + str(count_omega) + " times")
-        write_dataset(fingerprinted_relation, "ak_scheme", dataset_name, self.gamma, self.xi, buyer_id)
+        write_dataset(fingerprinted_relation, "ak_scheme", dataset_name, [self.gamma, self.xi], buyer_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
 
     def detection(self, dataset_name, real_buyer_id):
         print("Start AK detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
-        relation, primary_key = import_fingerprinted_dataset(scheme_string="AK", dataset_name=dataset_name,
-                                                             gamma=self.gamma, xi=self.xi, real_buyer_id=real_buyer_id)
+        relation, primary_key = import_fingerprinted_dataset(scheme_string="ak_scheme", dataset_name=dataset_name,
+                                                             scheme_params=[self.gamma, self.xi], real_buyer_id=real_buyer_id)
         start = time.time()
         # number of numerical attributes minus primary key
         num_of_attributes = len(relation.select_dtypes(exclude='object').columns) - 1

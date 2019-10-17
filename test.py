@@ -1,6 +1,7 @@
 import unittest
 from ak_scheme.ak_scheme import AKScheme
 from block_scheme.block_scheme import BlockScheme
+from two_level_scheme.two_level_scheme import TwoLevelScheme
 from utils import *
 
 
@@ -80,6 +81,13 @@ class TestBlockScheme(unittest.TestCase):
         scheme.insertion(dataset_name="covtype_data_int", buyer_id=0)
         result = scheme.detection(dataset_name="covtype_data_int", real_buyer_id=0)
         self.assertEqual(result, 0)
+
+
+class TestTwoLevelScheme(unittest.TestCase):
+    def test_insertion_algorithm(self):
+        scheme = TwoLevelScheme(gamma_1=5, gamma_2=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10, secret_key=333)
+        result = scheme.insertion(dataset_name="covtype_data_int_sample", buyer_id=0)
+        self.assertTrue(result)
 
 
 if __name__ == '__main__':
