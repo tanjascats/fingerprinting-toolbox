@@ -1,7 +1,7 @@
 import unittest
-from ak_scheme.ak_scheme import AKScheme
-from block_scheme.block_scheme import BlockScheme
-from two_level_scheme.two_level_scheme import TwoLevelScheme
+from schemes.ak_scheme.ak_scheme import AKScheme
+from schemes.block_scheme.block_scheme import BlockScheme
+from schemes.two_level_scheme.two_level_scheme import TwoLevelScheme
 from utils import *
 
 

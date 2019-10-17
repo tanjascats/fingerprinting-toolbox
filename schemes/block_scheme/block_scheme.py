@@ -1,4 +1,4 @@
-from scheme import Scheme
+from schemes.scheme import Scheme
 import time
 from utils import *
 from hashlib import blake2b

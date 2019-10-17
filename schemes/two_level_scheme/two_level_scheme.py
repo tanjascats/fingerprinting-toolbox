@@ -1,10 +1,9 @@
-from scheme import Scheme
+from schemes.scheme import Scheme
 from utils import *
 import random
 import time
 from mpmath import *
 from bitstring import BitArray
-from hashlib import blake2b
 
 
 class TwoLevelScheme(Scheme):

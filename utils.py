@@ -17,7 +17,7 @@ def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, rea
     params_string = ""
     for param in scheme_params:
         params_string += str(param) + "_"
-    filepath = scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
+    filepath = "schemes/" + scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
                str(real_buyer_id) + ".csv"
     relation = pd.read_csv(filepath)
     print("Dataset: " + filepath)
@@ -54,7 +54,7 @@ def write_dataset(fingerprinted_relation, scheme_string, dataset_name, scheme_pa
     params_string = ""
     for param in scheme_params:
         params_string += str(param) + "_"
-    new_path = scheme_string + "/fingerprinted_datasets/" + \
+    new_path = "schemes/" + scheme_string + "/fingerprinted_datasets/" + \
                dataset_name + "_" + params_string + str(buyer_id) + ".csv"
     fingerprinted_relation.to_csv(new_path, index=False)
     print("\tfingerprinted dataset written to: " + new_path)
