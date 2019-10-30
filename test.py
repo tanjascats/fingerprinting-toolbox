@@ -127,8 +127,14 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
     def test_insertion(self):
         scheme = CategoricalNeighbourhood(gamma=10, xi=2, fingerprint_bit_length=32, number_of_buyers=10,
                                           secret_key=333)
-        result = scheme.insertion(dataset_name="german_credit", buyer_id=0)
+        result = scheme.insertion(dataset_name="german_credit", buyer_id=2)
         self.assertTrue(result)
+
+    def test_detection(self):
+        scheme = CategoricalNeighbourhood(gamma=10, xi=2, fingerprint_bit_length=32, number_of_buyers=10,
+                                          secret_key=333)
+        result = scheme.detection(dataset_name="german_credit", real_buyer_id=2)
+        self.assertEqual(result, 2)
 
 
 if __name__ == '__main__':

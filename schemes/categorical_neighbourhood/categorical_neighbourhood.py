@@ -26,7 +26,7 @@ class CategoricalNeighbourhood(Scheme):
         super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
 
     def insertion(self, dataset_name, buyer_id):
-        print("Start the insertion algorithm of a scheme for fingerprinting categorical data (random) ...")
+        print("Start the insertion algorithm of a scheme for fingerprinting categorical data (neighbourhood) ...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
         # it is assumed that the first column in the dataset is the primary key
         relation, primary_key = import_dataset(dataset_name)
@@ -64,14 +64,6 @@ class CategoricalNeighbourhood(Scheme):
         balltree_all = BallTree(relation[CORRELATED_ATTRIBUTES], metric="hamming")
         balltree["all"] = balltree_all
         print("Training balltrees in: " + str(round(time.time() - start_training_balltrees, 2)) + " sec.")
-
-        # algorithm:
-        # -choose a tuple
-        # -choose an attribute
-        # -calculate nearest neighbours within distance 0 regarding other attributes
-        # --if this is empty, increase the distance
-        # -sort the frequencies of accurences of values and choose the most frequent one (alternatively, random using the sequence generator)
-        # ! NONDETERMINISM -> equally frequent values?
 
         fingerprinted_relation = relation.copy()
         for r in relation.iterrows():
@@ -166,4 +158,85 @@ class CategoricalNeighbourhood(Scheme):
         return True
 
     def detection(self, dataset_name, real_buyer_id):
-        pass
+        print("Start detection algorithm of fingerprinting scheme for categorical data (neighbourhood)...")
+        print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
+
+        relation_orig, primary_key_orig = import_dataset(dataset_name)
+        # number of numerical attributes minus primary key
+        number_of_num_attributes = len(relation_orig.select_dtypes(exclude='object').columns) - 1
+        number_of_cat_attributes = len(relation_orig.select_dtypes(include='object').columns)
+        tot_attributes = number_of_num_attributes + number_of_cat_attributes
+        categorical_attributes = relation_orig.select_dtypes(include='object').columns
+
+        relation_fp, primary_key_fp = import_fingerprinted_dataset(scheme_string="categorical_neighbourhood",
+                                                             dataset_name=dataset_name,
+                                                             scheme_params=[self.gamma, self.xi],
+                                                             real_buyer_id=real_buyer_id)
+
+        # encode the categorical values
+        label_encoders = dict()
+        for cat in categorical_attributes:
+            label_enc = LabelEncoder()
+            relation_fp[cat] = label_enc.fit_transform(relation_fp[cat])
+            label_encoders[cat] = label_enc
+
+        # encode the categorical values of the original
+        label_encoders_orig = dict()
+        for cat in categorical_attributes:
+            label_enc_orig = LabelEncoder()
+            relation_orig[cat] = label_enc_orig.fit_transform(relation_orig[cat])
+            label_encoders_orig[cat] = label_enc_orig
+
+        start = time.time()
+
+        count = [[0, 0] for x in range(self.fingerprint_bit_length)]
+
+        for r in relation_fp.iterrows():
+            seed = (self.secret_key << self.__primary_key_len) + r[0]
+            random.seed(seed)
+            # this tuple was marked
+            if random.randint(0, sys.maxsize) % self.gamma == 0:
+                # this attribute was marked (skip the primary key)
+                attr_idx = random.randint(0, sys.maxsize) % tot_attributes
+                attr_name = r[1].index[attr_idx]
+                attribute_val = r[1][attr_idx]
+                # fingerprint bit
+                fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
+                # mask
+                mask_bit = random.randint(0, sys.maxsize) % 2
+
+                if attr_name in categorical_attributes:
+                    original_value = relation_orig.loc[r[0], attr_name]
+                    mark_bit = 0
+                    if attribute_val != original_value:
+                        mark_bit = 1
+                else:
+                    bit_idx = random.randint(0, sys.maxsize) % self.xi
+                    if attribute_val < 0:
+                        attribute_val = -attribute_val
+                    mark_bit = (attribute_val >> bit_idx) % 2
+
+                fingerprint_bit = (mark_bit + mask_bit) % 2
+                count[fingerprint_idx][fingerprint_bit] += 1
+
+        # this fingerprint template will be upside-down from the real binary representation
+        fingerprint_template = [2] * self.fingerprint_bit_length
+        # recover fingerprint
+        for i in range(self.fingerprint_bit_length):
+            # certainty of a fingerprint value
+            T = 0.50
+            if count[i][0] / (count[i][0] + count[i][1]) > T:
+                fingerprint_template[i] = 0
+            elif count[i][1] / (count[i][0] + count[i][1]) > T:
+                fingerprint_template[i] = 1
+
+        fingerprint_template_str = ''.join(map(str, fingerprint_template))
+        print("Fingerprint detected: " + list_to_string(fingerprint_template))
+
+        buyer_no = super().detect_potential_traitor(fingerprint_template_str)
+        if buyer_no >= 0:
+            print("Buyer " + str(buyer_no) + " is a traitor.")
+        else:
+            print("None suspected.")
+        print("Runtime: " + str(int(time.time() - start)) + " sec.")
+        return buyer_no
