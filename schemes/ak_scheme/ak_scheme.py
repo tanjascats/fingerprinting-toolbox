@@ -1,4 +1,4 @@
-from scheme import Scheme
+from schemes.scheme import Scheme
 from utils import *
 import sys
 import random

@@ -1,7 +1,8 @@
 import unittest
-from ak_scheme.ak_scheme import AKScheme
-from block_scheme.block_scheme import BlockScheme
-from two_level_scheme.two_level_scheme import TwoLevelScheme
+from schemes.ak_scheme.ak_scheme import AKScheme
+from schemes.block_scheme.block_scheme import BlockScheme
+from schemes.two_level_scheme.two_level_scheme import TwoLevelScheme
+from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 from utils import *
 
 
@@ -48,7 +49,8 @@ class TestAKScheme(unittest.TestCase):
         insertion algorithm with the same parameters.
         """
         data = [5, 1, 16, 10, 333, "covtype_data_int_sample", 0]
-        scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3], secret_key=data[4])
+        scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3],
+                          secret_key=data[4])
         scheme.insertion(dataset_name=data[5], buyer_id=data[6])
         result = scheme.detection("covtype_data_int_sample", real_buyer_id=data[6])
         self.assertEqual(result, 0)
@@ -59,7 +61,8 @@ class TestAKScheme(unittest.TestCase):
         insertion algorithm with the same parameters.
         """
         data = [10, 1, 96, 10, 333, "covtype_data_int", 0]
-        scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3], secret_key=data[4])
+        scheme = AKScheme(gamma=data[0], xi=data[1], fingerprint_bit_length=data[2], number_of_buyers=data[3],
+                          secret_key=data[4])
         scheme.insertion(dataset_name=data[5], buyer_id=data[6])
         result = scheme.detection("covtype_data_int", real_buyer_id=data[6])
         self.assertEqual(result, 0)
@@ -102,6 +105,36 @@ class TestTwoLevelScheme(unittest.TestCase):
         scheme.insertion(dataset_name="covtype_data_int", buyer_id=1)
         result = scheme.detection(dataset_name="covtype_data_int", real_buyer_id=1)
         self.assertEqual(result, 1)
+
+
+class TestCategoricalNeighbourhood(unittest.TestCase):
+    def test_scheme_default_init(self):
+        scheme = CategoricalNeighbourhood(gamma=10, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333)
+        result_1 = scheme.distance_based
+        result_2 = scheme.k
+        result = not result_1 and result_2 == 10
+        self.assertTrue(result)
+
+    def test_scheme_init(self):
+        scheme = CategoricalNeighbourhood(gamma=10, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333, distance_based=True, d=1)
+        result_1 = scheme.distance_based
+        result_2 = scheme.d
+        result = result_1 and result_2 == 1
+        self.assertTrue(result)
+
+    def test_insertion(self):
+        scheme = CategoricalNeighbourhood(gamma=10, xi=2, fingerprint_bit_length=32, number_of_buyers=10,
+                                          secret_key=333)
+        result = scheme.insertion(dataset_name="german_credit", buyer_id=2)
+        self.assertTrue(result)
+
+    def test_detection(self):
+        scheme = CategoricalNeighbourhood(gamma=10, xi=2, fingerprint_bit_length=32, number_of_buyers=10,
+                                          secret_key=333)
+        result = scheme.detection(dataset_name="german_credit", real_buyer_id=2)
+        self.assertEqual(result, 2)
 
 
 if __name__ == '__main__':
