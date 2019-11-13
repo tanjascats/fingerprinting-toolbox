@@ -3,6 +3,7 @@ from schemes.ak_scheme.ak_scheme import AKScheme
 from schemes.block_scheme.block_scheme import BlockScheme
 from schemes.two_level_scheme.two_level_scheme import TwoLevelScheme
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
+from attacks.subset_attack import SubsetAttack
 from utils import *
 
 
@@ -135,6 +136,22 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
                                           secret_key=333)
         result = scheme.detection(dataset_name="german_credit", real_buyer_id=2)
         self.assertEqual(result, 2)
+
+
+class TestAttacks(unittest.TestCase):
+    def test_subset_attack(self):
+        attack = SubsetAttack()
+        dataset, primary_key = import_dataset("german_credit")
+        frac = 0.95
+        result = attack.run(dataset=dataset, fraction=frac)
+        self.assertEqual(len(result), frac*len(dataset))
+
+    def test_small_subset_attack(self):
+        attack = SubsetAttack()
+        dataset, primary_key = import_dataset("german_credit")
+        frac = 0.1
+        result = attack.run(dataset=dataset, fraction=frac)
+        self.assertEqual(len(result), frac*len(dataset))
 
 
 if __name__ == '__main__':
