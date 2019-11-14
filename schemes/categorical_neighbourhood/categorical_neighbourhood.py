@@ -121,6 +121,7 @@ class CategoricalNeighbourhood(Scheme):
                         dist.remove(dist[0])
                         # todo: show this graphically - this is a point for a discussion
                         print("Size of a neighbourhood: " + str(len(neighbours)) + " instead of " + str(self.k))
+                        print("\tNeighbours: " + str(neighbours))
 
                         # check the frequencies of the values
                         other_values = []
