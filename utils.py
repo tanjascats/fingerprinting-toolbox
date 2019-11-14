@@ -66,3 +66,9 @@ def list_to_string(l):
     for el in l:
         s += str(el)
     return s
+
+
+def count_differences(dataset1, dataset2):
+    if len(dataset1) != len(dataset2):
+        print("Please pass two datasets of same size.")
+    # todo
