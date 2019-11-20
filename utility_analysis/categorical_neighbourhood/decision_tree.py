@@ -13,17 +13,12 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
 from utils import *
 
-n_experiments = 5
+n_experiments = 10
+score_diff_total = 0
 start = time.time()
 random.seed(333)
 
-# things i have to do only once
-  # load the dataset
-  # load the fingerprinted
-  # label-encode the original
-  # hot-encode the original
-  # label-encode the fingerprinted
-  # hot-encode the fingeprinted
+print("Running " + str(n_experiments) + " experiments.")
 
 dataset_name = "german_credit_full"
 german_credit_original, primary_key = import_dataset(dataset_name)
@@ -31,6 +26,7 @@ german_credit = german_credit_original.copy()
 
 # this should also be in a loop because the randomness of the fingerprint affects the results
 # todo: if the file doesnt exist; invoke the fingerprinting func
+# todo: parameterize the input to this function
 german_credit_fp = read_data_with_target("german_credit", "categorical_neighbourhood", [1, 2], 0)
 
 # one-hot encode the categorical vals but first label-encode the catergorical because OneHot cant't handle them LOL
@@ -89,5 +85,9 @@ for i in range(n_experiments):
     model.fit(data_fp, target_fp)
     score_fp = model.score(holdout, holdout_target)
 
-    print(score_fp-score_original)
-    print(time.time()-start)
+    score_diff = score_fp - score_original
+    score_diff_total += score_diff
+
+score_diff_total /= n_experiments
+print("Average accuracy difference: " + str(score_diff_total))
+print("Time: " + str(int(time.time()-start)) + " seconds.")
