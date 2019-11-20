@@ -161,7 +161,7 @@ class CategoricalNeighbourhood(Scheme):
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return fingerprinted_relation
 
-    def detection(self, dataset_name, real_buyer_id):
+    def detection(self, dataset_name, real_buyer_id, secret_key=None, dataset=None):
         print("Start detection algorithm of fingerprinting scheme for categorical data (neighbourhood)...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
 
@@ -172,10 +172,13 @@ class CategoricalNeighbourhood(Scheme):
         tot_attributes = number_of_num_attributes + number_of_cat_attributes
         categorical_attributes = relation_orig.select_dtypes(include='object').columns
 
-        relation_fp, primary_key_fp = import_fingerprinted_dataset(scheme_string="categorical_neighbourhood",
-                                                             dataset_name=dataset_name,
-                                                             scheme_params=[self.gamma, self.xi],
-                                                             real_buyer_id=real_buyer_id)
+        if secret_key is not None:
+            relation_fp = dataset
+        else:
+            relation_fp, primary_key_fp = import_fingerprinted_dataset(scheme_string="categorical_neighbourhood",
+                                                                 dataset_name=dataset_name,
+                                                                 scheme_params=[self.gamma, self.xi],
+                                                                 real_buyer_id=real_buyer_id)
 
         # encode the categorical values
         label_encoders = dict()
@@ -229,10 +232,11 @@ class CategoricalNeighbourhood(Scheme):
         for i in range(self.fingerprint_bit_length):
             # certainty of a fingerprint value
             T = 0.50
-            if count[i][0] / (count[i][0] + count[i][1]) > T:
-                fingerprint_template[i] = 0
-            elif count[i][1] / (count[i][0] + count[i][1]) > T:
-                fingerprint_template[i] = 1
+            if count[i][0] + count[i][1] != 0:
+                if count[i][0] / (count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 0
+                elif count[i][1] / (count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 1
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Fingerprint detected: " + list_to_string(fingerprint_template))
