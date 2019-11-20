@@ -6,7 +6,7 @@ from bitstring import BitArray
 class Scheme(ABC):
 
     # todo: default values
-    def __init__(self, fingerprint_bit_length, secret_key, number_of_buyers):
+    def __init__(self, fingerprint_bit_length=32, secret_key=333, number_of_buyers=10):
         self.fingerprint_bit_length = fingerprint_bit_length
         self.secret_key = secret_key
         self.number_of_buyers = number_of_buyers
