@@ -1,5 +1,5 @@
 # this script runs the experiment on data utility of a fingerprinted dataset
-# when it is used to build a decision tree model
+# when it is used to build a logistic regression model
 
 # the workflow, as well as one run of the experiment is described in jupyter
 # notebook Utility Analysis on Machine Learning Performance
@@ -77,7 +77,6 @@ for fp_exp in range(n_fingerprint_experiments):
         C_range = range(10, 101, 10)
         param_dist = dict(C=C_range, solver=solver_range)
         rand_search = RandomizedSearchCV(model, param_dist, cv=10, n_iter=20, scoring="accuracy", random_state=0)
-        # todo: try except
         rand_search.fit(data, target)
 
         best_params = rand_search.best_params_
