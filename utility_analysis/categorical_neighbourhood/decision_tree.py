@@ -49,7 +49,7 @@ for i in range(n_experiments):
 
     # train the model
     model = DecisionTreeClassifier(random_state=0, criterion=best_params['criterion'],
-                                   max_depth=best_params['criterion'])
+                                   max_depth=best_params['max_depth'])
     model.fit(data, target)
     X_test = holdout.values[:, 1:(c - 1)]
     X_test = encoder.fit_transform(X_test).toarray().astype(np.int)
@@ -71,8 +71,8 @@ for i in range(n_experiments):
     encoder = OneHotEncoder(categorical_features=categorical_features_idx)
     data_fp = encoder.fit_transform(data_fp).toarray().astype(np.int)
     model = DecisionTreeClassifier(random_state=0, criterion=best_params['criterion'],
-                                   max_depth=best_params['criterion'])
+                                   max_depth=best_params['max_depth'])
     model.fit(data_fp, target_fp)
     model.score(X_test, y_test)
 
-    print(start-time.time())
+    print(time.time()-start)
