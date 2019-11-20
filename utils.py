@@ -86,3 +86,10 @@ def read_data_with_target(dataset_name, scheme_name=None, params=None, buyer_id=
     target_file = pd.read_csv("datasets/_" + dataset_name + ".csv")
     data["target"] = target_file["target"]
     return data
+
+
+def add_target(dataset, dataset_name):
+    data = dataset
+    target_file = pd.read_csv("datasets/_" + dataset_name + ".csv")
+    dataset["target"] = target_file["target"]
+    return data

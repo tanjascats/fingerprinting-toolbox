@@ -15,7 +15,7 @@ class CategoricalNeighbourhood(Scheme):
     # supports the dataset size of up to 1,048,576 entries
     __primary_key_len = 20
 
-    def __init__(self, gamma, xi, fingerprint_bit_length, secret_key, number_of_buyers, distance_based=False, d=0, k=10):
+    def __init__(self, gamma, xi, fingerprint_bit_length=32, secret_key=333, number_of_buyers=10, distance_based=False, d=0, k=10):
         self.gamma = gamma
         self.xi = xi
         self.distance_based = distance_based  # if False, then fixed-size-neighbourhood-based with k=10 - default
@@ -25,9 +25,11 @@ class CategoricalNeighbourhood(Scheme):
             self.k = k
         super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
 
-    def insertion(self, dataset_name, buyer_id):
+    def insertion(self, dataset_name, buyer_id, secret_key=None):
         print("Start the insertion algorithm of a scheme for fingerprinting categorical data (neighbourhood) ...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
+        if secret_key is not None:
+            self.secret_key = secret_key
         # it is assumed that the first column in the dataset is the primary key
         relation, primary_key = import_dataset(dataset_name)
         # number of numerical attributes minus primary key
@@ -156,7 +158,7 @@ class CategoricalNeighbourhood(Scheme):
         print("Fingerprint inserted.")
         write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset_name, [self.gamma, self.xi], buyer_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
-        return True
+        return fingerprinted_relation
 
     def detection(self, dataset_name, real_buyer_id):
         print("Start detection algorithm of fingerprinting scheme for categorical data (neighbourhood)...")
