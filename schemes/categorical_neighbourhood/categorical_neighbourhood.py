@@ -156,7 +156,8 @@ class CategoricalNeighbourhood(Scheme):
             fingerprinted_relation[cat] = label_encoders[cat].inverse_transform(fingerprinted_relation[cat])
 
         print("Fingerprint inserted.")
-        write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset_name, [self.gamma, self.xi], buyer_id)
+        if secret_key is None:
+            write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset_name, [self.gamma, self.xi], buyer_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return fingerprinted_relation
 

@@ -13,6 +13,7 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from utils import *
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
+scheme_params = {'gamma': 3, 'xi': 2}
 n_experiments = 5  # number of runs withing one single fingerprinted data set
 n_fingerprint_experiments = 10  # how many times do I want to fingerprint the data set
 fail = 0
@@ -20,7 +21,7 @@ score_diff_total = 0
 start = time.time()
 random.seed(333)
 
-scheme = CategoricalNeighbourhood(gamma=2, xi=2)
+scheme = CategoricalNeighbourhood(gamma=scheme_params['gamma'], xi=scheme_params['xi'])
 
 print("Running " + str(n_experiments) + " experiments.")
 
