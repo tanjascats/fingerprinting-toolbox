@@ -122,8 +122,8 @@ class CategoricalNeighbourhood(Scheme):
                         dist = dist[0].tolist()
                         dist.remove(dist[0])
                         # todo: show this graphically - this is a point for a discussion
-                        print("Size of a neighbourhood: " + str(len(neighbours)) + " instead of " + str(self.k))
-                        print("\tNeighbours: " + str(neighbours))
+                        # print("Size of a neighbourhood: " + str(len(neighbours)) + " instead of " + str(self.k))
+                        # print("\tNeighbours: " + str(neighbours))
 
                         # check the frequencies of the values
                         other_values = []
@@ -179,6 +179,15 @@ class CategoricalNeighbourhood(Scheme):
                                                                  dataset_name=dataset_name,
                                                                  scheme_params=[self.gamma, self.xi],
                                                                  real_buyer_id=real_buyer_id)
+        # check for the missing columns
+        if not relation_orig.columns.equals(relation_fp.columns):
+            print(relation_fp.columns)
+            difference = relation_orig.columns.difference(relation_fp.columns)
+            for diff in difference:
+                relation_fp[diff] = relation_orig[diff]
+
+        # bring back the original order of columns
+        relation_fp = relation_fp[relation_orig.columns.tolist()]
 
         # encode the categorical values
         label_encoders = dict()

@@ -3,7 +3,7 @@ import time
 import random
 
 
-class SubsetAttack(Attack):
+class HorizontalSubsetAttack(Attack):
 
     def __init__(self):
         super().__init__()
