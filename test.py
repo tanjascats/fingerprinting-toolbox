@@ -3,7 +3,8 @@ from schemes.ak_scheme.ak_scheme import AKScheme
 from schemes.block_scheme.block_scheme import BlockScheme
 from schemes.two_level_scheme.two_level_scheme import TwoLevelScheme
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
-from attacks.horizontal_subset_attack import SubsetAttack
+from attacks.horizontal_subset_attack import HorizontalSubsetAttack
+from attacks.bit_flipping_attack import BitFlippingAttack
 from utils import *
 
 
@@ -140,18 +141,40 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
 
 class TestAttacks(unittest.TestCase):
     def test_subset_attack(self):
-        attack = SubsetAttack()
+        attack = HorizontalSubsetAttack()
         dataset, primary_key = import_dataset("german_credit")
         frac = 0.95
         result = attack.run(dataset=dataset, fraction=frac)
         self.assertEqual(len(result), frac*len(dataset))
 
     def test_small_subset_attack(self):
-        attack = SubsetAttack()
+        attack = HorizontalSubsetAttack()
         dataset, primary_key = import_dataset("german_credit")
         frac = 0.1
         result = attack.run(dataset=dataset, fraction=frac)
         self.assertEqual(len(result), frac*len(dataset))
+
+    def test_zero_bit_flipping_attack(self):
+        attack = BitFlippingAttack()
+        dataset, primary_key = import_dataset("german_credit")
+        frac = 0
+        result = attack.run(dataset=dataset, fraction=frac)
+        test_column = dataset.columns.tolist()[1]
+        self.assertEqual(result[test_column][:].tolist(), result[test_column][:].tolist())
+
+    def test_bit_flipping_attack(self):
+        attack = BitFlippingAttack()
+        dataset, primary_key = import_dataset("german_credit")
+        frac = 0.5
+        result = attack.run(dataset=dataset, fraction=frac)
+        self.assertEqual(result["property"][568], 'A122')
+
+    def test_bit_flipping_attack_1(self):
+        attack = BitFlippingAttack()
+        dataset, primary_key = import_dataset("german_credit")
+        frac = 0.5
+        result = attack.run(dataset=dataset, fraction=frac)
+        self.assertNotEqual(result['property'][568], dataset['property'][568])
 
 
 if __name__ == '__main__':
