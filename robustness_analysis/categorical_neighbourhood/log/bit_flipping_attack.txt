@@ -1,0 +1,236 @@
+2019-11-25 01:40:34
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:40:36
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:40:40
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:40:44
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:40:49
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:40:55
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:41:02
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:41:10
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:41:18
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:41:27
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:41:37
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 2, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-11-25 01:41:37
+(gamma, xi, length of a fingerprint): (2, 1, 16)
+Correct: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+	/1
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:13
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:15
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:17
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:20
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:24
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:29
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:35
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:43
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:50
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 10, 1, 16)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:42:59
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 10, 1, 16)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-11-25 01:43:08
+seed: 332
+Data: german credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 10, 1, 16)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-11-25 01:43:08
+(gamma, xi, length of a fingerprint): (10, 1, 16)
+Correct: [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0]
+	/1
+
+--------------------------------------------------------------
+
