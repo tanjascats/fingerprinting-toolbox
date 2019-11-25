@@ -47,6 +47,18 @@ ax[0, 0].plot(x, y[3])
 fig.text(0.5, 0.02, 'Number of columns released', ha='center')
 fig.text(0.04, 0.5, 'Detected fingerprints(%)', va='center', rotation='vertical')
 
+# --------------------------------------------------------------------- #
+# ----------------- ALL IN ONE FIGURE --------------------------------- #
+# --------------------------------------------------------------------- #
+fig2, ax2 = plt.subplots(1, 1, sharex='col', sharey='row')
+ax2.plot(x, y[0], label='$\gamma$ = 2')
+ax2.plot(x, y[1], label='$\gamma$ = 5')
+ax2.plot(x, y[2], label='$\gamma$ = 7')
+# ax2.plot(x, y[3])
+plt.xticks(np.arange(0, 21, step=2), [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 'all'])
+fig2.text(0.5, 0.02, 'Number of columns released', ha='center')
+fig2.text(0.04, 0.5, 'Detected fingerprints(%)', va='center', rotation='vertical')
+ax2.legend()
 plt.show()
 
 

@@ -14,7 +14,7 @@ n_fp_experiments = 50  # number of times we run fp insertion
 size_of_subset = np.array([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.40, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75,
                            0.8, 0.85, 0.9, 0.95, 1])
 results = []
-gamma = 15; xi = 2; fingerprint_bit_length = 16
+gamma = 10; xi = 2; fingerprint_bit_length = 16
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = HorizontalSubsetAttack()

@@ -2,6 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 plt.rcParams['axes.grid'] = True
+plt.rcParams["legend.loc"] = 'lower right'
 plt.style.use('seaborn-colorblind')
 
 fig, ax = plt.subplots(2, 2, sharex='col', sharey='row')
@@ -48,6 +49,15 @@ ax[0, 0].plot(x, y[3])
 fig.text(0.5, 0.02, 'Size of the subset(%)', ha='center')
 fig.text(0.04, 0.5, 'Detected fingerprints(%)', va='center', rotation='vertical')
 
-plt.show()
+#plt.show()
 
+fig2, ax2 = plt.subplots(1, 1, sharex='col', sharey='row')
+ax2.plot(x, y[0], label='$\gamma$ = 2')
+ax2.plot(x, y[1], label='$\gamma$ = 5')
+ax2.plot(x, y[2], label='$\gamma$ = 7')
+# ax2.plot(x, y[3])
+fig2.text(0.5, 0.02, 'Size of the subset released(%)', ha='center')
+fig2.text(0.04, 0.5, 'Detected fingerprints(%)', va='center', rotation='vertical')
+ax2.legend()
+plt.show()
 
