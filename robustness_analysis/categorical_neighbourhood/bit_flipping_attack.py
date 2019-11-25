@@ -13,7 +13,7 @@ n_fp_experiments = 50  # (50) number of times we run fp insertion
 
 fractions = np.array([0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50])
 results = []
-gamma = 15; xi = 1; fingerprint_bit_length = 16
+gamma = 10; xi = 1; fingerprint_bit_length = 16
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = BitFlippingAttack()
