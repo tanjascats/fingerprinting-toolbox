@@ -4,7 +4,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 2,40-49,premeno,20-24,0-2,no,2,left,left_low,no
 3,60-69,ge40,15-19,0-2,no,2,right,left_up,no
 4,40-49,premeno,0-4,0-2,no,2,right,right_low,no
-5,60-69,ge40,20-24,0-2,no,2,left,left_low,no
+5,60-69,ge40,10-14,0-2,no,2,left,left_low,no
 6,50-59,premeno,25-29,0-2,no,2,left,left_low,no
 7,60-69,ge40,20-24,0-2,no,1,left,left_low,no
 8,40-49,premeno,50-54,0-2,no,2,left,left_low,no
@@ -96,7 +96,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 94,50-59,premeno,10-14,0-2,no,1,left,left_low,no
 95,40-49,premeno,30-34,0-2,no,2,right,right_low,no
 96,60-69,ge40,30-34,0-2,no,2,left,left_up,no
-97,60-69,premeno,15-19,0-2,no,2,right,left_up,no
+97,60-69,lt40,15-19,0-2,no,2,right,left_up,no
 98,40-49,premeno,30-34,0-2,yes,1,left,right_up,no
 99,30-39,premeno,25-29,0-2,no,2,left,left_low,no
 100,40-49,ge40,20-24,0-2,no,3,left,left_low,no
@@ -119,7 +119,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 117,40-49,ge40,20-24,0-2,no,3,left,left_up,no
 118,30-39,premeno,10-14,0-2,no,1,right,left_low,no
 119,60-69,ge40,15-19,0-2,no,1,left,right_low,no
-120,60-69,ge40,20-24,0-2,no,1,left,right_up,no
+120,60-69,ge40,20-24,0-2,no,1,left,right_low,no
 121,50-59,ge40,15-19,0-2,no,2,right,right_up,no
 122,50-59,ge40,40-44,0-2,no,3,left,left_up,no
 123,50-59,ge40,30-34,0-2,no,1,right,left_low,no
@@ -146,7 +146,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 144,60-69,ge40,45-49,6-8,yes,3,left,central,no
 145,40-49,premeno,25-29,0-2,?,2,left,right_low,yes
 146,60-69,ge40,50-54,0-2,no,2,right,left_up,yes
-147,40-49,premeno,30-34,3-5,yes,2,left,left_low,yes
+147,60-69,premeno,30-34,3-5,yes,2,left,left_low,yes
 148,30-39,premeno,20-24,0-2,no,3,left,central,no
 149,50-59,lt40,30-34,0-2,no,3,right,left_up,no
 150,50-59,ge40,25-29,15-17,yes,3,right,left_up,no
@@ -154,7 +154,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 152,50-59,ge40,35-39,15-17,yes,3,left,left_low,no
 153,60-69,ge40,15-19,0-2,no,3,right,left_up,yes
 154,30-39,lt40,15-19,0-2,no,3,left,left_up,no
-155,60-69,lt40,40-44,3-5,no,2,right,left_up,yes
+155,60-69,premeno,40-44,3-5,no,2,right,left_up,yes
 156,50-59,ge40,25-29,3-5,yes,3,left,left_up,no
 157,50-59,premeno,30-34,0-2,no,1,left,central,no
 158,50-59,ge40,30-34,0-2,no,1,right,central,no
@@ -178,9 +178,9 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 176,40-49,ge40,25-29,0-2,no,2,left,left_low,no
 177,60-69,ge40,10-14,0-2,no,2,left,left_low,no
 178,50-59,premeno,25-29,0-2,no,2,right,left_up,yes
-179,40-49,premeno,20-24,6-8,no,3,right,left_low,yes
+179,40-49,premeno,20-24,3-5,no,3,right,left_low,yes
 180,40-49,premeno,35-39,0-2,yes,3,right,left_up,yes
-181,50-59,premeno,35-39,0-2,yes,3,right,left_low,yes
+181,30-39,premeno,35-39,0-2,yes,3,right,left_low,yes
 182,40-49,premeno,25-29,0-2,no,1,right,left_low,yes
 183,50-59,ge40,30-34,9-11,?,3,left,left_up,yes
 184,50-59,ge40,30-34,9-11,?,3,left,left_low,yes
@@ -238,7 +238,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 236,40-49,premeno,25-29,0-2,no,2,right,left_low,no
 237,40-49,premeno,25-29,0-2,no,2,right,left_low,no
 238,30-39,premeno,35-39,0-2,no,3,left,left_low,no
-239,40-49,premeno,25-29,3-5,yes,2,right,right_up,yes
+239,40-49,premeno,30-34,3-5,yes,2,right,right_up,yes
 240,60-69,ge40,20-24,3-5,no,2,left,left_low,yes
 241,40-49,premeno,15-19,15-17,yes,3,left,left_low,no
 242,50-59,ge40,25-29,6-8,no,3,left,left_low,yes
@@ -265,7 +265,7 @@ Id,age,menopause,tumor-size,inv-nodes,node-caps,deg-malig,breast,breast-quad,irr
 263,50-59,lt40,20-24,0-2,?,0,left,left_up,no
 264,50-59,lt40,20-24,0-2,?,1,left,left_low,no
 265,30-39,premeno,35-39,9-11,yes,3,left,left_low,no
-266,40-49,premeno,35-39,3-5,yes,2,left,right_up,no
+266,40-49,premeno,25-29,3-5,yes,2,left,right_up,no
 267,60-69,ge40,20-24,24-26,yes,3,left,left_low,yes
 268,30-39,premeno,35-39,0-2,no,3,left,left_low,no
 269,40-49,premeno,25-29,0-2,no,2,left,left_low,yes
