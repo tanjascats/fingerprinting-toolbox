@@ -20,6 +20,7 @@ class CategoricalNeighbourhood(Scheme):
         self.gamma = gamma
         self.xi = xi
         self.distance_based = distance_based  # if False, then fixed-size-neighbourhood-based with k=10 - default
+        self.correlated_attributes = None
         if distance_based:
             self.d = d
         else:
@@ -55,16 +56,16 @@ class CategoricalNeighbourhood(Scheme):
             label_encoders[cat] = label_enc
 
         # ball trees from user-specified correlated attributes
-        CORRELATED_ATTRIBUTES = categorical_attributes[:]  # todo: this is a demo set
+        self.correlated_attributes = categorical_attributes[:]  # todo: this is a demo set
 
         start_training_balltrees = time.time()
         # ball trees from all-except-one attribute and all attributes
         balltree = dict()
-        for i in range(len(CORRELATED_ATTRIBUTES)):
-            balltree_i = BallTree(relation[CORRELATED_ATTRIBUTES[:i].append(CORRELATED_ATTRIBUTES[(i + 1):])],
+        for i in range(len(self.correlated_attributes)):
+            balltree_i = BallTree(relation[self.correlated_attributes[:i].append(self.correlated_attributes[(i + 1):])],
                                   metric="hamming")
-            balltree[CORRELATED_ATTRIBUTES[i]] = balltree_i
-        balltree_all = BallTree(relation[CORRELATED_ATTRIBUTES], metric="hamming")
+            balltree[self.correlated_attributes[i]] = balltree_i
+        balltree_all = BallTree(relation[self.correlated_attributes], metric="hamming")
         balltree["all"] = balltree_all
         print("Training balltrees in: " + str(round(time.time() - start_training_balltrees, 2)) + " sec.")
 
@@ -95,12 +96,12 @@ class CategoricalNeighbourhood(Scheme):
                     # fp information: if mark_bit = fp_bit xor mask_bit is 1 then change the value, otherwise not
                     if mark_bit == 1:
                         # selecting attributes for knn search -> this is user specified
-                        if attr_name in CORRELATED_ATTRIBUTES:
-                            other_attributes = CORRELATED_ATTRIBUTES.tolist().copy()
+                        if attr_name in self.correlated_attributes:
+                            other_attributes = self.correlated_attributes.tolist().copy()
                             other_attributes.remove(attr_name)
                             bt = balltree[attr_name]
                         else:
-                            other_attributes = CORRELATED_ATTRIBUTES.tolist().copy()
+                            other_attributes = self.correlated_attributes.tolist().copy()
                             bt = balltree["all"]
                         if self.distance_based:
                             neighbours, dist = bt.query_radius([relation[other_attributes].loc[r[0]]], r=self.d,
@@ -267,7 +268,7 @@ class CategoricalNeighbourhood(Scheme):
         # if the fp bit is 1 then change it to the most common in the neighbourhood
         # otherwise change it to the second most common (include self or not - donnow - it would for sure bring less
         # # # alterations - probably a good idea actually)
-        print("Start the insertion algorithm of a scheme for fingerprinting categorical data (neighbourhood) ...")
+        print("Start the blind insertion algorithm of a scheme for fingerprinting categorical data (neighbourhood) ...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
         if secret_key is not None:
             self.secret_key = secret_key
@@ -295,16 +296,16 @@ class CategoricalNeighbourhood(Scheme):
             label_encoders[cat] = label_enc
 
         # ball trees from user-specified correlated attributes
-        CORRELATED_ATTRIBUTES = categorical_attributes[:]  # todo: this is a demo set
+        self.correlated_attributes = categorical_attributes[:]  # todo: this is a demo set
 
         start_training_balltrees = time.time()
         # ball trees from all-except-one attribute and all attributes
         balltree = dict()
-        for i in range(len(CORRELATED_ATTRIBUTES)):
-            balltree_i = BallTree(relation[CORRELATED_ATTRIBUTES[:i].append(CORRELATED_ATTRIBUTES[(i + 1):])],
+        for i in range(len(self.correlated_attributes)):
+            balltree_i = BallTree(relation[self.correlated_attributes[:i].append(self.correlated_attributes[(i + 1):])],
                                   metric="hamming")
-            balltree[CORRELATED_ATTRIBUTES[i]] = balltree_i
-        balltree_all = BallTree(relation[CORRELATED_ATTRIBUTES], metric="hamming")
+            balltree[self.correlated_attributes[i]] = balltree_i
+        balltree_all = BallTree(relation[self.correlated_attributes], metric="hamming")
         balltree["all"] = balltree_all
         print("Training balltrees in: " + str(round(time.time() - start_training_balltrees, 2)) + " sec.")
 
@@ -336,12 +337,12 @@ class CategoricalNeighbourhood(Scheme):
                     # # # otherwise the second most frequent
 
                     # selecting attributes for knn search -> this is user specified
-                    if attr_name in CORRELATED_ATTRIBUTES:
-                        other_attributes = CORRELATED_ATTRIBUTES.tolist().copy()
+                    if attr_name in self.correlated_attributes:
+                        other_attributes = self.correlated_attributes.tolist().copy()
                         other_attributes.remove(attr_name)
                         bt = balltree[attr_name]
                     else:
-                        other_attributes = CORRELATED_ATTRIBUTES.tolist().copy()
+                        other_attributes = self.correlated_attributes.tolist().copy()
                         bt = balltree["all"]
                     if self.distance_based:
                         neighbours, dist = bt.query_radius([relation[other_attributes].loc[r[0]]], r=self.d,
@@ -407,6 +408,154 @@ class CategoricalNeighbourhood(Scheme):
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return fingerprinted_relation
 
-    def blind_detection(self):
-        # todo:
-        pass
+    def blind_detection(self, dataset_name, real_buyer_id, secret_key=None, dataset=None):
+        # todo: NOT TESTED
+        print("Start blind detection algorithm of fingerprinting scheme for categorical data (neighbourhood)...")
+        print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
+
+        # todo: this is the key difference: no original dataset needed
+        # number of numerical attributes minus primary key
+        number_of_num_attributes = len(relation_orig.select_dtypes(exclude='object').columns) - 1
+        number_of_cat_attributes = len(relation_orig.select_dtypes(include='object').columns)
+        tot_attributes = number_of_num_attributes + number_of_cat_attributes
+        categorical_attributes = relation_orig.select_dtypes(include='object').columns
+
+        if secret_key is not None:
+            relation_fp = dataset
+        else:
+            relation_fp, primary_key_fp = import_fingerprinted_dataset(scheme_string="categorical_neighbourhood",
+                                                                       dataset_name=dataset_name,
+                                                                       scheme_params=[self.gamma, self.xi],
+                                                                       real_buyer_id=real_buyer_id)
+
+        # todo: address checking for the missing columns (defense against vertical attack)
+        # if not relation_orig.columns.equals(relation_fp.columns):
+        #    print(relation_fp.columns)
+        #    difference = relation_orig.columns.difference(relation_fp.columns)
+        #    for diff in difference:
+        #        relation_fp[diff] = relation_orig[diff]
+        # bring back the original order of columns
+        # relation_fp = relation_fp[relation_orig.columns.tolist()]
+
+        # encode the categorical values
+        label_encoders = dict()
+        for cat in categorical_attributes:
+            label_enc = LabelEncoder()
+            relation_fp[cat] = label_enc.fit_transform(relation_fp[cat])
+            label_encoders[cat] = label_enc
+
+        start = time.time()
+
+        start_balling = time.time()
+        # ball trees from all-except-one attribute and all attributes
+        balltree = dict()
+        for i in range(len(self.correlated_attributes)):
+            balltree_i = BallTree(relation_fp[self.correlated_attributes[:i].append(self.correlated_attributes[(i + 1):])],
+                                  metric="hamming")
+            balltree[self.correlated_attributes[i]] = balltree_i
+        balltree_all = BallTree(relation_fp[self.correlated_attributes], metric="hamming")
+        balltree["all"] = balltree_all
+
+        count = [[0, 0] for x in range(self.fingerprint_bit_length)]
+
+        for r in relation_fp.iterrows():
+            seed = (self.secret_key << self.__primary_key_len) + r[0]
+            random.seed(seed)
+            # this tuple was marked
+            if random.randint(0, sys.maxsize) % self.gamma == 0:
+                # this attribute was marked (skip the primary key)
+                attr_idx = random.randint(0, sys.maxsize) % tot_attributes
+                attr_name = r[1].index[attr_idx]
+                attribute_val = r[1][attr_idx]
+                # fingerprint bit
+                fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
+                # mask
+                mask_bit = random.randint(0, sys.maxsize) % 2
+
+                # todo: this is different
+                # find the neighbourhood
+                # sort values by frequencies
+                # if the value is the most frequent by those, then the fingerprint bit value was 1, otherwise 0
+                # todo: consider this: if there is only one possible attribute in the neighbourhood then the value
+                # # # could have been both 0 and 1 equally likely. therefore, give votes to both.
+                if attr_name in categorical_attributes:
+                    # selecting attributes for knn search -> this is user specified
+                    if attr_name in self.correlated_attributes:
+                        other_attributes = self.correlated_attributes.tolist().copy()
+                        other_attributes.remove(attr_name)
+                        bt = balltree[attr_name]
+                    else:
+                        other_attributes = self.correlated_attributes.tolist().copy()
+                        bt = balltree["all"]
+                    if self.distance_based:
+                        neighbours, dist = bt.query_radius([relation_fp[other_attributes].loc[r[0]]], r=self.d,
+                                                           return_distance=True, sort_results=True)
+                    else:
+                        # nondeterminism - non chosen tuples with max distance
+                        dist, neighbours = bt.query([relation_fp[other_attributes].loc[r[0]]], k=self.k + 1)
+                    # excluding the observed tuple
+                    neighbours = neighbours[0].tolist()
+                    neighbours.remove(neighbours[0])
+                    dist = dist[0].tolist()
+                    dist.remove(dist[0])
+                    # print("Max distance: " + str(max(dist)))
+                    # resolve the non-determinism take all the tuples with max distance
+                    neighbours, dist = bt.query_radius(
+                        [relation_fp[other_attributes].loc[r[0]]], r=max(dist), return_distance=True,
+                        sort_results=True)
+                    neighbours = neighbours[0].tolist()
+                    neighbours.remove(neighbours[0])
+                    dist = dist[0].tolist()
+                    dist.remove(dist[0])
+
+                    # check the frequencies of the values
+                    possible_values = []
+                    for neighb in neighbours:
+                        possible_values.append(relation_fp.at[neighb, r[1].keys()[attr_idx]])
+                    frequencies = dict()
+                    if len(possible_values) != 0:
+                        for value in set(possible_values):
+                            f = possible_values.count(value) / len(possible_values)
+                            frequencies[value] = f
+                        # sort the values by their frequency
+                        frequencies = {k: v for k, v in
+                                       sorted(frequencies.items(), key=lambda item: item[1], reverse=True)}
+                    if attribute_val == list(frequencies.keys())[0]:
+                        mark_bit = 1
+                    else:
+                        mark_bit = 0
+                    # original_value = relation_orig.loc[r[0], attr_name]
+                    # mark_bit = 0
+                    # if attribute_val != original_value:
+                    #    mark_bit = 1
+                else:
+                    bit_idx = random.randint(0, sys.maxsize) % self.xi
+                    if attribute_val < 0:
+                        attribute_val = -attribute_val
+                    mark_bit = (attribute_val >> bit_idx) % 2
+
+                fingerprint_bit = (mark_bit + mask_bit) % 2
+                count[fingerprint_idx][fingerprint_bit] += 1
+
+        # this fingerprint template will be upside-down from the real binary representation
+        fingerprint_template = [2] * self.fingerprint_bit_length
+        # recover fingerprint
+        for i in range(self.fingerprint_bit_length):
+            # certainty of a fingerprint value
+            T = 0.50
+            if count[i][0] + count[i][1] != 0:
+                if count[i][0] / (count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 0
+                elif count[i][1] / (count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 1
+
+        fingerprint_template_str = ''.join(map(str, fingerprint_template))
+        print("Fingerprint detected: " + list_to_string(fingerprint_template))
+
+        buyer_no = super().detect_potential_traitor(fingerprint_template_str)
+        if buyer_no >= 0:
+            print("Buyer " + str(buyer_no) + " is a traitor.")
+        else:
+            print("None suspected.")
+        print("Runtime: " + str(int(time.time() - start)) + " sec.")
+        return buyer_no
