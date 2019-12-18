@@ -164,7 +164,8 @@ class TestBlindCategoricalNeighbScheme(unittest.TestCase):
     def test_insertion(self):
         scheme = CategoricalNeighbourhood(gamma=2, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
                                           secret_key=333)
-        scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=0)
+        result = scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=0)
+        self.assertIsNotNone(result)
 
 
 class TestAttacks(unittest.TestCase):

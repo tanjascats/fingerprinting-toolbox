@@ -332,8 +332,6 @@ class CategoricalNeighbourhood(Scheme):
                 # check if attribute is categorical
                 if attr_name in categorical_attributes:
                     marked_attribute = attribute_val
-                    # fp information: if mark_bit = fp_bit xor mask_bit is 1 then change the value, otherwise not
-                    # todo: this is different
                     # fp information: if mark_bit = fp_bit xor mask_bit is 1 then take the most frequent value,
                     # # # otherwise the second most frequent
 
@@ -382,15 +380,12 @@ class CategoricalNeighbourhood(Scheme):
                             frequencies[value] = f
                         # choose a value randomly, weighted by a frequency
                         # todo: this is different - choose a value based on the fingerprint bit value
+                        # sort the values by their frequency
                         frequencies = {k: v for k, v in sorted(frequencies.items(), key=lambda item: item[1], reverse=True)}
-                        if fingerprint_bit == 1:
-                            marked_attribute = list(frequencies.keys())[0]
-                        else:
+                        if fingerprint_bit == 0 and len(frequencies.keys()) > 1:
                             marked_attribute = list(frequencies.keys())[1]
-                            # todo: resolve if there is only 1 in the list
-                            #marked_attribute =
-                        #marked_attribute = random.choice(list(frequencies.keys()), 1,
-                                              #           p=list(frequencies.values()))[0]
+                        else:
+                            marked_attribute = list(frequencies.keys())[0]
 
                 else:  # numerical value
                     # select least significant bit
@@ -407,7 +402,7 @@ class CategoricalNeighbourhood(Scheme):
 
         print("Fingerprint inserted.")
         if secret_key is None:
-            write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset_name, [self.gamma, self.xi],
+            write_dataset(fingerprinted_relation, "categorical_neighbourhood", "blind/" + dataset_name, [self.gamma, self.xi],
                           buyer_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return fingerprinted_relation
