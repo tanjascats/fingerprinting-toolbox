@@ -414,19 +414,19 @@ class CategoricalNeighbourhood(Scheme):
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
 
         # todo: this is the key difference: no original dataset needed
-        # number of numerical attributes minus primary key
-        number_of_num_attributes = len(relation_orig.select_dtypes(exclude='object').columns) - 1
-        number_of_cat_attributes = len(relation_orig.select_dtypes(include='object').columns)
-        tot_attributes = number_of_num_attributes + number_of_cat_attributes
-        categorical_attributes = relation_orig.select_dtypes(include='object').columns
 
         if secret_key is not None:
             relation_fp = dataset
         else:
             relation_fp, primary_key_fp = import_fingerprinted_dataset(scheme_string="categorical_neighbourhood",
-                                                                       dataset_name=dataset_name,
+                                                                       dataset_name="blind/" + dataset_name,
                                                                        scheme_params=[self.gamma, self.xi],
                                                                        real_buyer_id=real_buyer_id)
+        # number of numerical attributes minus primary key
+        number_of_num_attributes = len(relation_fp.select_dtypes(exclude='object').columns) - 1
+        number_of_cat_attributes = len(relation_fp.select_dtypes(include='object').columns)
+        tot_attributes = number_of_num_attributes + number_of_cat_attributes
+        categorical_attributes = relation_fp.select_dtypes(include='object').columns
 
         # todo: address checking for the missing columns (defense against vertical attack)
         # if not relation_orig.columns.equals(relation_fp.columns):
