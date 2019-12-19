@@ -143,7 +143,7 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
     testing on Breast Cancer data with 286 instances
     """
     def test_scheme_breast_cancer(self):
-        scheme = CategoricalNeighbourhood(gamma=3, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
                                           secret_key=333)
         scheme.insertion(dataset_name="breast_cancer", buyer_id=2)
         result = scheme.detection(dataset_name="breast_cancer", real_buyer_id=2)
@@ -153,7 +153,7 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
     testing on Breast Cancer data with 286 instances
     """
     def test_false_scheme_breast_cancer(self):
-        scheme = CategoricalNeighbourhood(gamma=3, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+        scheme = CategoricalNeighbourhood(gamma=7, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
                                           secret_key=333)
         scheme.insertion(dataset_name="breast_cancer", buyer_id=0)
         result = scheme.detection(dataset_name="breast_cancer", real_buyer_id=0)
@@ -170,9 +170,16 @@ class TestBlindCategoricalNeighbScheme(unittest.TestCase):
     def test_detection(self):
         scheme = CategoricalNeighbourhood(gamma=1, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
                                           secret_key=333)
-        scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=1)
-        result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=1)
-        self.assertEqual(result, 1)
+        scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=5)
+        result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=5)
+        self.assertEqual(result, 5)
+
+    def test_detection_2(self):
+        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333)
+        scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=5)
+        result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=5)
+        self.assertEqual(result, 5)
 
 
 class TestAttacks(unittest.TestCase):

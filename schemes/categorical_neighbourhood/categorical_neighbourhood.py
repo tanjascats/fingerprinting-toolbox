@@ -350,9 +350,9 @@ class CategoricalNeighbourhood(Scheme):
                     else:
                         # nondeterminism - non chosen tuples with max distance
                         dist, neighbours = bt.query([relation[other_attributes].loc[r[0]]], k=self.k + 1)
-                    # excluding the observed tuple
+                    # excluding the observed tuple - todo: maybe i want to keep the observed one since I am not forcing the change
                     neighbours = neighbours[0].tolist()
-                    neighbours.remove(neighbours[0])
+                    # neighbours.remove(neighbours[0])
                     dist = dist[0].tolist()
                     dist.remove(dist[0])
                     # print("Max distance: " + str(max(dist)))
@@ -383,7 +383,7 @@ class CategoricalNeighbourhood(Scheme):
                         # todo: this is different - choose a value based on the fingerprint bit value
                         # sort the values by their frequency
                         frequencies = {k: v for k, v in sorted(frequencies.items(), key=lambda item: item[1], reverse=True)}
-                        if fingerprint_bit == 0 and len(frequencies.keys()) > 1:
+                        if mark_bit == 0 and len(frequencies.keys()) > 1:
                             marked_attribute = list(frequencies.keys())[1]
                         else:
                             marked_attribute = list(frequencies.keys())[0]
@@ -493,9 +493,9 @@ class CategoricalNeighbourhood(Scheme):
                     else:
                         # nondeterminism - non chosen tuples with max distance
                         dist, neighbours = bt.query([relation_fp[other_attributes].loc[r[0]]], k=self.k + 1)
-                    # excluding the observed tuple
+                    # excluding the observed tuple - todo: dont exclude
                     neighbours = neighbours[0].tolist()
-                    neighbours.remove(neighbours[0])
+                    # neighbours.remove(neighbours[0])
                     dist = dist[0].tolist()
                     dist.remove(dist[0])
                     # print("Max distance: " + str(max(dist)))
