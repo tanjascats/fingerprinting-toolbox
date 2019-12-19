@@ -143,7 +143,7 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
     testing on Breast Cancer data with 286 instances
     """
     def test_scheme_breast_cancer(self):
-        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+        scheme = CategoricalNeighbourhood(gamma=7, xi=2, fingerprint_bit_length=8, number_of_buyers=10,
                                           secret_key=333)
         scheme.insertion(dataset_name="breast_cancer", buyer_id=2)
         result = scheme.detection(dataset_name="breast_cancer", real_buyer_id=2)
@@ -168,7 +168,7 @@ class TestBlindCategoricalNeighbScheme(unittest.TestCase):
         self.assertIsNotNone(result)
 
     def test_detection(self):
-        scheme = CategoricalNeighbourhood(gamma=1, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+        scheme = CategoricalNeighbourhood(gamma=2, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
                                           secret_key=333)
         scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=5)
         result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=5)
@@ -180,6 +180,13 @@ class TestBlindCategoricalNeighbScheme(unittest.TestCase):
         scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=5)
         result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=5)
         self.assertEqual(result, 5)
+
+    def test_detection_mushroom_data(self):
+        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333, k=100)
+        scheme.blind_insertion(dataset_name="mushrooms", buyer_id=2)
+        result = scheme.blind_detection(dataset_name="mushrooms", real_buyer_id=2)
+        self.assertEqual(result, 2)
 
 
 class TestAttacks(unittest.TestCase):

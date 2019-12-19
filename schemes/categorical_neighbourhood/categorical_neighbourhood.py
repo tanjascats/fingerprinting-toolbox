@@ -409,7 +409,6 @@ class CategoricalNeighbourhood(Scheme):
         return fingerprinted_relation
 
     def blind_detection(self, dataset_name, real_buyer_id, secret_key=None, dataset=None):
-        # todo: NOT TESTED
         print("Start blind detection algorithm of fingerprinting scheme for categorical data (neighbourhood)...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
 
@@ -551,6 +550,7 @@ class CategoricalNeighbourhood(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Fingerprint detected: " + list_to_string(fingerprint_template))
+        print(count)
 
         buyer_no = super().detect_potential_traitor(fingerprint_template_str)
         if buyer_no >= 0:

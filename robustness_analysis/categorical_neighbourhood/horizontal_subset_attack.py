@@ -14,12 +14,13 @@ n_fp_experiments = 50  # number of times we run fp insertion
 size_of_subset = np.array([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.40, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75,
                            0.8, 0.85, 0.9, 0.95, 1])
 results = []
-gamma = 10; xi = 2; fingerprint_bit_length = 16
+gamma = 2; xi = 2; fingerprint_bit_length = 8
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = HorizontalSubsetAttack()
+data = 'breast_cancer'
 
-f = open("robustness_analysis/categorical_neighbourhood/log/horizontal_subset_attack.txt", "a+")
+f = open("robustness_analysis/categorical_neighbourhood/log/horizontal_subset_attack_" + data + ".txt", "a+")
 
 for size in size_of_subset:
     # for reproducibility
@@ -30,13 +31,13 @@ for size in size_of_subset:
     for i in range(n_fp_experiments):
         # fingerprint the data
         secret_key = random.randint(0, 1000)
-        fp_dataset = scheme.insertion(dataset_name='german_credit', buyer_id=1, secret_key=secret_key)
+        fp_dataset = scheme.insertion(dataset_name=data, buyer_id=1, secret_key=secret_key)
 
         for j in range(n_experiments):
             # perform the attack
             release_data = attack.run(dataset=fp_dataset, fraction=size)
             # try to extract the fingerprint
-            suspect = scheme.detection(dataset_name='german_credit', real_buyer_id=1, secret_key=secret_key,
+            suspect = scheme.detection(dataset_name=data, real_buyer_id=1, secret_key=secret_key,
                                 dataset=release_data)
             if suspect == 1:
                 correct += 1
