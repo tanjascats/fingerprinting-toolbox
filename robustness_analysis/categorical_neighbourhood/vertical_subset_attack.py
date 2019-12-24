@@ -11,14 +11,15 @@ from schemes.categorical_neighbourhood.categorical_neighbourhood import Categori
 n_experiments = 20  # (20) number of times we attack the same fingerprinted file
 n_fp_experiments = 50  # (50) number of times we run fp insertion
 
-size_of_subset = np.array([i for i in range(20)])  # number of columns to be DELETED
+size_of_subset = np.array([i for i in range(9)])  # number of columns to be DELETED
 results = []
-gamma = 10; xi = 2; fingerprint_bit_length = 16
+gamma = 5; xi = 2; fingerprint_bit_length = 8
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = VerticalSubsetAttack()
+data = 'breast_cancer'
 
-f = open("robustness_analysis/categorical_neighbourhood/log/vertical_subset_attack.txt", "a+")
+f = open("robustness_analysis/categorical_neighbourhood/log/vertical_subset_attack" + data + ".txt", "a+")
 
 for size in size_of_subset:
     # for reproducibility
@@ -29,13 +30,13 @@ for size in size_of_subset:
     for i in range(n_fp_experiments):
         # fingerprint the data
         secret_key = random.randint(0, 1000)
-        fp_dataset = scheme.insertion(dataset_name='german_credit', buyer_id=1, secret_key=secret_key)
+        fp_dataset = scheme.insertion(dataset_name=data, buyer_id=1, secret_key=secret_key)
 
         for j in range(n_experiments):
             # perform the attack
             release_data = attack.run_random(dataset=fp_dataset, number_of_columns=size)
             # try to extract the fingerprint
-            suspect = scheme.detection(dataset_name='german_credit', real_buyer_id=1, secret_key=secret_key,
+            suspect = scheme.detection(dataset_name=data, real_buyer_id=1, secret_key=secret_key,
                                 dataset=release_data)
             if suspect == 1:
                 correct += 1
@@ -52,7 +53,7 @@ for size in size_of_subset:
     # write to log file
     f.write(str(datetime.fromtimestamp(int(datetime.timestamp(datetime.now())))))
     f.write("\nseed: " + str(seed))
-    f.write("\nData: german credit")
+    f.write("\nData: " + data)
     f.write("\n(size of subset, gamma, xi, length of a fingerprint): " + str((size, gamma, xi,
                                                                             fingerprint_bit_length)))
     f.write("\nCorrect: " + str(correct) + "/" + str(n_experiments*n_fp_experiments))
