@@ -8,18 +8,18 @@ import numpy as np
 from attacks.vertical_subset_attack import VerticalSubsetAttack
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
-n_experiments = 20  # (20) number of times we attack the same fingerprinted file
-n_fp_experiments = 50  # (50) number of times we run fp insertion
+n_experiments = 10  # (20) number of times we attack the same fingerprinted file
+n_fp_experiments = 25  # (50) number of times we run fp insertion
 
-size_of_subset = np.array([i for i in range(9)])  # number of columns to be DELETED
+size_of_subset = np.array([i for i in range(8)])  # number of columns to be DELETED
 results = []
-gamma = 5; xi = 2; fingerprint_bit_length = 8
+gamma = 5; xi = 2; fingerprint_bit_length = 64
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = VerticalSubsetAttack()
-data = 'breast_cancer'
+data = 'nursery'
 
-f = open("robustness_analysis/categorical_neighbourhood/log/vertical_subset_attack" + data + ".txt", "a+")
+f = open("robustness_analysis/categorical_neighbourhood/log/vertical_subset_attack_" + data + ".txt", "a+")
 
 for size in size_of_subset:
     # for reproducibility

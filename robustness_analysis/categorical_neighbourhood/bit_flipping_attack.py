@@ -11,14 +11,15 @@ from schemes.categorical_neighbourhood.categorical_neighbourhood import Categori
 n_experiments = 20  # (20) number of times we attack the same fingerprinted file
 n_fp_experiments = 50  # (50) number of times we run fp insertion
 
-fractions = np.array([0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50])
+fractions = np.array([0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60])
 results = []
-gamma = 7; xi = 1; fingerprint_bit_length = 16
+gamma = 3; xi = 1; fingerprint_bit_length = 8
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = BitFlippingAttack()
+data = "breast_cancer"
 
-f = open("robustness_analysis/categorical_neighbourhood/log/bit_flipping_attack.txt", "a+")
+f = open("robustness_analysis/categorical_neighbourhood/log/bit_flipping_attack_" + data + ".txt", "a+")
 
 for size in fractions:
     # for reproducibility
@@ -29,13 +30,13 @@ for size in fractions:
     for i in range(n_fp_experiments):
         # fingerprint the data
         secret_key = random.randint(0, 1000)
-        fp_dataset = scheme.insertion(dataset_name='german_credit', buyer_id=1, secret_key=secret_key)
+        fp_dataset = scheme.insertion(dataset_name=data, buyer_id=1, secret_key=secret_key)
 
         for j in range(n_experiments):
             # perform the attack
             release_data = attack.run(dataset=fp_dataset, fraction=size)
             # try to extract the fingerprint
-            suspect = scheme.detection(dataset_name='german_credit', real_buyer_id=1, secret_key=secret_key,
+            suspect = scheme.detection(dataset_name=data, real_buyer_id=1, secret_key=secret_key,
                                 dataset=release_data)
             if suspect == 1:
                 correct += 1
@@ -45,7 +46,7 @@ for size in fractions:
     # write to log file
     f.write(str(datetime.fromtimestamp(int(datetime.timestamp(datetime.now())))))
     f.write("\nseed: " + str(seed))
-    f.write("\nData: german credit")
+    f.write("\nData: " + data)
     f.write("\n(fraction flipped, gamma, xi, length of a fingerprint): " + str((size, gamma, xi,
                                                                             fingerprint_bit_length)))
     f.write("\nCorrect: " + str(correct) + "/" + str(n_experiments*n_fp_experiments))

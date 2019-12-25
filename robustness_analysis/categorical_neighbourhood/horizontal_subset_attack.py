@@ -8,17 +8,17 @@ import numpy as np
 from attacks.horizontal_subset_attack import HorizontalSubsetAttack
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
-n_experiments = 20  # number of times we attack the same fingerprinted file
-n_fp_experiments = 50  # number of times we run fp insertion
+n_experiments = 10  # number of times we attack the same fingerprinted file
+n_fp_experiments = 25  # number of times we run fp insertion
 
 size_of_subset = np.array([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.40, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75,
                            0.8, 0.85, 0.9, 0.95, 1])
 results = []
-gamma = 3; xi = 2; fingerprint_bit_length = 8
+gamma = 20; xi = 2; fingerprint_bit_length = 64
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = HorizontalSubsetAttack()
-data = 'breast_cancer'
+data = 'nursery'
 
 f = open("robustness_analysis/categorical_neighbourhood/log/horizontal_subset_attack_" + data + ".txt", "a+")
 
@@ -45,7 +45,7 @@ for size in size_of_subset:
                     misdiagnosis += 1
 
     print("\n\n--------------------------------------------------------------\n\n")
-    print("Data: german credit")
+    print("Data: " + data)
     print("(size of subset, gamma, xi, length of a fingerprint): " + str((size, gamma, xi, fingerprint_bit_length)))
     print("Correct: " + str(correct) + "/" + str(n_experiments*n_fp_experiments))
     print("Wrong: " + str(n_experiments*n_fp_experiments - correct) + "/" + str(n_experiments*n_fp_experiments)
@@ -54,7 +54,7 @@ for size in size_of_subset:
     # write to log file
     f.write(str(datetime.fromtimestamp(int(datetime.timestamp(datetime.now())))))
     f.write("\nseed: " + str(seed))
-    f.write("\nData: german credit")
+    f.write("\nData: " + data)
     f.write("\n(size of subset, gamma, xi, length of a fingerprint): " + str((size, gamma, xi,
                                                                             fingerprint_bit_length)))
     f.write("\nCorrect: " + str(correct) + "/" + str(n_experiments*n_fp_experiments))

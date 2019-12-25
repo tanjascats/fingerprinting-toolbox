@@ -390,3 +390,101 @@ Correct: [1000, 1000, 1000, 973, 957, 931, 831, 731, 734]
 
 --------------------------------------------------------------
 
+2019-12-24 18:06:24
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (0, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:09:59
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (1, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:13:39
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (2, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:17:51
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (3, 1, 2, 8)
+Correct: 980/1000
+Wrong: 20/1000
+	- out of which misdiagnosed: 20
+
+--------------------------------------------------------------
+
+2019-12-24 18:22:40
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (4, 1, 2, 8)
+Correct: 993/1000
+Wrong: 7/1000
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+2019-12-24 18:27:26
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (5, 1, 2, 8)
+Correct: 993/1000
+Wrong: 7/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:32:14
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (6, 1, 2, 8)
+Correct: 958/1000
+Wrong: 42/1000
+	- out of which misdiagnosed: 20
+
+--------------------------------------------------------------
+
+2019-12-24 18:36:50
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (7, 1, 2, 8)
+Correct: 942/1000
+Wrong: 58/1000
+	- out of which misdiagnosed: 2
+
+--------------------------------------------------------------
+
+2019-12-24 18:41:40
+seed: 332
+Data: breast_cancer
+(size of subset, gamma, xi, length of a fingerprint): (8, 1, 2, 8)
+Correct: 919/1000
+Wrong: 81/1000
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-24 18:41:40
+(gamma, xi, length of a fingerprint): (1, 2, 8)
+Correct: [1000, 1000, 1000, 980, 993, 993, 958, 942, 919]
+	/1000
+
+--------------------------------------------------------------
+

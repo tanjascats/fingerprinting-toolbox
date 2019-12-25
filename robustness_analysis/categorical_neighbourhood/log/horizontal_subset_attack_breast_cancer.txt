@@ -870,3 +870,221 @@ Correct: [0, 0, 9, 28, 119, 203, 360, 492, 608, 676, 777, 833, 890, 904, 952, 97
 
 --------------------------------------------------------------
 
+2019-12-24 18:05:13
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.0, 1, 2, 8)
+Correct: 0/1000
+Wrong: 1000/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:06:52
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.05, 1, 2, 8)
+Correct: 4/1000
+Wrong: 996/1000
+	- out of which misdiagnosed: 2
+
+--------------------------------------------------------------
+
+2019-12-24 18:08:39
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.1, 1, 2, 8)
+Correct: 135/1000
+Wrong: 865/1000
+	- out of which misdiagnosed: 7
+
+--------------------------------------------------------------
+
+2019-12-24 18:10:33
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.15, 1, 2, 8)
+Correct: 381/1000
+Wrong: 619/1000
+	- out of which misdiagnosed: 9
+
+--------------------------------------------------------------
+
+2019-12-24 18:12:17
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.2, 1, 2, 8)
+Correct: 648/1000
+Wrong: 352/1000
+	- out of which misdiagnosed: 3
+
+--------------------------------------------------------------
+
+2019-12-24 18:14:36
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.25, 1, 2, 8)
+Correct: 786/1000
+Wrong: 214/1000
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+2019-12-24 18:16:56
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.3, 1, 2, 8)
+Correct: 897/1000
+Wrong: 103/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:19:52
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.35, 1, 2, 8)
+Correct: 955/1000
+Wrong: 45/1000
+	- out of which misdiagnosed: 2
+
+--------------------------------------------------------------
+
+2019-12-24 18:22:38
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.4, 1, 2, 8)
+Correct: 978/1000
+Wrong: 22/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:25:31
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.45, 1, 2, 8)
+Correct: 993/1000
+Wrong: 7/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:28:41
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.5, 1, 2, 8)
+Correct: 999/1000
+Wrong: 1/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:31:55
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.55, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:35:06
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.6, 1, 2, 8)
+Correct: 999/1000
+Wrong: 1/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:38:22
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.65, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:41:52
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.7, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:45:07
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.75, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:48:40
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.8, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:52:08
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.85, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:56:11
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.9, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:00:22
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (0.95, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:04:36
+seed: 332
+Data: german credit
+(size of subset, gamma, xi, length of a fingerprint): (1.0, 1, 2, 8)
+Correct: 1000/1000
+Wrong: 0/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-24 19:04:36
+(gamma, xi, length of a fingerprint): (1, 2, 8)
+Correct: [0, 4, 135, 381, 648, 786, 897, 955, 978, 993, 999, 1000, 999, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
+	/1000
+
+--------------------------------------------------------------
+
