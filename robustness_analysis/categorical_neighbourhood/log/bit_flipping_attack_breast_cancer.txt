@@ -412,3 +412,141 @@ Correct: [1000, 980, 1000, 999, 1000, 980, 999, 995, 974, 978, 958, 939, 917]
 
 --------------------------------------------------------------
 
+2019-12-25 22:02:22
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 5, 1, 8)
+Correct: 959/1000
+Wrong: 41/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:06:35
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 5, 1, 8)
+Correct: 979/1000
+Wrong: 21/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:14:16
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 5, 1, 8)
+Correct: 910/1000
+Wrong: 90/1000
+	- out of which misdiagnosed: 15
+
+--------------------------------------------------------------
+
+2019-12-25 22:24:27
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 5, 1, 8)
+Correct: 848/1000
+Wrong: 152/1000
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-26 14:23:03
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 5, 1, 8)
+Correct: 859/1000
+Wrong: 141/1000
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+2019-12-26 14:38:37
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 5, 1, 8)
+Correct: 704/1000
+Wrong: 296/1000
+	- out of which misdiagnosed: 3
+
+--------------------------------------------------------------
+
+2019-12-28 00:52:34
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 5, 1, 8)
+Correct: 641/1000
+Wrong: 359/1000
+	- out of which misdiagnosed: 7
+
+--------------------------------------------------------------
+
+2019-12-28 01:11:26
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 5, 1, 8)
+Correct: 545/1000
+Wrong: 455/1000
+	- out of which misdiagnosed: 7
+
+--------------------------------------------------------------
+
+2019-12-28 01:31:48
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 5, 1, 8)
+Correct: 461/1000
+Wrong: 539/1000
+	- out of which misdiagnosed: 18
+
+--------------------------------------------------------------
+
+2019-12-28 01:51:58
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 5, 1, 8)
+Correct: 376/1000
+Wrong: 624/1000
+	- out of which misdiagnosed: 13
+
+--------------------------------------------------------------
+
+2019-12-28 02:10:35
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 5, 1, 8)
+Correct: 332/1000
+Wrong: 668/1000
+	- out of which misdiagnosed: 6
+
+--------------------------------------------------------------
+
+2019-12-28 02:30:23
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 5, 1, 8)
+Correct: 277/1000
+Wrong: 723/1000
+	- out of which misdiagnosed: 15
+
+--------------------------------------------------------------
+
+2019-12-28 02:52:00
+seed: 332
+Data: breast_cancer
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 5, 1, 8)
+Correct: 181/1000
+Wrong: 819/1000
+	- out of which misdiagnosed: 21
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-28 02:52:00
+(gamma, xi, length of a fingerprint): (5, 1, 8)
+Correct: [959, 979, 910, 848, 859, 704, 641, 545, 461, 376, 332, 277, 181]
+	/1000
+
+--------------------------------------------------------------
+

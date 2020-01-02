@@ -8,20 +8,19 @@ import numpy as np
 from attacks.bit_flipping_attack import BitFlippingAttack
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
-n_experiments = 20  # (20) number of times we attack the same fingerprinted file
-n_fp_experiments = 50  # (50) number of times we run fp insertion
+n_experiments = 10  # (20) number of times we attack the same fingerprinted file
+n_fp_experiments = 25  # (50) number of times we run fp insertion
 
-fractions = np.array([0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60])
+fractions = np.array([0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45])
 results = []
-gamma = 3; xi = 1; fingerprint_bit_length = 8
+gamma = 30; xi = 1; fingerprint_bit_length = 64
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = BitFlippingAttack()
-data = "breast_cancer"
-
-f = open("robustness_analysis/categorical_neighbourhood/log/bit_flipping_attack_" + data + ".txt", "a+")
+data = "nursery"
 
 for size in fractions:
+
     # for reproducibility
     seed = 332
     random.seed(seed)
@@ -44,6 +43,7 @@ for size in fractions:
                     misdiagnosis += 1
 
     # write to log file
+    f = open("robustness_analysis/categorical_neighbourhood/log/bit_flipping_attack_" + data + ".txt", "a+")
     f.write(str(datetime.fromtimestamp(int(datetime.timestamp(datetime.now())))))
     f.write("\nseed: " + str(seed))
     f.write("\nData: " + data)
@@ -55,7 +55,12 @@ for size in fractions:
     f.write("\n\n--------------------------------------------------------------\n\n")
 
     results.append(correct)
+    f.write("intermediate summary\n")
+    f.write("\n(gamma, xi, length of a fingerprint): " + str((gamma, xi, fingerprint_bit_length)))
+    f.write("\nCorrect: " + str(results) + "\n\t/" + str(n_experiments * n_fp_experiments))
+    f.close()
 
+f = open("robustness_analysis/categorical_neighbourhood/log/bit_flipping_attack_" + data + ".txt", "a+")
 f.write("SUMMARY\n")
 f.write(str(datetime.fromtimestamp(int(datetime.timestamp(datetime.now())))))
 f.write("\n(gamma, xi, length of a fingerprint): " + str((gamma, xi, fingerprint_bit_length)))

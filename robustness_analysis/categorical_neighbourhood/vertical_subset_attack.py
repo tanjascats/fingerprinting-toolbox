@@ -13,7 +13,7 @@ n_fp_experiments = 25  # (50) number of times we run fp insertion
 
 size_of_subset = np.array([i for i in range(8)])  # number of columns to be DELETED
 results = []
-gamma = 5; xi = 2; fingerprint_bit_length = 64
+gamma = 30; xi = 2; fingerprint_bit_length = 64
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = VerticalSubsetAttack()
