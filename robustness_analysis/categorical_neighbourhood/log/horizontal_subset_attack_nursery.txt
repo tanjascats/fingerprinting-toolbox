@@ -1,0 +1,1090 @@
+2019-12-24 18:05:34
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.0, 5, 2, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:05:49
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.05, 5, 2, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:06:06
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.1, 5, 2, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:06:22
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.15, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:06:37
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.2, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:06:53
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.25, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:07:11
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.3, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:07:28
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.35, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:07:44
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.4, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:08:01
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.45, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:08:18
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.5, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:08:34
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.55, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:08:53
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.6, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:09:11
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.65, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:09:29
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.7, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:09:46
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.75, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:10:04
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.8, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:10:22
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.85, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:10:40
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.9, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:10:57
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.95, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:11:15
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (1.0, 5, 2, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-24 18:11:15
+(gamma, xi, length of a fingerprint): (5, 2, 64)
+Correct: [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+	/1
+
+--------------------------------------------------------------
+
+2019-12-24 18:22:05
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.0, 20, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:27:15
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.05, 20, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:33:00
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.1, 20, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:39:05
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.15, 20, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:45:47
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.2, 20, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:52:57
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.25, 20, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:01:37
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.3, 20, 2, 64)
+Correct: 10/250
+Wrong: 240/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:10:05
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.35, 20, 2, 64)
+Correct: 39/250
+Wrong: 211/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:18:36
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.4, 20, 2, 64)
+Correct: 82/250
+Wrong: 168/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:27:43
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.45, 20, 2, 64)
+Correct: 127/250
+Wrong: 123/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:37:32
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.5, 20, 2, 64)
+Correct: 166/250
+Wrong: 84/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:51:59
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.55, 20, 2, 64)
+Correct: 212/250
+Wrong: 38/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:05:08
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.6, 20, 2, 64)
+Correct: 222/250
+Wrong: 28/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:17:59
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.65, 20, 2, 64)
+Correct: 226/250
+Wrong: 24/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:31:03
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.7, 20, 2, 64)
+Correct: 241/250
+Wrong: 9/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:44:49
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.75, 20, 2, 64)
+Correct: 240/250
+Wrong: 10/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:59:07
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.8, 20, 2, 64)
+Correct: 247/250
+Wrong: 3/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:13:57
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.85, 20, 2, 64)
+Correct: 249/250
+Wrong: 1/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:29:12
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.9, 20, 2, 64)
+Correct: 246/250
+Wrong: 4/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:43:59
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.95, 20, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:59:24
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (1.0, 20, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-24 21:59:24
+(gamma, xi, length of a fingerprint): (20, 2, 64)
+Correct: [0, 0, 0, 0, 0, 0, 10, 39, 82, 127, 166, 212, 222, 226, 241, 240, 247, 249, 246, 250, 250]
+	/250
+
+--------------------------------------------------------------
+
+2019-12-24 18:23:34
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.0, 10, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:30:29
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.05, 10, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:37:52
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.1, 10, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:45:42
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.15, 10, 2, 64)
+Correct: 8/250
+Wrong: 242/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:54:09
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.2, 10, 2, 64)
+Correct: 74/250
+Wrong: 176/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:04:06
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.25, 10, 2, 64)
+Correct: 165/250
+Wrong: 85/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:13:21
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.3, 10, 2, 64)
+Correct: 213/250
+Wrong: 37/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:23:09
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.35, 10, 2, 64)
+Correct: 237/250
+Wrong: 13/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:33:38
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.4, 10, 2, 64)
+Correct: 247/250
+Wrong: 3/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:46:10
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.45, 10, 2, 64)
+Correct: 247/250
+Wrong: 3/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:00:25
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.5, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:14:24
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.55, 10, 2, 64)
+Correct: 249/250
+Wrong: 1/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:28:21
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.6, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:42:57
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.65, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:58:06
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.7, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:13:52
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.75, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:30:01
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.8, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:45:47
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.85, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 22:01:53
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.9, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 22:17:16
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.95, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 22:33:12
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (1.0, 10, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-24 22:33:12
+(gamma, xi, length of a fingerprint): (10, 2, 64)
+Correct: [0, 0, 0, 8, 74, 165, 213, 237, 247, 247, 250, 249, 250, 250, 250, 250, 250, 250, 250, 250, 250]
+	/250
+
+--------------------------------------------------------------
+
+2019-12-24 18:21:47
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.0, 5, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:32:11
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.05, 5, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:42:59
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.1, 5, 2, 64)
+Correct: 83/250
+Wrong: 167/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 18:54:15
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.15, 5, 2, 64)
+Correct: 221/250
+Wrong: 29/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:07:05
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.2, 5, 2, 64)
+Correct: 245/250
+Wrong: 5/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:19:10
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.25, 5, 2, 64)
+Correct: 248/250
+Wrong: 2/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:31:54
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.3, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 19:48:27
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.35, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:06:06
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.4, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:22:24
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.45, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:39:08
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.5, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 20:56:39
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.55, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:14:40
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.6, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:32:58
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.65, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 21:51:00
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.7, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 22:08:46
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.75, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 22:26:20
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.8, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 22:43:31
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.85, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 23:00:26
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.9, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 23:17:54
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.95, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-24 23:34:10
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (1.0, 5, 2, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-24 23:34:10
+(gamma, xi, length of a fingerprint): (5, 2, 64)
+Correct: [0, 0, 83, 221, 245, 248, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250]
+	/250
+
+--------------------------------------------------------------
+
+2019-12-25 22:06:31
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.0, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:10:51
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.05, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:15:43
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.1, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:21:16
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.15, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:26:55
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.2, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:32:34
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.25, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-26 14:26:53
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.3, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-26 14:34:39
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.35, 30, 2, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-26 14:41:53
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.4, 30, 2, 64)
+Correct: 1/250
+Wrong: 249/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-26 14:49:19
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.45, 30, 2, 64)
+Correct: 10/250
+Wrong: 240/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 00:56:26
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.5, 30, 2, 64)
+Correct: 32/250
+Wrong: 218/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 01:05:39
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.55, 30, 2, 64)
+Correct: 56/250
+Wrong: 194/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 01:14:56
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.6, 30, 2, 64)
+Correct: 79/250
+Wrong: 171/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 01:24:53
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.65, 30, 2, 64)
+Correct: 112/250
+Wrong: 138/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 01:34:43
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.7, 30, 2, 64)
+Correct: 133/250
+Wrong: 117/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 01:44:33
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.75, 30, 2, 64)
+Correct: 167/250
+Wrong: 83/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 01:53:42
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.8, 30, 2, 64)
+Correct: 185/250
+Wrong: 65/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 02:02:35
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.85, 30, 2, 64)
+Correct: 199/250
+Wrong: 51/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 02:11:22
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.9, 30, 2, 64)
+Correct: 208/250
+Wrong: 42/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 02:20:33
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (0.95, 30, 2, 64)
+Correct: 214/250
+Wrong: 36/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 02:30:09
+seed: 332
+Data: nursery
+(size of subset, gamma, xi, length of a fingerprint): (1.0, 30, 2, 64)
+Correct: 220/250
+Wrong: 30/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-28 02:30:09
+(gamma, xi, length of a fingerprint): (30, 2, 64)
+Correct: [0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 32, 56, 79, 112, 133, 167, 185, 199, 208, 214, 220]
+	/250
+
+--------------------------------------------------------------
+

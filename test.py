@@ -143,7 +143,7 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
     testing on Breast Cancer data with 286 instances
     """
     def test_scheme_breast_cancer(self):
-        scheme = CategoricalNeighbourhood(gamma=3, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+        scheme = CategoricalNeighbourhood(gamma=7, xi=2, fingerprint_bit_length=8, number_of_buyers=10,
                                           secret_key=333)
         scheme.insertion(dataset_name="breast_cancer", buyer_id=2)
         result = scheme.detection(dataset_name="breast_cancer", real_buyer_id=2)
@@ -153,11 +153,50 @@ class TestCategoricalNeighbourhood(unittest.TestCase):
     testing on Breast Cancer data with 286 instances
     """
     def test_false_scheme_breast_cancer(self):
-        scheme = CategoricalNeighbourhood(gamma=3, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+        scheme = CategoricalNeighbourhood(gamma=7, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
                                           secret_key=333)
         scheme.insertion(dataset_name="breast_cancer", buyer_id=0)
         result = scheme.detection(dataset_name="breast_cancer", real_buyer_id=0)
         self.assertNotEqual(result, 2)
+
+    """
+    testing on Nursery data with 12960 instances
+    """
+    def test_scheme_nursery(self):
+        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=64, number_of_buyers=10,
+                                          secret_key=333)
+        scheme.insertion(dataset_name="nursery", buyer_id=5)
+        result = scheme.detection(dataset_name="nursery", real_buyer_id=5)
+        self.assertEqual(result, 5)
+
+
+class TestBlindCategoricalNeighbScheme(unittest.TestCase):
+    def test_insertion(self):
+        scheme = CategoricalNeighbourhood(gamma=2, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333)
+        result = scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=0)
+        self.assertIsNotNone(result)
+
+    def test_detection(self):
+        scheme = CategoricalNeighbourhood(gamma=2, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333)
+        scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=5)
+        result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=5)
+        self.assertEqual(result, 5)
+
+    def test_detection_2(self):
+        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333)
+        scheme.blind_insertion(dataset_name="breast_cancer", buyer_id=5)
+        result = scheme.blind_detection(dataset_name="breast_cancer", real_buyer_id=5)
+        self.assertEqual(result, 5)
+
+    def test_detection_mushroom_data(self):
+        scheme = CategoricalNeighbourhood(gamma=5, xi=2, fingerprint_bit_length=16, number_of_buyers=10,
+                                          secret_key=333, k=100)
+        scheme.blind_insertion(dataset_name="mushrooms", buyer_id=2)
+        result = scheme.blind_detection(dataset_name="mushrooms", real_buyer_id=2)
+        self.assertEqual(result, 2)
 
 
 class TestAttacks(unittest.TestCase):
@@ -177,11 +216,18 @@ class TestAttacks(unittest.TestCase):
 
     def test_zero_bit_flipping_attack(self):
         attack = BitFlippingAttack()
-        dataset, primary_key = import_dataset("german_credit")
+        dataset, primary_key = import_dataset("breast_cancer")
         frac = 0
         result = attack.run(dataset=dataset, fraction=frac)
         test_column = dataset.columns.tolist()[1]
         self.assertEqual(result[test_column][:].tolist(), result[test_column][:].tolist())
+
+    def test_run_bit_flipping_attack(self):
+        attack = BitFlippingAttack()
+        dataset, primary_key = import_dataset("breast_cancer")
+        frac = 0.3
+        result = attack.run(dataset=dataset, fraction=frac)
+        self.assertIsNotNone(result)
 
     def test_bit_flipping_attack(self):
         attack = BitFlippingAttack()
@@ -210,6 +256,13 @@ class TestAttacks(unittest.TestCase):
         subset = 2
         result = attack.run_random(dataset=dataset, number_of_columns=subset)
         self.assertEqual(len(result.columns), len(dataset.columns)-2)
+
+    def test_vertical_subset_attack_2(self):
+        attack = VerticalSubsetAttack()
+        dataset, primary_key = import_dataset("breast_cancer")
+        subset = 9
+        result = attack.run_random(dataset=dataset, number_of_columns=subset)
+        self.assertIsNotNone(result)
 
 
 if __name__ == '__main__':

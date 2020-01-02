@@ -1,0 +1,1144 @@
+2019-12-25 22:08:45
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:09:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:10:03
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:10:58
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:12:03
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:13:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:14:45
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:16:29
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:18:28
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:20:24
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:22:27
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:24:40
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-25 22:27:03
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 5, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-25 22:27:03
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+	/1
+
+--------------------------------------------------------------
+
+2019-12-28 17:36:15
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 30, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:36:30
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:36:52
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:37:23
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:38:15
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:39:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:40:43
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:42:00
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:43:32
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:44:57
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:46:37
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:48:25
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:50:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 30, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-28 17:50:19
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	/1
+
+--------------------------------------------------------------
+
+2019-12-28 17:37:48
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 20, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:38:13
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 20, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:38:47
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 20, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:39:32
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 20, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:40:33
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 20, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:41:32
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 20, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:42:49
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:44:01
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:45:20
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:46:54
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:48:34
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:50:22
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:52:13
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 20, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-28 17:52:13
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+	/1
+
+--------------------------------------------------------------
+
+2019-12-28 17:37:48
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:38:16
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:38:53
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:39:45
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:40:48
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:41:50
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:43:10
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:44:23
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 10, 1, 64)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:45:46
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 10, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:47:25
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 10, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:49:06
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 10, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:50:55
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 10, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2019-12-28 17:52:47
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 10, 1, 64)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2019-12-28 17:52:47
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+	/1
+
+--------------------------------------------------------------
+
+2019-12-31 15:07:31
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 10, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250]
+	/2502019-12-31 15:08:22
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250]
+	/2502019-12-31 15:24:06
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 30, 1, 64)
+Correct: 231/250
+Wrong: 19/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231]
+	/2502019-12-31 15:24:17
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.01, 20, 1, 64)
+Correct: 249/250
+Wrong: 1/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249]
+	/2502019-12-31 15:27:54
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 10, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250]
+	/2502019-12-31 15:30:31
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250]
+	/2502019-12-31 15:46:24
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 30, 1, 64)
+Correct: 198/250
+Wrong: 52/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198]
+	/2502019-12-31 15:46:53
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 20, 1, 64)
+Correct: 248/250
+Wrong: 2/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248]
+	/2502019-12-31 16:09:30
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 10, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250]
+	/2502019-12-31 16:13:39
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250]
+	/2502019-12-31 16:28:27
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 30, 1, 64)
+Correct: 118/250
+Wrong: 132/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118]
+	/2502019-12-31 16:29:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 20, 1, 64)
+Correct: 232/250
+Wrong: 18/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232]
+	/2502019-12-31 17:15:36
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 10, 1, 64)
+Correct: 248/250
+Wrong: 2/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248]
+	/2502019-12-31 17:21:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250]
+	/2502019-12-31 17:33:30
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 30, 1, 64)
+Correct: 68/250
+Wrong: 182/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68]
+	/2502019-12-31 17:34:36
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 20, 1, 64)
+Correct: 203/250
+Wrong: 47/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203]
+	/2502019-12-31 18:40:34
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 10, 1, 64)
+Correct: 247/250
+Wrong: 3/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247]
+	/2502019-12-31 18:46:17
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250]
+	/2502019-12-31 18:54:21
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 30, 1, 64)
+Correct: 46/250
+Wrong: 204/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46]
+	/2502019-12-31 18:55:40
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 20, 1, 64)
+Correct: 146/250
+Wrong: 104/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146]
+	/2502019-12-31 20:15:34
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 10, 1, 64)
+Correct: 242/250
+Wrong: 8/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247, 242]
+	/2502019-12-31 20:22:10
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250, 250]
+	/2502019-12-31 20:27:34
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 30, 1, 64)
+Correct: 24/250
+Wrong: 226/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46, 24]
+	/2502019-12-31 20:28:59
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 20, 1, 64)
+Correct: 130/250
+Wrong: 120/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146, 130]
+	/2502019-12-31 22:08:59
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 10, 1, 64)
+Correct: 233/250
+Wrong: 17/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247, 242, 233]
+	/2502019-12-31 22:16:14
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250, 250, 250]
+	/2502019-12-31 22:19:07
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 30, 1, 64)
+Correct: 7/250
+Wrong: 243/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46, 24, 7]
+	/2502019-12-31 22:20:37
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 20, 1, 64)
+Correct: 71/250
+Wrong: 179/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146, 130, 71]
+	/2502020-01-01 00:20:22
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 10, 1, 64)
+Correct: 205/250
+Wrong: 45/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247, 242, 233, 205]
+	/2502020-01-01 00:28:08
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 5, 1, 64)
+Correct: 248/250
+Wrong: 2/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250, 250, 250, 248]
+	/2502020-01-01 00:28:31
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 30, 1, 64)
+Correct: 3/250
+Wrong: 247/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46, 24, 7, 3]
+	/2502020-01-01 00:29:59
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 20, 1, 64)
+Correct: 42/250
+Wrong: 208/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146, 130, 71, 42]
+	/2502020-01-01 02:49:17
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 10, 1, 64)
+Correct: 177/250
+Wrong: 73/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247, 242, 233, 205, 177]
+	/2502020-01-01 02:55:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 30, 1, 64)
+Correct: 2/250
+Wrong: 248/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46, 24, 7, 3, 2]
+	/2502020-01-01 02:56:44
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 20, 1, 64)
+Correct: 18/250
+Wrong: 232/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146, 130, 71, 42, 18]
+	/2502020-01-01 02:57:25
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 5, 1, 64)
+Correct: 250/250
+Wrong: 0/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250, 250, 250, 248, 250]
+	/2502020-01-01 05:36:19
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 10, 1, 64)
+Correct: 136/250
+Wrong: 114/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247, 242, 233, 205, 177, 136]
+	/250SUMMARY
+2020-01-01 05:36:19
+(gamma, xi, length of a fingerprint): (10, 1, 64)
+Correct: [250, 250, 250, 248, 247, 242, 233, 205, 177, 136]
+	/250
+
+--------------------------------------------------------------
+
+2020-01-01 05:39:29
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 30, 1, 64)
+Correct: 0/250
+Wrong: 250/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46, 24, 7, 3, 2, 0]
+	/250SUMMARY
+2020-01-01 05:39:29
+(gamma, xi, length of a fingerprint): (30, 1, 64)
+Correct: [231, 198, 118, 68, 46, 24, 7, 3, 2, 0]
+	/250
+
+--------------------------------------------------------------
+
+2020-01-01 05:40:26
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 20, 1, 64)
+Correct: 6/250
+Wrong: 244/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146, 130, 71, 42, 18, 6]
+	/250SUMMARY
+2020-01-01 05:40:26
+(gamma, xi, length of a fingerprint): (20, 1, 64)
+Correct: [249, 248, 232, 203, 146, 130, 71, 42, 18, 6]
+	/250
+
+--------------------------------------------------------------
+
+2020-01-01 05:42:28
+seed: 332
+Data: nursery
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 5, 1, 64)
+Correct: 241/250
+Wrong: 9/250
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250, 250, 250, 248, 250, 241]
+	/250SUMMARY
+2020-01-01 05:42:28
+(gamma, xi, length of a fingerprint): (5, 1, 64)
+Correct: [250, 250, 250, 250, 250, 250, 250, 248, 250, 241]
+	/250
+
+--------------------------------------------------------------
+
