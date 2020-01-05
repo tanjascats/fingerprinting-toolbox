@@ -12,28 +12,28 @@ n_exp = 250
 # --------------------------------------- #
 # gamma = 5
 # --------------------------------------- #
-y[0] = np.flip(np.array([250, 250, 250, 250, 250, 250, 250, 248, 250, 241])) / n_exp*100
+y[0] = n_exp - np.flip(np.array([250, 250, 250, 250, 250, 250, 250, 248, 250, 241]))
 # --------------------------------------- #
 # gamma = 10
 # --------------------------------------- #
-y[1] = np.flip(np.array([250, 250, 250, 248, 247, 242, 233, 205, 177, 136])) / n_exp*100
+y[1] = n_exp - np.flip(np.array([250, 250, 250, 248, 247, 242, 233, 205, 177, 136]))
 # --------------------------------------- #
 # gamma = 20
 # --------------------------------------- #
-y[2] = np.flip(np.array([250, 248, 232, 203, 146, 130, 71, 42, 18, 6])) / n_exp*100
+y[2] = n_exp - np.flip(np.array([250, 248, 232, 203, 146, 130, 71, 42, 18, 6]))
 # --------------------------------------- #
 # gamma = 30
 # --------------------------------------- #
-y[3] = np.flip(np.array([250, 198, 118, 68, 46, 24, 7, 3, 2, 0])) / n_exp*100
+y[3] = n_exp - np.flip(np.array([250, 198, 118, 68, 46, 24, 7, 3, 2, 0]))
 
 plt.style.use('seaborn-colorblind')
 plt.grid()
 plt.xlabel("Portion of the unchanged data(%)")
-plt.ylabel("Detected fingerprints(%)")
+plt.ylabel("False Miss")
 
-plt.plot(x, y[0], label='$\gamma$ = 5')
-plt.plot(x, y[1], label='$\gamma$ = 10')
-plt.plot(x, y[2], label='$\gamma$ = 20')
-plt.plot(x, y[3], label='$\gamma$ = 30')
+plt.plot(x, y[0]/n_exp, label='$\gamma$ = 5')
+plt.plot(x, y[1]/n_exp, label='$\gamma$ = 10')
+plt.plot(x, y[2]/n_exp, label='$\gamma$ = 20')
+plt.plot(x, y[3]/n_exp, label='$\gamma$ = 30')
 plt.legend()
 plt.show()

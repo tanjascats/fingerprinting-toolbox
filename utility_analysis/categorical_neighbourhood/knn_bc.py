@@ -1,11 +1,14 @@
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import RandomizedSearchCV
 from utils import *
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 import numpy as np
+from time import time
+from sklearn.neighbors import KNeighborsClassifier
 
-gamma = 5
-n_exp = 1000
+gamma = 2
+n_exp = 100
+
+start = time()
 
 # brast cancer data
 breast_cancer, pk = import_dataset('breast_cancer_full')
@@ -24,21 +27,20 @@ data = breast_cancer.values
 
 # define the model and possible hyperparameters
 random_state = 25 # increase every run
-criterion_range = ["gini", "entropy"]
-max_depth_range = range(1, 30)
+n_neighbors_range = range(1, 20)
+algorithm_range = ['auto', 'ball_tree', 'kd_tree', 'brute']
 
 # hyperparameter random search
 # take the best accuracy from 10-fold cross validation as a benchmark performance
-model = DecisionTreeClassifier(random_state=random_state)
-param_dist = dict(criterion=criterion_range, max_depth=max_depth_range)
-rand_search = RandomizedSearchCV(model, param_dist, cv=10, n_iter=40, scoring="accuracy", random_state=random_state)
+model = KNeighborsClassifier()
+param_dist = dict(n_neighbors=n_neighbors_range, algorithm=algorithm_range)
+rand_search = RandomizedSearchCV(model, param_dist, cv=10, n_iter=15, scoring="accuracy", random_state=random_state)
 rand_search.fit(data, target)
 best_params = rand_search.best_params_
 print(best_params)
 print(rand_search.best_score_)
 print(rand_search.best_estimator_)
 
-exit()
 results = []
 for n in range(n_exp):
     # fingerprint the data
@@ -52,7 +54,7 @@ for n in range(n_exp):
     fp_dataset = fp_dataset.values
     # hyperparameter seach
 
-    model2 = DecisionTreeClassifier(random_state=secret_key)
+    model2 = KNeighborsClassifier()
     rand_search2 = RandomizedSearchCV(model, param_dist, cv=10, n_iter=10, scoring="accuracy", random_state=random_state)
     rand_search2.fit(fp_dataset, target)
     best_params_fp = rand_search2.best_params_
@@ -65,14 +67,19 @@ for n in range(n_exp):
     secret_key = secret_key - 3
 
 print(np.mean(results))
+print("Time: " + str(int(time()-start)) + " sec.")
 
-
-# --------- # decision tree # logistic regression #
-# gamma = 1 |
+# --------- # 0.7167832167832168 # 0.6678321678321678  # 0.6783216783216783 # 0.7517482517482518
+# --------------------------------------------------------------------------------------------
+# --------- # decision tree      # logistic regression # gradient boosting  # knn
+# gamma = 1 | 0.6853146853146851 #                     #                    #
 # -----------------------------------------------#
-# gamma = 2 |
+# gamma = 2 | 0.6993006993006995
 # -----------------------------------------------#
-# gamma = 3 |
+# gamma = 3 | 0.6643356643356643
 # -----------------------------------------------#
-# gamma = 5 |
+# gamma = 5 | 0.6993006993006995
 # ------------------------------------------------
+# ------------------------------------------------
+# ------------------------------------------------
+# gamma = 1 |

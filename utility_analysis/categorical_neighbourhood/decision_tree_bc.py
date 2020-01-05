@@ -45,6 +45,8 @@ for n in range(n_exp):
     rand_search = RandomizedSearchCV(model, param_dist, cv=10, n_iter=10, scoring="accuracy", random_state=random_state)
     rand_search.fit(data, target)
     best_params = rand_search.best_params_
+    print(best_params)
+    exit()
     # 3.2) train
     model = DecisionTreeClassifier(max_depth=best_params['max_depth'], criterion=best_params['criterion'], random_state=0)
     model.fit(X_data, y_data)
