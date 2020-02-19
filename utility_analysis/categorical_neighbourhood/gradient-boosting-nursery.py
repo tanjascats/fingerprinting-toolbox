@@ -8,8 +8,8 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import ShuffleSplit
 
-gamma = 30
-n_exp = 15
+gamma = 3
+n_exp = 10
 
 start = time()
 
@@ -81,6 +81,8 @@ print("Time: " + str(int(time()-start)) + " sec.")
 
 # --------- # 0.7798611111111111 # 0.8449845679012346  # 0.9838220169999999
 # --------- # decision tree      # logistic regression # gradient boosting # knn
+# gamma = 1                                            # 0.9255984224965706
+# gamma = 3 |                    # 0.8371504131348129  # 0.963346193415638
 # gamma = 5 | 0.7712789981739371 # 0.8406252166787789  # 0.970838477366255
 # -----------------------------------------------#
 # gamma = 10 | 0.7739561900738382 # 0.8429010038165808 # 0.9774554183813444

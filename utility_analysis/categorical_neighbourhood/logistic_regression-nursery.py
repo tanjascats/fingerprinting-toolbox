@@ -6,7 +6,7 @@ from time import time
 from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 
-gamma = 30
+gamma = 3
 n_exp = 20
 
 start = time()

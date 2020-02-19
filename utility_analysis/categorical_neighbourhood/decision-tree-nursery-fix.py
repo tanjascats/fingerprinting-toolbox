@@ -6,7 +6,7 @@ from time import time
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
-gamma = 30
+gamma = 3
 n_exp = 10
 
 start = time()
@@ -27,7 +27,7 @@ breast_cancer = breast_cancer.drop('finance_inconv', axis=1)
 data = breast_cancer.values
 
 # define the model and possible hyperparameters
-random_state = 25 # increase every run
+random_state = 18 # increase every run
 criterion_range = ["gini", "entropy"]
 max_depth_range = range(1, 30)
 
@@ -41,8 +41,8 @@ best_params = rand_search.best_params_
 print(best_params)
 print(rand_search.best_score_)
 print(rand_search.best_estimator_)
-exit()
-secret_key = 3255  # increase every run
+
+secret_key = 3285  # increase every run
 results = []
 for n in range(n_exp):
     # fingerprint the data
@@ -69,6 +69,10 @@ print("Time: " + str(int(time()-start)) + " sec.")
 
 # --------- # 0.7798611111111111 #
 # --------- # decision tree      # gradient boosting # knn
+# gamma = 1 | 0.7614499284525335 #
+# -----------------------------------------------
+# gamma = 3 |
+# -----------------------------------------------#
 # gamma = 5 | 0.7712789981739371
 # -----------------------------------------------#
 # gamma = 10 |
