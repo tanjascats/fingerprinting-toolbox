@@ -34,12 +34,12 @@ y[3] = n_exp - np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 10, 32, 56, 79, 112, 133, 16
 
 
 fig, ax = plt.subplots(1, 1, sharex='col', sharey='row')
-ax.plot(x, y[0]/n_exp, label='$\gamma$ = 5')
-ax.plot(x, y[1]/n_exp, label='$\gamma$ = 10')
-ax.plot(x, y[2]/n_exp, label='$\gamma$ = 20')
-ax.plot(x, y[3]/n_exp, label='$\gamma$ = 30')
-fig.text(0.5, 0.02, 'Size of the subset released(%)', ha='center')
-fig.text(0.04, 0.5, 'False Miss', va='center', rotation='vertical')
+ax.plot(x, y[0]/n_exp, label='$\gamma$ = 5', c='0.15')
+ax.plot(x, y[1]/n_exp, label='$\gamma$ = 10', c='0.35')
+ax.plot(x, y[2]/n_exp, label='$\gamma$ = 20', c='0.65')
+ax.plot(x, y[3]/n_exp, label='$\gamma$ = 30', c='0.85')
+fig.text(0.5, 0.02, 'Size of the subset released(%)', ha='center', size=14)
+fig.text(0.04, 0.5, 'False Miss', va='center', rotation='vertical', size=14)
 ax.legend()
 plt.show()
 

@@ -48,14 +48,14 @@ fig.text(0.04, 0.5, 'Detected fingerprints(%)', va='center', rotation='vertical'
 # ----------------- ALL IN ONE FIGURE --------------------------------- #
 # --------------------------------------------------------------------- #
 fig2, ax2 = plt.subplots(1, 1, sharex='col', sharey='row')
-ax2.plot(x, y[0]/100, label='$\gamma$ = 1')
-ax2.plot(x, y[1]/100, label='$\gamma$ = 2')
-ax2.plot(x, y[2]/100, label='$\gamma$ = 3')
-ax2.plot(x, y[3]/100, label='$\gamma$ = 5')
+ax2.plot(x, y[0]/100, label='$\gamma$ = 1', c='0.15')
+ax2.plot(x, y[1]/100, label='$\gamma$ = 2', c='0.35')
+ax2.plot(x, y[2]/100, label='$\gamma$ = 3', c='0.65')
+ax2.plot(x, y[3]/100, label='$\gamma$ = 5', c='0.85')
 # ax2.plot(x, y[3])
 plt.xticks(np.arange(0, 10, step=1), [0, 1, 2, 3, 4, 5, 6, 7, 8, 'ALL'])
-fig2.text(0.5, 0.02, 'Number of columns released', ha='center')
-fig2.text(0.04, 0.5, 'False Miss(%)', va='center', rotation='vertical')
+fig2.text(0.5, 0.02, 'Number of columns released', ha='center', size=14)
+fig2.text(0.04, 0.5, 'False Miss(%)', va='center', rotation='vertical', size=14)
 ax2.legend()
 plt.show()
 

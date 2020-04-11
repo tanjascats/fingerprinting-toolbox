@@ -5,9 +5,13 @@ import numpy as np
 from time import time
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
+import itertools
+from pprint import pprint
+import matplotlib.pyplot as plt
 
-gamma = 3
+gamma = 30
 n_exp = 10
+#remove = 2
 
 start = time()
 
@@ -20,6 +24,10 @@ breast_cancer = breast_cancer.drop('Id', axis=1)
 c = len(breast_cancer.columns)
 target = breast_cancer.values[:, (c-1)]
 breast_cancer = breast_cancer.drop("target", axis=1)
+
+#combinations = list(itertools.combinations(breast_cancer.columns, remove))
+#print(combinations)
+
 # one-hot encode
 breast_cancer = pd.get_dummies(breast_cancer)
 # a bit more preprocessing
@@ -43,28 +51,50 @@ print(rand_search.best_score_)
 print(rand_search.best_estimator_)
 
 secret_key = 3285  # increase every run
-results = []
+results = {'full': []}
 for n in range(n_exp):
     # fingerprint the data
     scheme = CategoricalNeighbourhood(gamma=gamma, xi=2, fingerprint_bit_length=8)
     fp_dataset = scheme.insertion(dataset_name="nursery", buyer_id=1, secret_key=secret_key)
     # same prepocessing as above
     fp_dataset = fp_dataset.drop("Id", axis=1)
-    fp_dataset = pd.get_dummies(fp_dataset)
-    fp_dataset = fp_dataset.drop(['finance_inconv'], axis=1)
-    fp_dataset = fp_dataset.values
+    fp_dataset_dummies = pd.get_dummies(fp_dataset)
+    fp_dataset_dummies = fp_dataset_dummies.drop(['finance_inconv'], axis=1)
     # hyperparameter seach
 
     model2 = DecisionTreeClassifier(random_state=random_state, criterion=best_params['criterion'],
                                     max_depth=best_params['max_depth'])
-    scores = cross_val_score(model2, fp_dataset, target, cv=10)
+    scores = cross_val_score(model2, fp_dataset_dummies.values, target, cv=10)
     print(np.mean(scores))
     # note the  best accuracy from the 10-fold
     # repeat
-    results.append(np.mean(scores))
+    results['full'].append(np.mean(scores))
     secret_key = secret_key - 3
+'''
+    # calculate the accuracy of reduced dataset
+    for attribute_combination in combinations:
+        if attribute_combination not in results:
+            results[attribute_combination] = []
+        # feature selected dataset
+        fs_dataset = fp_dataset
+        for att in attribute_combination:
+            fs_dataset = fs_dataset.drop(att, axis=1)
+        fs_dataset = pd.get_dummies(fs_dataset)
+        if 'finance_inconv' in fs_dataset.columns:
+            fs_dataset = fs_dataset.drop(['finance_inconv'], axis=1)
+        model3 = DecisionTreeClassifier(random_state=random_state, criterion=best_params['criterion'],
+                                        max_depth=best_params['max_depth'])
+        scores = cross_val_score(model3, fs_dataset.values, target, cv=10)
+        results[attribute_combination].append(np.mean(scores))
+'''
 
-print(np.mean(results))
+
+#print(np.mean(results))
+pprint(results)
+print('Full: ' + str(np.mean(results['full'])))
+results_avg = [np.mean(results[r]) for r in results]
+results_avg.remove(np.mean(results['full']))
+print(sorted(results_avg))
 print("Time: " + str(int(time()-start)) + " sec.")
 
 # --------- # 0.7798611111111111 #

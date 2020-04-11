@@ -28,12 +28,12 @@ y[3] = n_exp - np.flip(np.array([250, 198, 118, 68, 46, 24, 7, 3, 2, 0, 0, 0, 0]
 
 plt.style.use('seaborn-colorblind')
 plt.grid()
-plt.xlabel("Portion of the unchanged data(%)")
-plt.ylabel("False Miss")
+plt.xlabel("Portion of the unchanged data(%)", size=14)
+plt.ylabel("False Miss", size=14)
 
-plt.plot(x, y[0]/n_exp, label='$\gamma$ = 5')
-plt.plot(x, y[1]/n_exp, label='$\gamma$ = 10')
-plt.plot(x, y[2]/n_exp, label='$\gamma$ = 20')
-plt.plot(x, y[3]/n_exp, label='$\gamma$ = 30')
+plt.plot(x, y[0]/n_exp, label='$\gamma$ = 5', c='0.15')
+plt.plot(x, y[1]/n_exp, label='$\gamma$ = 10', c='0.35')
+plt.plot(x, y[2]/n_exp, label='$\gamma$ = 20', c='0.65')
+plt.plot(x, y[3]/n_exp, label='$\gamma$ = 30', c='0.85')
 plt.legend()
 plt.show()
