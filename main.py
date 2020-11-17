@@ -1,4 +1,4 @@
-from schemes.ak_scheme.ak_scheme import AKScheme
+from scheme import AKScheme
 from attacks.horizontal_subset_attack import HorizontalSubsetAttack
 
 
