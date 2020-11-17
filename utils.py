@@ -1,15 +1,21 @@
 import pandas as pd
 import math
+import os
 
 
 # returns the pandas structure of the dataset and its primary key
-"""
-:returns relation, primary key
-"""
-def import_dataset(dataset_name):
-    filepath = "datasets/" + dataset_name + ".csv"
 
-    relation = pd.read_csv(filepath)
+def import_dataset(dataset_name):
+    """
+    :returns relation, primary key
+    """
+    filepath = "../../datasets/" + str(dataset_name) + ".csv"
+    if os.path.isfile(filepath):
+        relation = pd.read_csv(filepath)
+    else:
+        print('dataset not found in datasets directory')
+        relation = dataset_name
+
     print("Dataset: " + filepath)
 
     # detect primary key
@@ -17,14 +23,17 @@ def import_dataset(dataset_name):
     return relation, primary_key
 
 
-def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, real_buyer_id):
-    params_string = ""
-    for param in scheme_params:
-        params_string += str(param) + "_"
-    filepath = "schemes/" + scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
-               str(real_buyer_id) + ".csv"
-    relation = pd.read_csv(filepath)
-    print("Dataset: " + filepath)
+def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, real_buyer_id=None):
+    if real_buyer_id is None:
+        relation = dataset_name
+    else:
+        params_string = ""
+        for param in scheme_params:
+            params_string += str(param) + "_"
+        filepath = "schemes/" + scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
+                   str(real_buyer_id) + ".csv"
+        relation = pd.read_csv(filepath)
+        print("Dataset: " + filepath)
 
     # detect primary key
     primary_key = relation[relation.columns[0]]

@@ -8,5 +8,5 @@ setup(
     license='',
     author='tsarcevic',
     author_email='',
-    description=''
+    description='', install_requires=['numpy', 'scikit-learn']
 )

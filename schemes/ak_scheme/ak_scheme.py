@@ -4,11 +4,14 @@ import sys
 import random
 import time
 
+
 """
 Class representing the AK fingerprinting scheme
 - gamma: ratio #rows/#marks
 - xi: least significant bits 
 """
+
+
 class AKScheme(Scheme):
 
     # supports the dataset size of up to 1,048,576 entries

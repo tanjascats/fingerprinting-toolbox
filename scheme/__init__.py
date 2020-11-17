@@ -1,6 +1,5 @@
 from ._ak import AKScheme
-from ._block import BlockScheme
-from ._universal import NonBlindUniversalScheme, BlindUniversalScheme
+from ._universal import NBNNScheme
 
 __all__ = ['AKScheme',
-           'BlockScheme']
+           'NBNNScheme']
