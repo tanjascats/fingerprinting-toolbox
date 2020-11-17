@@ -40,7 +40,7 @@ def fingerprint_cross_val_score(model, data, fp_data, target, cv=10):
     # # take a group as a holdout (test) from original data
         holdout_set = data[k_groups[i]]
     # # take the remaining groups as training set -> fingerprint the training set
-        training_set_idx = shuffle
+        training_set_idx = shuffle.copy()
         for index in k_groups[i]:
             training_set_idx.remove(index)
         training_set = fp_data[training_set_idx]
@@ -65,14 +65,14 @@ def demo_exp():
     accuracy_original = 0.7168  # for decision tree: max_depth = 2, criterion = 'entropy'
     gamma = 5
     accuracy_fingerprinted_full = 0.6994
-    n_removed_attr = 8
+    n_removed_attr = 5
 
     # try removing each attribute and record the results
     score = dict()
     score_realistic = dict()
     n_exp = 100
     random_state = 25
-    attributes = list(itertools.combinations(data.columns[:-1], n_removed_attr))
+    attributes = list(itertools.combinations(data.columns, n_removed_attr))
     attributes = [list(combo) for combo in attributes]
     for attr_combination in attributes:
         # calculate utility of attacked fingerprinted data set
@@ -149,6 +149,19 @@ def demo_exp():
 
         log_refined.write("\nTimestamp: " + str(datetime.today()) + "\n")
         log_refined.write("------------------------------------------\n------------------------------------------")
+
+    with open("robustness_vs_utility/breast_cancer_experiments/log_formatted", "a+") as log_formatted:
+        # experiment_results_data['decision tree'][0][3] = {
+        gamma_formatted = {1: 0, 2: 1, 3: 2, 5: 3}
+        log_formatted.write("experiment_results_data['decision tree'][" + str(gamma_formatted[gamma]) +
+                            "][" + str(n_removed_attr) + "] = {")
+        keys = map(str, {i: np.mean(score_realistic[i]) for i in score_realistic})
+        items = (key + ": " + str(np.mean(score_realistic[key])) for key in keys)
+        line = ",\n".join(items)
+        line = line.replace("[", "(")
+        line = line.replace("]", ")")
+        line += "}\n"
+        log_formatted.write(line)
 
 
 if __name__ == '__main__':

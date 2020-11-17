@@ -28,7 +28,7 @@ data = breast_cancer.values
 
 # define the model and possible hyperparameters
 random_state = 25 # increase every run
-n_neighbors_range = range(1, 20)
+n_neighbors_range = range(1, 6)
 algorithm_range = ['auto', 'ball_tree', 'kd_tree', 'brute']
 
 # hyperparameter random search

@@ -1,0 +1,53 @@
+{
+    "tables": {
+        "ftable": {
+            "fields": {
+                "Parasympathicus activity": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Heart rate": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Vegetative quotient": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Date of birth": {
+                    "type": "categorical"
+                },
+                "Total variability": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "PulsBreath quotient": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Buoyancy": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Vital Potential": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Vitality Index": {
+                    "type": "numerical",
+                    "subtype": "float"
+                },
+                "Examination date": {
+                    "type": "categorical"
+                },
+                "Gender": {
+                    "type": "categorical"
+                },
+                "Sympathincus activity": {
+                    "type": "numerical",
+                    "subtype": "float"
+                }
+            }
+        }
+    }
+}

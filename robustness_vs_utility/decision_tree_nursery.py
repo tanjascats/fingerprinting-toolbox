@@ -12,8 +12,6 @@ warnings.filterwarnings('ignore')
 from datetime import datetime
 import random
 
-import matplotlib.pyplot as plt
-
 gamma = 5  # todo: all gammas
 n_exp = 15  # todo 100 or 15
 # how many attributes to remove in a vertical attack

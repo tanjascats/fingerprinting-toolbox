@@ -4,7 +4,7 @@ import os, os.path
 
 imgs = []
 names=[]
-path = "C:/Users/tsarcevic/PycharmProjects/fingerprinting-toolbox/robustness_analysis/categorical_neighbourhood/plots/nursery/images/"
+path = "C:/Users/tsarcevic/PycharmProjects/fingerprinting-toolbox/robustness_vs_utility/plot/"
 #valid_images = [".jpg",".gif",".png",".tga", ".PNG"]
 # = [".PNG"]
 for f in os.listdir(path):
@@ -23,5 +23,5 @@ for (name,items) in zip(names,imgs):
         #cv2.imshow("Cropped", rect) # Show it
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        dest = os.path.join(path,name)
+        dest = os.path.join(path + "cropped/",name)
         cv2.imwrite(dest, rect) # Save the image

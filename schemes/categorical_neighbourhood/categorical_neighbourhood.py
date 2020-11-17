@@ -79,7 +79,7 @@ class CategoricalNeighbourhood(Scheme):
             # selecting the tuple
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # selecting the attribute
-                attr_idx = random.randint(0, sys.maxsize) % tot_attributes
+                attr_idx = random.randint(0, sys.maxsize) % tot_attributes + 1
                 attr_name = r[1].index[attr_idx]
                 attribute_val = r[1][attr_idx]
 
@@ -197,6 +197,7 @@ class CategoricalNeighbourhood(Scheme):
         for cat in categorical_attributes:
             label_enc = LabelEncoder()
             relation_fp[cat] = label_enc.fit_transform(relation_fp[cat])
+
             label_encoders[cat] = label_enc
 
         # encode the categorical values of the original
@@ -216,7 +217,7 @@ class CategoricalNeighbourhood(Scheme):
             # this tuple was marked
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # this attribute was marked (skip the primary key)
-                attr_idx = random.randint(0, sys.maxsize) % tot_attributes
+                attr_idx = random.randint(0, sys.maxsize) % tot_attributes + 1
                 attr_name = r[1].index[attr_idx]
                 attribute_val = r[1][attr_idx]
                 # fingerprint bit

@@ -9,15 +9,15 @@ from attacks.vertical_subset_attack import VerticalSubsetAttack
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
 n_experiments = 10  # (20) number of times we attack the same fingerprinted file
-n_fp_experiments = 25  # (50) number of times we run fp insertion
+n_fp_experiments = 30  # (50) number of times we run fp insertion
 
-size_of_subset = np.array([i for i in range(8)])  # number of columns to be DELETED
+size_of_subset = np.array([i for i in range(20)])  # number of columns to be DELETED
 results = []
-gamma = 30; xi = 2; fingerprint_bit_length = 64
+gamma = 3; xi = 2; fingerprint_bit_length = 8
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = VerticalSubsetAttack()
-data = 'nursery'
+data = 'german_credit'
 
 f = open("robustness_analysis/categorical_neighbourhood/log/vertical_subset_attack_" + data + ".txt", "a+")
 

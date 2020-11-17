@@ -17,6 +17,7 @@ from schemes.categorical_neighbourhood.categorical_neighbourhood import Categori
 from sklearn.model_selection import cross_val_score
 from pprint import pprint
 import random
+import itertools
 
 
 # assuming all rows are present
@@ -38,7 +39,7 @@ def fingerprint_cross_val_score(model, data, fp_data, target, cv=10):
     # # take a group as a holdout (test) from original data
         holdout_set = data[k_groups[i]]
     # # take the remaining groups as training set -> fingerprint the training set
-        training_set_idx = shuffle
+        training_set_idx = shuffle.copy()
         for index in k_groups[i]:
             training_set_idx.remove(index)
         training_set = fp_data[training_set_idx]
@@ -61,7 +62,7 @@ def demo_exp():
 
     # retrieving performance from the previous runs
     accuracy_original = 0.7168  # for decision tree: max_depth = 2, criterion = 'entropy'
-    gamma = 5
+    gamma = 3
     accuracy_fingerprinted_full = 0.6994
 
     # try removing each attribute and record the results
@@ -69,7 +70,7 @@ def demo_exp():
     score_realistic = dict()
     n_exp = 100
     random_state = 25
-    attributes = list(data.columns)[:-1]
+    attributes = list(data.columns)
     attributes.append('full')
     for attr in attributes:
         # calculate utility of attacked fingerprinted data set
@@ -126,16 +127,16 @@ def demo_exp():
                         data_original_preprocessed.columns), axis=1)
 
                 model2 = DecisionTreeClassifier(random_state=random_state, criterion='entropy', max_depth=2)
-                scores = cross_val_score(model2, fp_dataset_attack.values, target, cv=10)
+                #scores = cross_val_score(model2, fp_dataset_attack.values, target, cv=10)
                 # todo fingerprinted scores
-                scores_realistic = fingerprint_cross_val_score(model2, data_original_preprocessed.values,
-                                                               fp_dataset_attack.values, target, cv=10)
+                #scores_realistic = fingerprint_cross_val_score(model2, data_original_preprocessed.values,
+                #                                               fp_dataset_attack.values, target, cv=10)
                 if attr not in score:
                     score[attr] = []
-                score[attr].append(np.mean(scores))
+                #score[attr].append(np.mean(scores))
                 if attr not in score_realistic:
                     score_realistic[attr] = []
-                score_realistic[attr].append(np.mean(scores_realistic))
+                #score_realistic[attr].append(np.mean(scores_realistic))
 
             secret_key = secret_key - 3
     print("Fingerprinted full: " + str(accuracy_fingerprinted_full))
@@ -145,5 +146,69 @@ def demo_exp():
     pprint({i: np.mean(score_realistic[i]) for i in score_realistic})
 
 
+def predicting_with_one_attr():
+    data = pd.read_csv('datasets/breast_cancer_full.csv', index_col='Id')
+    target = data.values[:, (len(data.columns) - 1)]
+    data = data.drop("recurrence", axis=1)
+
+    # retrieving performance from the previous runs
+    accuracy_original = 0.7168  # for decision tree: max_depth = 2, criterion = 'entropy'
+    gamma = 5
+    n_removed_attr = 7
+
+    # try removing each attribute and record the results
+    score = dict()
+    score_realistic = dict()
+    n_exp = 1
+    random_state = 25
+    attributes = list(itertools.combinations(data.columns, n_removed_attr))
+    attributes = [list(combo) for combo in attributes]
+    for attr_combination in attributes:
+        # calculate utility of attacked fingerprinted data set
+        secret_key = 3255  # increase every run
+        for n in range(n_exp):
+            # fingerprint the data
+            scheme = CategoricalNeighbourhood(gamma=gamma, xi=2, fingerprint_bit_length=8)
+            fp_dataset = scheme.insertion(dataset_name="breast_cancer", buyer_id=1, secret_key=secret_key)
+            fp_dataset = fp_dataset.drop("Id", axis=1)
+
+            # attack
+            fp_dataset_attack = fp_dataset.drop(attr_combination, axis=1)
+            # data_original_preprocessed = data.drop(attr_combination, axis=1)
+            fp_dataset_attack = pd.get_dummies(fp_dataset_attack)
+            # data_original_preprocessed = pd.get_dummies(data_original_preprocessed)
+            # todo: remove
+            data_original_preprocessed = pd.get_dummies(data)
+            if 'breast_left' in fp_dataset_attack:
+                fp_dataset_attack = fp_dataset_attack.drop(['breast_left'], axis=1)
+            if 'irradiat_yes' in fp_dataset_attack:
+                fp_dataset_attack = fp_dataset_attack.drop(['irradiat_yes'], axis=1)
+
+            if len(data_original_preprocessed.columns.difference(fp_dataset_attack.columns)) != 0:
+                data_original_preprocessed = data_original_preprocessed.drop(
+                    data_original_preprocessed.columns.difference(
+                        fp_dataset_attack.columns), axis=1)
+            if len(fp_dataset_attack.columns.difference(data_original_preprocessed.columns)) != 0:
+                fp_dataset_attack = fp_dataset_attack.drop(fp_dataset_attack.columns.difference(
+                    data_original_preprocessed.columns), axis=1)
+
+            model2 = DecisionTreeClassifier(random_state=random_state, criterion='entropy', max_depth=2)
+            print(fp_dataset_attack.columns)
+            scores = cross_val_score(model2, fp_dataset_attack.values, target, cv=10)
+            scores_realistic = fingerprint_cross_val_score(model2, data_original_preprocessed.values,
+                                                           fp_dataset_attack.values, target, cv=10)
+            if str(attr_combination) not in score:
+                score[str(attr_combination)] = []
+            score[str(attr_combination)].append(np.mean(scores))
+            if str(attr_combination) not in score_realistic:
+                score_realistic[str(attr_combination)] = []
+            score_realistic[str(attr_combination)].append(np.mean(scores_realistic))
+
+            secret_key = secret_key - 3
+    pprint(score)
+    pprint(score_realistic)
+
+
 if __name__ == '__main__':
     demo_exp()
+    predicting_with_one_attr()

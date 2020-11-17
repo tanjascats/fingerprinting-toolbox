@@ -1,0 +1,704 @@
+2020-04-23 06:12:30
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 3, 1, 16)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200]
+	/2002020-04-23 06:12:31
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 7, 1, 8)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200]
+	/2002020-04-23 06:12:40
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 10, 1, 8)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200]
+	/2002020-04-23 06:12:43
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.05, 20, 1, 8)
+Correct: 183/200
+Wrong: 17/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183]
+	/2002020-04-23 06:17:28
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 7, 1, 8)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200]
+	/2002020-04-23 06:17:34
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 3, 1, 16)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200]
+	/2002020-04-23 06:17:34
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 10, 1, 8)
+Correct: 199/200
+Wrong: 1/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199]
+	/2002020-04-23 06:17:35
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.1, 20, 1, 8)
+Correct: 176/200
+Wrong: 24/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176]
+	/2002020-04-23 06:24:45
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 20, 1, 8)
+Correct: 174/200
+Wrong: 26/200
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174]
+	/2002020-04-23 06:24:46
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 7, 1, 8)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200]
+	/2002020-04-23 06:24:48
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 10, 1, 8)
+Correct: 195/200
+Wrong: 5/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195]
+	/2002020-04-23 06:24:58
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.15, 3, 1, 16)
+Correct: 200/200
+Wrong: 0/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200]
+	/2002020-04-23 06:33:29
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 20, 1, 8)
+Correct: 118/200
+Wrong: 82/200
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118]
+	/2002020-04-23 06:33:34
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 10, 1, 8)
+Correct: 189/200
+Wrong: 11/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189]
+	/2002020-04-23 06:33:37
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 7, 1, 8)
+Correct: 198/200
+Wrong: 2/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198]
+	/2002020-04-23 06:33:54
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.2, 3, 1, 16)
+Correct: 198/200
+Wrong: 2/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198]
+	/2002020-04-23 06:47:42
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 20, 1, 8)
+Correct: 124/200
+Wrong: 76/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124]
+	/2002020-04-23 06:48:18
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 7, 1, 8)
+Correct: 196/200
+Wrong: 4/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196]
+	/2002020-04-23 06:48:22
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 10, 1, 8)
+Correct: 178/200
+Wrong: 22/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178]
+	/2002020-04-23 06:49:08
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.25, 3, 1, 16)
+Correct: 195/200
+Wrong: 5/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195]
+	/2002020-04-23 07:12:21
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 20, 1, 8)
+Correct: 88/200
+Wrong: 112/200
+	- out of which misdiagnosed: 7
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88]
+	/2002020-04-23 07:12:57
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 10, 1, 8)
+Correct: 157/200
+Wrong: 43/200
+	- out of which misdiagnosed: 9
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157]
+	/2002020-04-23 07:13:05
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 7, 1, 8)
+Correct: 179/200
+Wrong: 21/200
+	- out of which misdiagnosed: 10
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179]
+	/2002020-04-23 07:13:57
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.3, 3, 1, 16)
+Correct: 193/200
+Wrong: 7/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193]
+	/2002020-04-23 14:54:50
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 20, 1, 8)
+Correct: 71/200
+Wrong: 129/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71]
+	/2002020-04-23 14:55:25
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 10, 1, 8)
+Correct: 151/200
+Wrong: 49/200
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151]
+	/2002020-04-23 14:55:33
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 7, 1, 8)
+Correct: 186/200
+Wrong: 14/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186]
+	/2002020-04-23 14:56:11
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.35, 3, 1, 16)
+Correct: 167/200
+Wrong: 33/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167]
+	/2002020-04-23 15:07:00
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 20, 1, 8)
+Correct: 50/200
+Wrong: 150/200
+	- out of which misdiagnosed: 3
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71, 50]
+	/2002020-04-23 15:07:23
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 10, 1, 8)
+Correct: 118/200
+Wrong: 82/200
+	- out of which misdiagnosed: 10
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151, 118]
+	/2002020-04-23 15:07:34
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 7, 1, 8)
+Correct: 160/200
+Wrong: 40/200
+	- out of which misdiagnosed: 10
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186, 160]
+	/2002020-04-23 15:08:05
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.4, 3, 1, 16)
+Correct: 155/200
+Wrong: 45/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167, 155]
+	/2002020-04-23 15:19:50
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 20, 1, 8)
+Correct: 37/200
+Wrong: 163/200
+	- out of which misdiagnosed: 4
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71, 50, 37]
+	/2002020-04-23 15:20:16
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 10, 1, 8)
+Correct: 116/200
+Wrong: 84/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151, 118, 116]
+	/2002020-04-23 15:20:30
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 7, 1, 8)
+Correct: 145/200
+Wrong: 55/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186, 160, 145]
+	/2002020-04-23 15:21:01
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.45, 3, 1, 16)
+Correct: 142/200
+Wrong: 58/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167, 155, 142]
+	/2002020-04-23 15:34:58
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 20, 1, 8)
+Correct: 24/200
+Wrong: 176/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71, 50, 37, 24]
+	/2002020-04-23 15:35:31
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 10, 1, 8)
+Correct: 85/200
+Wrong: 115/200
+	- out of which misdiagnosed: 2
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151, 118, 116, 85]
+	/2002020-04-23 15:35:46
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 7, 1, 8)
+Correct: 110/200
+Wrong: 90/200
+	- out of which misdiagnosed: 3
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186, 160, 145, 110]
+	/2002020-04-23 15:36:24
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.5, 3, 1, 16)
+Correct: 93/200
+Wrong: 107/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167, 155, 142, 93]
+	/2002020-04-23 15:50:46
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 20, 1, 8)
+Correct: 19/200
+Wrong: 181/200
+	- out of which misdiagnosed: 1
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71, 50, 37, 24, 19]
+	/2002020-04-23 15:51:15
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 10, 1, 8)
+Correct: 61/200
+Wrong: 139/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151, 118, 116, 85, 61]
+	/2002020-04-23 15:51:36
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 7, 1, 8)
+Correct: 89/200
+Wrong: 111/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186, 160, 145, 110, 89]
+	/2002020-04-23 15:52:16
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.55, 3, 1, 16)
+Correct: 71/200
+Wrong: 129/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167, 155, 142, 93, 71]
+	/2002020-04-23 16:08:11
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 20, 1, 8)
+Correct: 9/200
+Wrong: 191/200
+	- out of which misdiagnosed: 3
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71, 50, 37, 24, 19, 9]
+	/200SUMMARY
+2020-04-23 16:08:11
+(gamma, xi, length of a fingerprint): (20, 1, 8)
+Correct: [183, 176, 174, 118, 124, 88, 71, 50, 37, 24, 19, 9]
+	/200
+
+--------------------------------------------------------------
+
+2020-04-23 16:08:39
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 10, 1, 8)
+Correct: 28/200
+Wrong: 172/200
+	- out of which misdiagnosed: 4
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151, 118, 116, 85, 61, 28]
+	/200SUMMARY
+2020-04-23 16:08:39
+(gamma, xi, length of a fingerprint): (10, 1, 8)
+Correct: [200, 199, 195, 189, 178, 157, 151, 118, 116, 85, 61, 28]
+	/200
+
+--------------------------------------------------------------
+
+2020-04-23 16:09:02
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 7, 1, 8)
+Correct: 61/200
+Wrong: 139/200
+	- out of which misdiagnosed: 2
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186, 160, 145, 110, 89, 61]
+	/200SUMMARY
+2020-04-23 16:09:02
+(gamma, xi, length of a fingerprint): (7, 1, 8)
+Correct: [200, 200, 200, 198, 196, 179, 186, 160, 145, 110, 89, 61]
+	/200
+
+--------------------------------------------------------------
+
+2020-04-23 16:09:29
+seed: 332
+Data: german_credit
+(fraction flipped, gamma, xi, length of a fingerprint): (0.6, 3, 1, 16)
+Correct: 41/200
+Wrong: 159/200
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+intermediate summary
+
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167, 155, 142, 93, 71, 41]
+	/200SUMMARY
+2020-04-23 16:09:29
+(gamma, xi, length of a fingerprint): (3, 1, 16)
+Correct: [200, 200, 200, 198, 195, 193, 167, 155, 142, 93, 71, 41]
+	/200
+
+--------------------------------------------------------------
+

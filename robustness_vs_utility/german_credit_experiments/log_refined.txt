@@ -1,0 +1,410 @@
+
+Removing 1 attributes
+Decision Tree
+gamma = 20
+number of experiments = 1
+Averages:
+['checking_account']: 0.664,
+['duration']: 0.685,
+['credit_hist']: 0.685,
+['purpose']: 0.6950000000000001,
+['credit_amount']: 0.7030000000000001,
+['savings']: 0.695,
+['employment_since']: 0.712,
+['installment_rate']: 0.719,
+['sex_status']: 0.717,
+['debtors']: 0.71,
+['residence_since']: 0.7209999999999999,
+['property']: 0.723,
+['age']: 0.731,
+['installment_other']: 0.714,
+['housing']: 0.718,
+['existing_credits']: 0.7299999999999999,
+['job']: 0.717,
+['liable_people']: 0.7210000000000001,
+['tel']: 0.713,
+full: 0.719
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.6679999999999999,
+['duration']: 0.6839999999999999,
+['credit_hist']: 0.6799999999999999,
+['purpose']: 0.718,
+['credit_amount']: 0.6920000000000001,
+['savings']: 0.681,
+['employment_since']: 0.696,
+['installment_rate']: 0.7070000000000001,
+['sex_status']: 0.693,
+['debtors']: 0.682,
+['residence_since']: 0.701,
+['property']: 0.6900000000000001,
+['age']: 0.707,
+['installment_other']: 0.7049999999999998,
+['housing']: 0.692,
+['existing_credits']: 0.6950000000000001,
+['job']: 0.706,
+['liable_people']: 0.692,
+['tel']: 0.696,
+full: 0.5469999999999999
+Timestamp: 2020-04-15 12:23:19.765883
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+Decision Tree
+gamma = 20
+number of experiments = 100
+Averages:
+['checking_account']: 0.6697300000000002,
+['duration']: 0.6941299999999999,
+['credit_hist']: 0.6847500000000001,
+['purpose']: 0.68763,
+['credit_amount']: 0.6966999999999999,
+['savings']: 0.6919299999999998,
+['employment_since']: 0.70103,
+['installment_rate']: 0.70899,
+['sex_status']: 0.7073799999999999,
+['debtors']: 0.70754,
+['residence_since']: 0.7071599999999998,
+['property']: 0.7112999999999999,
+['age']: 0.71623,
+['installment_other']: 0.7115299999999999,
+['housing']: 0.71335,
+['existing_credits']: 0.7144499999999999,
+['job']: 0.7148499999999998,
+['liable_people']: 0.70951,
+['tel']: 0.7075099999999999,
+full: 0.7096199999999999
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.6730200000000001,
+['duration']: 0.6813300000000001,
+['credit_hist']: 0.6893799999999998,
+['purpose']: 0.68706,
+['credit_amount']: 0.6875100000000001,
+['savings']: 0.6858799999999998,
+['employment_since']: 0.6947500000000001,
+['installment_rate']: 0.69708,
+['sex_status']: 0.6979799999999997,
+['debtors']: 0.6966399999999999,
+['residence_since']: 0.694,
+['property']: 0.69639,
+['age']: 0.7026700000000001,
+['installment_other']: 0.70073,
+['housing']: 0.6964199999999999,
+['existing_credits']: 0.69808,
+['job']: 0.6977,
+['liable_people']: 0.69633,
+['tel']: 0.69333,
+full: 0.54953
+Timestamp: 2020-04-15 13:38:33.019736
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+Decision Tree
+gamma = 20
+number of experiments = 10
+Averages:
+full: 0.7149
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.6691,
+['duration']: 0.6843999999999999,
+['credit_hist']: 0.6909000000000001,
+['purpose']: 0.6867,
+['credit_amount']: 0.6905,
+['savings']: 0.6895,
+['employment_since']: 0.6972999999999999,
+['installment_rate']: 0.6942999999999999,
+['sex_status']: 0.6989,
+['debtors']: 0.6968000000000001,
+['residence_since']: 0.6990000000000001,
+['property']: 0.6931,
+['age']: 0.7032999999999999,
+['installment_other']: 0.6944999999999999,
+['housing']: 0.6953000000000001,
+['existing_credits']: 0.6964000000000001,
+['job']: 0.6927000000000001,
+['liable_people']: 0.6951,
+['tel']: 0.6898,
+full: 0.5322
+Timestamp: 2020-04-15 13:40:35.167647
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+Decision Tree
+gamma = 20
+number of experiments = 100
+Averages:
+full: 0.7096199999999999
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.6744199999999998,
+['duration']: 0.67971,
+['credit_hist']: 0.6875800000000001,
+['purpose']: 0.68842,
+['credit_amount']: 0.69087,
+['savings']: 0.68784,
+['employment_since']: 0.6945700000000001,
+['installment_rate']: 0.69797,
+['sex_status']: 0.6975099999999999,
+['debtors']: 0.6977400000000001,
+['residence_since']: 0.6959600000000001,
+['property']: 0.6953,
+['age']: 0.6991899999999999,
+['installment_other']: 0.70104,
+['housing']: 0.6967099999999998,
+['existing_credits']: 0.6978799999999998,
+['job']: 0.6979799999999997,
+['liable_people']: 0.6958199999999999,
+['tel']: 0.69477,
+full: 0.54289
+Timestamp: 2020-04-15 13:50:35.799489
+------------------------------------------
+------------------------------------------
+Removing 16 attributes
+Decision Tree
+gamma = 20
+number of experiments = 2
+Averages:
+full: 0.7095
+
+Non-fingerprinted holdout test:
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'age', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.6695,
+['checking_account', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6635,
+['checking_account', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'tel', 'foreign']: 0.6784999999999999,
+['checking_account', 'duration', 'credit_hist', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.6580000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'job', 'liable_people', 'tel']: 0.6844999999999999,
+['checking_account', 'duration', 'purpose', 'savings', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel']: 0.6759999999999999,
+['duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6925,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.685,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.678,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'foreign']: 0.6855,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.696,
+['duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.73,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.6725000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'debtors', 'residence_since', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel']: 0.677,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6515,
+['duration', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel']: 0.6775,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'age', 'installment_other', 'housing', 'liable_people', 'tel']: 0.6819999999999999,
+['credit_hist', 'purpose', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.7045,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'foreign']: 0.6955,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel']: 0.662,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.683,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'sex_status', 'residence_since', 'property', 'age', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.667,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'tel', 'foreign']: 0.6890000000000001,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.706,
+['checking_account', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.6835,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'job', 'tel']: 0.671,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.691,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6600000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6855,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'age', 'housing', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.6704999999999999,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'housing', 'existing_credits', 'liable_people', 'tel']: 0.7075,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'liable_people', 'foreign']: 0.6785,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.6715,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.675,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.695,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.6615,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.6705,
+['checking_account', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'job', 'liable_people', 'tel', 'foreign']: 0.6985000000000001,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'tel', 'foreign']: 0.675,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.7035,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'foreign']: 0.6735,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'job', 'liable_people', 'tel', 'foreign']: 0.6944999999999999,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'debtors', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.661,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'job', 'tel', 'foreign']: 0.6745,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'job', 'liable_people', 'tel', 'foreign']: 0.6785,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.653,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people']: 0.702,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'job', 'liable_people', 'foreign']: 0.703,
+full: 0.519
+Timestamp: 2020-04-15 15:07:31.282266
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+Decision Tree
+gamma = 20
+number of experiments = 2
+Averages:
+full: 0.755
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.7395,
+['duration']: 0.7475,
+['credit_hist']: 0.7505,
+['purpose']: 0.744,
+['credit_amount']: 0.748,
+['savings']: 0.753,
+['employment_since']: 0.7569999999999999,
+['installment_rate']: 0.7474999999999999,
+['sex_status']: 0.753,
+['debtors']: 0.7525,
+['residence_since']: 0.7495,
+['property']: 0.7530000000000001,
+['age']: 0.7549999999999999,
+['installment_other']: 0.7435,
+['housing']: 0.7525,
+['existing_credits']: 0.7565000000000001,
+['job']: 0.7535000000000001,
+['liable_people']: 0.7590000000000001,
+['tel']: 0.7565,
+['foreign']: 0.7495,
+full: 0.29999999999999993
+Timestamp: 2020-04-15 15:19:14.941477
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+Logistic Regression
+gamma = 20
+number of experiments = 2
+Averages:
+full: 0.755
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.7365,
+['duration']: 0.7444999999999999,
+['credit_hist']: 0.7449999999999999,
+['purpose']: 0.749,
+['credit_amount']: 0.752,
+['savings']: 0.752,
+['employment_since']: 0.7535000000000001,
+['installment_rate']: 0.7515000000000001,
+['sex_status']: 0.7535,
+['debtors']: 0.756,
+['residence_since']: 0.7555000000000001,
+['property']: 0.7569999999999999,
+['age']: 0.7495,
+['installment_other']: 0.746,
+['housing']: 0.7505000000000002,
+['existing_credits']: 0.7484999999999999,
+['job']: 0.7465,
+['liable_people']: 0.7575000000000001,
+['tel']: 0.7505,
+['foreign']: 0.7525000000000001,
+full: 0.3
+Timestamp: 2020-04-15 15:25:54.728907
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+KNN
+gamma = 20
+number of experiments = 1
+Averages:
+full: 0.733
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.71,
+['duration']: 0.732,
+['credit_hist']: 0.726,
+['purpose']: 0.731,
+['credit_amount']: 0.734,
+['savings']: 0.717,
+['employment_since']: 0.735,
+['installment_rate']: 0.7310000000000001,
+['sex_status']: 0.73,
+['debtors']: 0.7310000000000001,
+['residence_since']: 0.725,
+['property']: 0.741,
+['age']: 0.7310000000000001,
+['installment_other']: 0.726,
+['housing']: 0.725,
+['existing_credits']: 0.723,
+['job']: 0.728,
+['liable_people']: 0.725,
+['tel']: 0.743,
+['foreign']: 0.724,
+full: 0.3
+Timestamp: 2020-04-15 16:42:51.830333
+------------------------------------------
+------------------------------------------
+Removing 1 attributes
+KNN
+gamma = 20
+number of experiments = 10
+Averages:
+full: 0.7658
+
+Non-fingerprinted holdout test:
+['checking_account']: 0.7312,
+['duration']: 0.7482,
+['credit_hist']: 0.7557,
+['purpose']: 0.7543,
+['credit_amount']: 0.7595000000000001,
+['savings']: 0.7475,
+['employment_since']: 0.7511,
+['installment_rate']: 0.7531,
+['sex_status']: 0.76,
+['debtors']: 0.7642000000000001,
+['residence_since']: 0.7617,
+['property']: 0.7572,
+['age']: 0.7579,
+['installment_other']: 0.7594,
+['housing']: 0.7619,
+['existing_credits']: 0.7603,
+['job']: 0.7619999999999999,
+['liable_people']: 0.7634000000000001,
+['tel']: 0.7640999999999999,
+['foreign']: 0.7577999999999999,
+full: 0.7
+Timestamp: 2020-04-15 16:56:32.945422
+------------------------------------------
+------------------------------------------
+Removing 16 attributes
+Decision Tree
+gamma = 20
+number of experiments = 1
+Averages:
+full: 0.719
+
+Non-fingerprinted holdout test:
+['checking_account', 'duration', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.693,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'debtors', 'age', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6629999999999999,
+['credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.711,
+['duration', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.711,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'liable_people']: 0.6869999999999999,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.693,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.7020000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel']: 0.677,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'age', 'installment_other', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.686,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.6839999999999999,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'liable_people', 'tel']: 0.692,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'debtors', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.672,
+['checking_account', 'credit_hist', 'purpose', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.656,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel']: 0.708,
+['duration', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel']: 0.736,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'liable_people', 'tel', 'foreign']: 0.686,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel']: 0.696,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.672,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.703,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.6659999999999998,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'tel', 'foreign']: 0.6849999999999999,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.6719999999999999,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.687,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'age', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.709,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.651,
+['credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.702,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'foreign']: 0.7030000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'residence_since', 'age', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.692,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'age', 'housing', 'job', 'liable_people', 'tel', 'foreign']: 0.688,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'age', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6769999999999999,
+['duration', 'credit_hist', 'purpose', 'savings', 'installment_rate', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6739999999999999,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'housing', 'job', 'liable_people', 'foreign']: 0.697,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'job', 'liable_people', 'foreign']: 0.6900000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.649,
+['checking_account', 'duration', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'housing', 'existing_credits', 'liable_people', 'tel', 'foreign']: 0.709,
+['checking_account', 'duration', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'residence_since', 'property', 'installment_other', 'job', 'liable_people', 'tel', 'foreign']: 0.6869999999999999,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'installment_rate', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.7070000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.702,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.7059999999999998,
+['checking_account', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.7100000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'savings', 'sex_status', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'foreign']: 0.6859999999999999,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.6839999999999999,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'debtors', 'residence_since', 'property', 'age', 'installment_other', 'existing_credits', 'liable_people', 'foreign']: 0.687,
+['checking_account', 'duration', 'credit_amount', 'savings', 'employment_since', 'installment_rate', 'sex_status', 'debtors', 'property', 'age', 'installment_other', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6980000000000001,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'residence_since', 'age', 'installment_other', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.6659999999999999,
+['checking_account', 'duration', 'credit_hist', 'purpose', 'credit_amount', 'savings', 'employment_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'liable_people', 'tel', 'foreign']: 0.683,
+['checking_account', 'duration', 'credit_hist', 'credit_amount', 'savings', 'employment_since', 'sex_status', 'debtors', 'residence_since', 'property', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.661,
+['duration', 'credit_hist', 'purpose', 'credit_amount', 'employment_since', 'installment_rate', 'sex_status', 'residence_since', 'property', 'age', 'installment_other', 'housing', 'existing_credits', 'job', 'tel', 'foreign']: 0.676
+Timestamp: 2020-04-17 01:04:43.055157
+------------------------------------------
+------------------------------------------

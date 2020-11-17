@@ -9,15 +9,15 @@ from attacks.bit_flipping_attack import BitFlippingAttack
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
 n_experiments = 10  # (20) number of times we attack the same fingerprinted file
-n_fp_experiments = 25  # (50) number of times we run fp insertion
+n_fp_experiments = 20  # (50) number of times we run fp insertion
 
-fractions = np.array([0.01, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45])
+fractions = np.array([0.05, 0.1, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.6])
 results = []
-gamma = 30; xi = 1; fingerprint_bit_length = 64
+gamma = 20; xi = 1; fingerprint_bit_length = 8
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = BitFlippingAttack()
-data = "nursery"
+data = "german_credit"
 
 for size in fractions:
 

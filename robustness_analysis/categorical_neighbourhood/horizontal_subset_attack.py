@@ -8,19 +8,19 @@ import numpy as np
 from attacks.horizontal_subset_attack import HorizontalSubsetAttack
 from schemes.categorical_neighbourhood.categorical_neighbourhood import CategoricalNeighbourhood
 
-n_experiments = 10  # number of times we attack the same fingerprinted file
-n_fp_experiments = 25  # number of times we run fp insertion
+n_experiments = 1 #10  # number of times we attack the same fingerprinted file
+n_fp_experiments = 1 #25  # number of times we run fp insertion
 
-size_of_subset = np.array([0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.40, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75,
+size_of_subset = np.array([0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.40, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75,
                            0.8, 0.85, 0.9, 0.95, 1])
 results = []
-gamma = 30; xi = 2; fingerprint_bit_length = 64
+gamma = 7; xi = 2; fingerprint_bit_length = 16
 
 scheme = CategoricalNeighbourhood(gamma=gamma, xi=xi, fingerprint_bit_length=fingerprint_bit_length)
 attack = HorizontalSubsetAttack()
 data = 'nursery'
 
-f = open("robustness_analysis/categorical_neighbourhood/log/horizontal_subset_attack_" + data + ".txt", "a+")
+f = open("robustness_analysis/categorical_neighbourhood/log/test/horizontal_subset_attack_" + data + ".txt", "a+")
 
 for size in size_of_subset:
     # for reproducibility
@@ -36,6 +36,8 @@ for size in size_of_subset:
         for j in range(n_experiments):
             # perform the attack
             release_data = attack.run(dataset=fp_dataset, fraction=size)
+            print(release_data.head())
+            exit()
             # try to extract the fingerprint
             suspect = scheme.detection(dataset_name=data, real_buyer_id=1, secret_key=secret_key,
                                 dataset=release_data)

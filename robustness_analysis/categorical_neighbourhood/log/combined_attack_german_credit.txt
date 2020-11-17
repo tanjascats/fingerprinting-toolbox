@@ -1,0 +1,189 @@
+2020-06-17 04:13:11
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.9, 1, 0.9, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:13:18
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.9, 1, 0.95, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:13:26
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.9, 1, 1.0, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:13:33
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.9, 2, 0.9, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:13:41
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.9, 2, 0.95, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:13:48
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.9, 2, 1.0, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:13:56
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.95, 1, 0.9, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:04
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.95, 1, 0.95, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:12
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.95, 1, 1.0, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:20
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.95, 2, 0.9, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:28
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.95, 2, 0.95, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:37
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (0.95, 2, 1.0, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:45
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (1.0, 1, 0.9, 3, 2, 8)
+Correct: 1/1
+Wrong: 0/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:14:53
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (1.0, 1, 0.95, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:15:03
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (1.0, 1, 1.0, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:15:10
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (1.0, 2, 0.9, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:15:19
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (1.0, 2, 0.95, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+2020-06-17 04:15:28
+seed: 332
+Data: german_credit
+(size of subset, columns, flipped, gamma, xi, length of a fingerprint): (1.0, 2, 1.0, 3, 2, 8)
+Correct: 0/1
+Wrong: 1/1
+	- out of which misdiagnosed: 0
+
+--------------------------------------------------------------
+
+SUMMARY
+2020-06-17 04:15:28
+(gamma, xi, length of a fingerprint): (3, 2, 8)
+[(0.9, 1, 0.9), (0.9, 1, 0.95), (0.9, 1, 1.0), (0.9, 2, 0.9), (0.9, 2, 0.95), (0.9, 2, 1.0), (0.95, 1, 0.9), (0.95, 1, 0.95), (0.95, 1, 1.0), (0.95, 2, 0.9), (0.95, 2, 0.95), (0.95, 2, 1.0), (1.0, 1, 0.9), (1.0, 1, 0.95), (1.0, 1, 1.0), (1.0, 2, 0.9), (1.0, 2, 0.95), (1.0, 2, 1.0)]
+Correct: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+	/1
+
+--------------------------------------------------------------
+
