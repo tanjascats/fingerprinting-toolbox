@@ -37,6 +37,9 @@ class Scheme(ABC):
         seed = (self.secret_key << shift) + buyer_id
         b = blake2b(key=seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
         fingerprint = BitArray(hex=b.hexdigest())
+        fp_msg = "\nGenerated fingerprint for buyer " + str(buyer_id) + ": " + fingerprint.bin + "Inserting the " \
+                                                                                                 "fingerprint...\n"
+        print(fp_msg)
         return fingerprint
 
     def detect_potential_traitor(self, fingerprint):
