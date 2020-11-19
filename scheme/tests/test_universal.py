@@ -68,3 +68,39 @@ class TestBNNScheme(unittest.TestCase):
         suspect_id = scheme.detection(fingerprinted_data)
         print(suspect_id)
         self.assertEqual(0, suspect_id)
+
+    def test_detection_adult_data(self):
+        data = 'adult_full'
+        scheme = BNNScheme(gamma=5, secret_key=7, fingerprint_bit_length=16, k=3, number_of_buyers=3, xi=2)
+        fingerprinted_data = scheme.insertion(data, 0)
+
+        suspect_id = scheme.detection(fingerprinted_data)
+        print(suspect_id)
+        self.assertEqual(0, suspect_id)
+
+    def test_detection_breast_cancer(self):
+        data = 'breast_cancer_full'
+        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        fingerprinted_data = scheme.insertion(data, 0)
+
+        suspect_id = scheme.detection(fingerprinted_data)
+        print(suspect_id)
+        self.assertEqual(0, suspect_id)
+
+    def test_detection_mushrooms(self):
+        data = 'mushrooms_full'
+        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        fingerprinted_data = scheme.insertion(data, 0)
+
+        suspect_id = scheme.detection(fingerprinted_data)
+        print(suspect_id)
+        self.assertEqual(0, suspect_id)
+
+    def test_detection_nursery(self):
+        data = 'nursery_full'
+        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=16, k=3, number_of_buyers=3, xi=2)
+        fingerprinted_data = scheme.insertion(data, 0)
+
+        suspect_id = scheme.detection(fingerprinted_data)
+        print(suspect_id)
+        self.assertEqual(0, suspect_id)
