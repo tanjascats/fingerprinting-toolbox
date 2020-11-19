@@ -375,11 +375,13 @@ class BNNScheme(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Fingerprint detected: " + list_to_string(fingerprint_template))
+        print('VOTES')
         print(votes)
 
+        # todo: add probabilistic matching
         buyer_no = super().detect_potential_traitor(fingerprint_template_str)
         if buyer_no >= 0:
-            print("Buyer " + str(buyer_no) + " is a traitor.")
+            print("Recipient " + str(buyer_no) + " is a suspect.")
         else:
             print("None suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")

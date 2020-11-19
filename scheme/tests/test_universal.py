@@ -44,7 +44,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_medium_dataset(self):
         data = 'german_credit_full'  # fails for small (150 rows, 11 columns) datasets
-        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -53,7 +53,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_very_small_dataset(self):
         data = 'german_credit_sample'  # fails for small (150 rows, 11 columns) datasets
-        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -62,7 +62,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_small_dataset(self):
         data = 'german_credit_medium_sample'
-        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
