@@ -221,7 +221,7 @@ class BNNScheme(Scheme):
             fingerprinted_relation[cat] = label_encoders[cat].inverse_transform(fingerprinted_relation[cat])
 
         print("Fingerprint inserted.")
-        if save is True:
+        if save:
             # todo: fix this
             write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset, [self.gamma, self.xi],
                           buyer_id)

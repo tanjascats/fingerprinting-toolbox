@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from hashlib import blake2b
 from bitstring import BitArray
+import pyblake2
 
 
 class Scheme(ABC):
@@ -35,9 +35,9 @@ class Scheme(ABC):
         shift = 10
         # seed is 42 bit long
         seed = (self.secret_key << shift) + buyer_id
-        b = blake2b(key=seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
+        b = pyblake2.blake2b(key=seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
         fingerprint = BitArray(hex=b.hexdigest())
-        fp_msg = "\nGenerated fingerprint for buyer " + str(buyer_id) + ": " + fingerprint.bin + "Inserting the " \
+        fp_msg = "\nGenerated fingerprint for buyer " + str(buyer_id) + ": " + fingerprint.bin + "\nInserting the " \
                                                                                                  "fingerprint...\n"
         print(fp_msg)
         return fingerprint
@@ -47,9 +47,18 @@ class Scheme(ABC):
         # for each buyer
         for buyer_id in range(self.number_of_buyers):
             buyer_seed = (self.secret_key << shift) + buyer_id
-            b = blake2b(key=buyer_seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
+            b = pyblake2.blake2b(key=buyer_seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
             buyer_fp = BitArray(hex=b.hexdigest())
             buyer_fp = buyer_fp.bin
             if buyer_fp == fingerprint:
                 return buyer_id
         return -1
+
+    def plot_attribute_difference(self, original_dataset, fingerprinted_dataset):
+        # for attribute in original dataset
+        # # count differences in fp and plot as a bar plot
+        # todo
+        pass
+
+    def summary(self, original_dataset, fingerprinted_dataset):
+        self.plot_attribute_difference(original_dataset, fingerprinted_dataset)

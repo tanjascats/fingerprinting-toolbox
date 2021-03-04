@@ -30,17 +30,27 @@ class AKScheme(Scheme):
         self.xi = xi
         super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
 
-    def insertion(self, dataset_name, buyer_id):
-        print("Start AK insertion algorithm...")
-        print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
+        self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
+                             "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
+
+    def insertion(self, dataset, buyer_id, save=False, exclude=None, include=None):
+        print(self._INIT_MESSAGE)
         # it is assumed that the first column in the dataset is the primary key
-        relation, primary_key = import_dataset(dataset_name)
+        if type(dataset) != 'string':
+            relation = dataset
+        else:
+            relation, primary_key = import_dataset(dataset)
+        # handle the attributes for marking
+        original = relation
+        if exclude is not None:
+            for attribute in exclude:
+                relation = relation.drop(attribute, axis=1)
+        if include is not None:
+            relation = relation[include]
         # number of numerical attributes minus primary key
         num_of_attributes = len(relation.select_dtypes(exclude='object').columns) - 1
 
         fingerprint = super().create_fingerprint(buyer_id)
-        print("\nGenerated fingerprint for buyer " + str(buyer_id) + ": " + fingerprint.bin)
-        print("Inserting the fingerprint...\n")
 
         fingerprinted_relation = relation.copy()
         # count marked tuples
@@ -72,11 +82,21 @@ class AKScheme(Scheme):
                 fingerprinted_relation.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
                 count += 1
 
+        # put back the excluded stuff
+        for attribute in exclude:
+            fingerprinted_relation[attribute] = original[attribute]
+        fingerprinted_relation = fingerprinted_relation[original.columns]
         print("Fingerprint inserted.")
         print("\tmarked tuples: ~" + str((count / len(relation)) * 100) + "%")
         print("\tsingle fingerprint bit embedded " + str(count_omega) + " times")
-        write_dataset(fingerprinted_relation, "ak_scheme", dataset_name, [self.gamma, self.xi], buyer_id)
-        print("Time: " + str(int(time.time() - start)) + " sec.")
+        if save:
+            write_dataset(fingerprinted_relation, "ak_scheme", dataset, [self.gamma, self.xi], buyer_id)
+        runtime = int(time.time() - start)
+        if runtime == 0:
+            runtime_string = "<1"
+        else:
+            runtime_string = str(runtime)
+        print("Time: " + runtime_string + " sec.")
         return fingerprinted_relation
 
     def detection(self, dataset_name, real_buyer_id):

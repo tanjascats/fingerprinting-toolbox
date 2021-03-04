@@ -1,4 +1,4 @@
-from attacks.attack import Attack
+from attacks._base import Attack
 import time
 import random
 
