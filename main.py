@@ -1,5 +1,5 @@
 from scheme import AKScheme
-from attacks.horizontal_subset_attack import HorizontalSubsetAttack
+from attacks import HorizontalSubsetAttack
 
 
 def main():
