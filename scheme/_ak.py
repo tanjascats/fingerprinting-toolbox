@@ -33,22 +33,31 @@ class AKScheme(Scheme):
         self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
 
-    def insertion(self, dataset, buyer_id, save=False, exclude=None, include=None):
+    def insertion(self, dataset, buyer_id, save=False, exclude=None, include=None, primary_key_attribute=None):
         print(self._INIT_MESSAGE)
         # it is assumed that the first column in the dataset is the primary key
         if type(dataset) != 'string':
-            relation = dataset
+            if primary_key_attribute is not None:
+                primary_key = dataset[primary_key_attribute]
+                original = dataset
+                relation = dataset.drop(primary_key_attribute, axis=1)
+                # relation.index = primary_key
+            else:
+                primary_key = dataset.index
+                original = dataset
+                relation = dataset
         else:
             relation, primary_key = import_dataset(dataset)
+            original = relation
         # handle the attributes for marking
-        original = relation
+
         if exclude is not None:
             for attribute in exclude:
                 relation = relation.drop(attribute, axis=1)
         if include is not None:
             relation = relation[include]
-        # number of numerical attributes minus primary key
-        num_of_attributes = len(relation.select_dtypes(exclude='object').columns) - 1
+        # number of numerical attributes
+        num_of_attributes = len(relation.select_dtypes(exclude='object').columns)
 
         fingerprint = super().create_fingerprint(buyer_id)
 
@@ -58,13 +67,13 @@ class AKScheme(Scheme):
         start = time.time()
         for r in relation.select_dtypes(exclude='object').iterrows():
             # seed = concat(secret_key, primary_key)
-            seed = (self.secret_key << self.__primary_key_len) + r[1][0]
+            seed = (self.secret_key << self.__primary_key_len) + primary_key[r[0]]
             random.seed(seed)
 
             # select the tuple
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # select attribute (that is not the primary key)
-                attr_idx = random.randint(0, sys.maxsize) % num_of_attributes + 1
+                attr_idx = random.randint(0, sys.maxsize) % num_of_attributes
                 attribute_val = r[1][attr_idx]
                 # select least significant bit
                 bit_idx = random.randint(0, sys.maxsize) % self.xi
@@ -85,6 +94,8 @@ class AKScheme(Scheme):
         # put back the excluded stuff
         for attribute in exclude:
             fingerprinted_relation[attribute] = original[attribute]
+        if primary_key_attribute is not None:
+            fingerprinted_relation[primary_key_attribute] = original[primary_key_attribute]
         fingerprinted_relation = fingerprinted_relation[original.columns]
         print("Fingerprint inserted.")
         print("\tmarked tuples: ~" + str((count / len(relation)) * 100) + "%")
@@ -98,19 +109,30 @@ class AKScheme(Scheme):
             runtime_string = str(runtime)
         print("Time: " + runtime_string + " sec.")
         return fingerprinted_relation
+    # todo: return fingerprint meta, i.e. gamma, xi, excluded attributes, primary key attribute, number of recipients
 
-    def detection(self, dataset_name, real_buyer_id):
+    def detection(self, dataset, exclude=None, include=None, read=False, primary_key_attribute=None,
+                  real_buyer_id=None):
         print("Start AK detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
-        if isinstance(dataset_name, pd.DataFrame):
-            relation, primary_key = dataset_name, dataset_name[dataset_name.columns[0]]
-        else:
-            relation, primary_key = import_fingerprinted_dataset(scheme_string="ak_scheme", dataset_name=dataset_name,
+        if isinstance(dataset, pd.DataFrame) and read is False:
+            relation = dataset
+            # drop stuff
+            if primary_key_attribute is not None:
+                primary_key = relation[primary_key_attribute]
+                relation = relation.drop(primary_key_attribute, axis=1)
+            else:
+                primary_key = relation.index
+        elif read:  # then we assume that the dataset parameter is string name of the dataset or path or something
+            relation, primary_key = import_fingerprinted_dataset(scheme_string="ak_scheme", dataset_name=dataset,
                                                                  scheme_params=[self.gamma, self.xi],
                                                                  real_buyer_id=real_buyer_id)
+        if exclude is not None:
+            relation = relation.drop(exclude, axis=1)
+
         start = time.time()
         # number of numerical attributes minus primary key
-        num_of_attributes = len(relation.select_dtypes(exclude='object').columns) - 1
+        num_of_attributes = len(relation.select_dtypes(exclude='object').columns)
 
         # init fingerprint template and counts
         # for each of the fingerprint bit the votes if it is 0 or 1
@@ -118,13 +140,13 @@ class AKScheme(Scheme):
 
         # scan all tuples and obtain counts for each fingerprint bit
         for r in relation.select_dtypes(exclude='object').iterrows():
-            seed = (self.secret_key << self.__primary_key_len) + r[1][0]
+            seed = (self.secret_key << self.__primary_key_len) + primary_key[r[0]]
             random.seed(seed)
 
             # this tuple was marked
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # this attribute was marked (skip the primary key)
-                attr_idx = random.randint(0, sys.maxsize) % num_of_attributes + 1
+                attr_idx = random.randint(0, sys.maxsize) % num_of_attributes
                 attribute_val = r[1][attr_idx]
                 # this LS bit was marked
                 bit_idx = random.randint(0, sys.maxsize) % self.xi
@@ -146,10 +168,13 @@ class AKScheme(Scheme):
         for i in range(self.fingerprint_bit_length):
             # certainty of a fingerprint value
             T = 0.50
-            if count[i][0]/(count[i][0] + count[i][1]) > T:
-                fingerprint_template[i] = 0
-            elif count[i][1]/(count[i][0] + count[i][1]) > T:
-                fingerprint_template[i] = 1
+            try:
+                if count[i][0]/(count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 0
+                elif count[i][1]/(count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 1
+            except ZeroDivisionError:
+                pass
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Fingerprint detected: " + list_to_string(fingerprint_template))

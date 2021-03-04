@@ -62,3 +62,10 @@ class Scheme(ABC):
 
     def summary(self, original_dataset, fingerprinted_dataset):
         self.plot_attribute_difference(original_dataset, fingerprinted_dataset)
+
+    def set_secret_key(self, secret_key):
+        '''
+        This method can be used from the outside on the defined scheme for better experimental experience
+        :param secret_key: a new secret key to be used - the old one will be permanently deleted
+        '''
+        self.secret_key = secret_key
