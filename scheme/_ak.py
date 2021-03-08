@@ -33,7 +33,8 @@ class AKScheme(Scheme):
         self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
 
-    def insertion(self, dataset, buyer_id, save=False, exclude=None, include=None, primary_key_attribute=None):
+    def insertion(self, dataset, buyer_id, save=False, exclude=None, include=None, primary_key_attribute=None,
+                  write_to=None):
         print(self._INIT_MESSAGE)
         # it is assumed that the first column in the dataset is the primary key
         if type(dataset) != 'string':
@@ -100,8 +101,14 @@ class AKScheme(Scheme):
         print("Fingerprint inserted.")
         print("\tmarked tuples: ~" + str((count / len(relation)) * 100) + "%")
         print("\tsingle fingerprint bit embedded " + str(count_omega) + " times")
-        if save:
+        if save and write_to is None:
             write_dataset(fingerprinted_relation, "ak_scheme", dataset, [self.gamma, self.xi], buyer_id)
+        elif save and write_to is not None:
+            write_to_dir = "/".join(write_to.split("/")[:-1])
+            if not os.path.exists(write_to_dir):
+                os.mkdir(write_to_dir)
+            fullname = os.path.join(write_to)
+            fingerprinted_relation.to_csv(fullname)
         runtime = int(time.time() - start)
         if runtime == 0:
             runtime_string = "<1"

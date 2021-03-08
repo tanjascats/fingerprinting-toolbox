@@ -6,6 +6,7 @@ import time
 import numbers
 import warnings
 from traceback import format_exc
+from astropy.table import Table
 
 from sklearn.utils.validation import _check_fit_params, _num_samples
 from sklearn.utils.metaestimators import _safe_split
@@ -29,6 +30,7 @@ def import_dataset(dataset_name):
     """
     :returns relation, primary key
     """
+    print("Warning! Method is deprecated and will be replaced. Please use import_dataset_from_file")
     filepath = "../../datasets/" + str(dataset_name) + ".csv"
     if os.path.isfile(filepath):
         relation = pd.read_csv(filepath)
@@ -41,6 +43,17 @@ def import_dataset(dataset_name):
     # detect primary key
     primary_key = relation[relation.columns[0]]
     return relation, primary_key
+
+
+def import_dataset_from_file(data_path, primary_key_attribute=None):
+    dataset = pd.read_csv(data_path)
+    if primary_key_attribute is not None:
+        primary_key = dataset[primary_key_attribute]
+        dataset.drop(primary_key_attribute)
+    else:
+        primary_key = dataset.index
+    # todo: check if the primary_key is unique
+    return dataset, primary_key
 
 
 def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, real_buyer_id=None):
@@ -338,3 +351,9 @@ def fp_cross_val_score(estimator, X_original, y_original, X_fingerprint, y_finge
             ret[key] = train_scores_dict[name]
 
     return ret
+
+
+def latex_to_pandas(path):
+    tab = Table.read(path).to_pandas()
+    # todo: in the latex version there might be necessary to remove some parts like \toprule
+    return tab
