@@ -24,18 +24,30 @@ class AKScheme(Scheme):
     """
     __primary_key_len = 20
 
-    def __init__(self, gamma, xi=1, fingerprint_bit_length=32, number_of_recipients=100):
+    def __init__(self, gamma, fingerprint_bit_length=None, number_of_recipients=None, xi=1):
         self.gamma = gamma
         self.xi = xi
-        super().__init__(fingerprint_bit_length, number_of_recipients)
+
+        if fingerprint_bit_length is not None:
+            if number_of_recipients is not None:
+                super().__init__(fingerprint_bit_length, number_of_recipients)
+            else:
+                super().__init__(fingerprint_bit_length)
+        else:
+            if number_of_recipients is not None:
+                super().__init__(number_of_recipients)
+            else:
+                super().__init__()
 
         self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
 
-    def insertion(self, dataset, buyer_id, save=False, exclude=None, include=None, primary_key_attribute=None,
+    def insertion(self, dataset, recipient_id, save=False, exclude=None, include=None, primary_key_attribute=None,
                   write_to=None):
         print(self._INIT_MESSAGE)
         # it is assumed that the first column in the dataset is the primary key
+        # todo: a method that deals with importing the dataset
+        # dataset may be passed as a dataset object or a string specfying the path or a pandas dataframe
         if type(dataset) != 'string':
             if primary_key_attribute is not None:
                 primary_key = dataset[primary_key_attribute]
@@ -59,7 +71,7 @@ class AKScheme(Scheme):
         # number of numerical attributes
         num_of_attributes = len(relation.select_dtypes(exclude='object').columns)
 
-        fingerprint = super().create_fingerprint(buyer_id)
+        fingerprint = super().create_fingerprint(recipient_id)
 
         fingerprinted_relation = relation.copy()
         # count marked tuples
