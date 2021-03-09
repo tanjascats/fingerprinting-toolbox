@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+import os
+import copy
 
 
 class Dataset(ABC):
     """
-    Abstract scheme for structuring the dataset within this toolbox
+    Abstract scheme for structuring the dataset within the toolbox
     """
-    # todo: default values
     def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None):
         if path is None and dataframe is None:
             raise ValueError('Error defining a data set! Please provide either a path or a Pandas DataFrame to '
@@ -46,3 +47,92 @@ class Dataset(ABC):
             raise TypeError('Primary key attribute should be a string name of the attribute column')
         else:
             self.primary_key = self.dataframe[self.primary_key_attribute]
+
+    def set_dataframe(self, new_dataframe):
+        '''
+        Sets the dataframe of the class instance to another dataframe
+        :param new_dataframe: pandas.DataFrame instance
+        :return: self
+        '''
+        if not isinstance(new_dataframe, pd.DataFrame):
+            print('Dataset can only be set to a pandas.DataFrame instance')
+            exit()
+        self.dataframe = new_dataframe
+
+        self.columns = self.dataframe.columns
+        self.number_of_rows, self.number_of_columns = self.dataframe.shape
+        return self
+
+    def remove_primary_key(self):
+        if self.primary_key_attribute is not None:
+            self.set_dataframe(self.dataframe.drop(self.primary_key_attribute, axis=1))
+        return self
+
+    def remove_target(self):
+        self.set_dataframe(self.dataframe.drop(self.target_attribute, axis=1))
+        return self
+
+    def remove_categorical(self):
+        self.set_dataframe(self.dataframe.select_dtypes(exclude='object'))
+        return self
+
+    def add_column(self, name, values):
+        self.dataframe[name] = values
+
+        self.columns = self.dataframe.columns
+        self.number_of_rows, self.number_of_columns = self.dataframe.shape
+        return self
+
+    def save(self, path):
+        self.dataframe.to_csv(path, index=False)
+        return self
+
+    def get_target_attribute(self):
+        return self.target_attribute
+
+    def get_primary_key_attribute(self):
+        return self.primary_key_attribute
+
+    def get_dataframe(self):
+        return self.dataframe.copy(deep=True)
+
+    def clone(self):
+        clone = Dataset(target_attribute=self.target_attribute, dataframe=self.get_dataframe(),
+                        primary_key_attribute=self.get_primary_key_attribute())
+        return clone
+
+
+class GermanCredit(Dataset):
+    def __init__(self):
+        path = 'datasets/german_credit_full.csv'
+        super().__init__(path=path, target_attribute='target', primary_key_attribute='Id')
+
+
+class BreastCancerWisconsin(Dataset):
+    def __init__(self):
+        path = os.path.dirname(os.path.realpath(__file__)) + '/breast_cancer_wisconsin.csv'
+        super().__init__(path=path, target_attribute='class', primary_key_attribute='sample-code-number')
+
+
+class Adult(Dataset):
+    def __init__(self):
+        path = 'datasets/adult.csv'
+        super().__init__(path=path, target_attribute='income')
+
+
+class BreastCancer(Dataset):
+    def __init__(self):
+        path = 'datasets/breast_cancer_full.csv'
+        super().__init__(path=path, primary_key_attribute='Id', target_attribute='recurrence')
+
+
+class Nursery(Dataset):
+    def __init__(self):
+        path = 'datasets/nursery_full.csv'
+        super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')
+
+
+class Mushrooms(Dataset):
+    def __init__(self):
+        path = 'datasets/mushroom_full.csv'
+        super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')

@@ -3,6 +3,7 @@ import bitstring
 import unittest
 
 from scheme import AKScheme
+from datasets import *
 
 
 class TestScheme(unittest.TestCase):
@@ -47,4 +48,27 @@ class TestScheme(unittest.TestCase):
 
 
 class TestAKScheme(unittest.TestCase):
-    pass
+    def test_insertion_all_numerical(self):
+        scheme = AKScheme(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = BreastCancerWisconsin()
+        fingerprinted = scheme.insertion(data, recipient, secret_key)
+        self.assertListEqual(data.dataframe.columns.tolist(), fingerprinted.dataframe.columns.tolist())
+
+    def test_fingerprinted_data_type(self):
+        scheme = AKScheme(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = BreastCancerWisconsin()
+        fingerprinted = scheme.insertion(data, recipient, secret_key)
+        self.assertIsInstance(fingerprinted, Dataset)
+
+    def test_detection_all_numerical(self):
+        scheme = AKScheme(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = BreastCancerWisconsin()
+        fingerprinted_data = scheme.insertion(data, recipient, secret_key)
+        suspect = scheme.detection(fingerprinted_data, secret_key)
+        self.assertEqual(recipient, suspect)

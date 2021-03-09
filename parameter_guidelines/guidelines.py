@@ -6,6 +6,8 @@ from utils import *
 from scheme import AKScheme
 import numpy as np
 from attacks import *
+from datasets import *
+import time
 
 
 def get_experimental_gammae(amount, data_len, fp_len):
@@ -152,3 +154,45 @@ def get_robustness(data, primary_key_attribute, target, exclude=None):
     # todo:plot
 
     return results
+
+
+def master_evaluation(dataset,
+                      target_attribute=None, primary_key_attribute=None):
+    '''
+    This method outputs the full robustness and utility evaluation to user 'at glance', given the data set.
+    This includes: (1) utility approximation trends and (2) expected robustness trends
+    The outputs should help the user with parameter choices for their data set.
+
+    (1) Utility evaluation shows (i) the average change in mean and variance for each attribute and (ii) average
+    performance of the fingerprinted data sets using a variety of classifiers, e.g. Decision Tree,
+    Logistic Regression, Gradient Boosting...
+    :param dataset: path to the dataset, pandas DataFrame or class Dataset
+    :param target_attribute: name of the target attribute for the dataset. Ignored if dataset is of type Dataset
+    :param primary_key_attribute: name of the primary key attribute of the dataset. Ignored if dataset is of type Dataset
+    :return: metadata of the experimental run
+    '''
+    meta = ''
+    if isinstance(dataset, str):  # assumed the path is given
+        data = Dataset(path=dataset, target_attribute=target_attribute, primary_key_attribute=primary_key_attribute)
+    elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
+        data = Dataset(dataframe=dataset, target_attribute=target_attribute, primary_key_attribute=primary_key_attribute)
+    elif isinstance(dataset, Dataset):
+        data = dataset
+    else:
+        print('Wrong type of input data.')
+        exit()
+
+    # EXPERIMENT RUN
+    # 1) fingerprint the data (i.e. distinct secret key & distinct gamma)
+    # 2) record the changes in mean and variance for each attribute
+    # 3) perform the classification analysis
+    # 4) robustness per se (extraction rate)
+    # 5) robustness against the attacks (experimental) -> here it would make sense to compare the theoretical results
+
+    _start_exp_run = time.time()
+
+    # todo: for now only integer data fingerprinting is supported via AK scheme. Next up: categorical & decimal
+    scheme = AKScheme()
+
+
+    return meta
