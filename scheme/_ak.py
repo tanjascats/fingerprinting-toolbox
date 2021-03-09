@@ -24,11 +24,10 @@ class AKScheme(Scheme):
     """
     __primary_key_len = 20
 
-    def __init__(self, gamma, xi, fingerprint_bit_length, secret_key, number_of_buyers):
-        # todo: default values
+    def __init__(self, gamma, xi=1, fingerprint_bit_length=32, number_of_recipients=100):
         self.gamma = gamma
         self.xi = xi
-        super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
+        super().__init__(fingerprint_bit_length, number_of_recipients)
 
         self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
