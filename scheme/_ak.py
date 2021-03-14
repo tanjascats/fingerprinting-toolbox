@@ -3,38 +3,12 @@ AK Scheme
 """
 
 from utils import *
+from utils import _read_data, _data_postprocess
 import sys
 import random
 import time
-from datasets import Dataset
-import copy
 
 from ._base import Scheme
-# from ._base import LinearClassifierMixin, SparseCoefMixin, BaseEstimator
-# from ..svm._base import _fit_liblinear
-
-
-def _read_data(dataset, primary_key_attribute=None, target_attribute=None):
-    '''
-    Creates the instance of Dataset for given data.
-    :param dataset: string, pandas dataframe or Dataset
-    :param primary_key_attribute: name of the primary key attribute
-    :param target_attribute: name of the target attribute
-    :return: Dataset instance
-    '''
-    relation = None
-    if isinstance(dataset, str):  # assumed the path is given
-        relation = Dataset(path=dataset, target_attribute=target_attribute,
-                           primary_key_attribute=primary_key_attribute)
-    elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
-        relation = Dataset(dataframe=dataset, target_attribute=target_attribute,
-                           primary_key_attribute=primary_key_attribute)
-    elif isinstance(dataset, Dataset):
-        relation = dataset
-    else:
-        print('Wrong type of input data.')
-        exit()
-    return relation
 
 
 def _data_preprocess(dataset, exclude=None, include=None):
@@ -50,6 +24,9 @@ def _data_preprocess(dataset, exclude=None, include=None):
     '''
     relation = dataset
     if exclude is not None:
+        if not isinstance(exclude, list):
+            print('Error! "exclude" parameter should be a list of attribute names')
+            exit(1)
         for attribute in exclude:
             relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
         include = None
@@ -59,14 +36,6 @@ def _data_preprocess(dataset, exclude=None, include=None):
     relation.remove_target()
     relation.remove_categorical()
     return relation
-
-
-def _data_postprocess(fingerprinted_dataset, original_dataset):
-    diff = original_dataset.columns.difference(fingerprinted_dataset.columns)
-    for attribute in diff:
-        fingerprinted_dataset.add_column(attribute, original_dataset.dataframe[attribute])
-    fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
-    return fingerprinted_dataset
 
 
 class AKScheme(Scheme):
@@ -171,7 +140,8 @@ class AKScheme(Scheme):
         print("Start AK detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
         fingerprinted_data = _read_data(dataset)
-        fingerprinted_data = _data_preprocess(fingerprinted_data)
+        fingerprinted_data_prep = fingerprinted_data.clone()
+        fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
 
         start = time.time()
         # init fingerprint template and counts
@@ -179,14 +149,14 @@ class AKScheme(Scheme):
         count = [[0, 0] for x in range(self.fingerprint_bit_length)]
 
         # scan all tuples and obtain counts for each fingerprint bit
-        for r in fingerprinted_data.dataframe.iterrows():
-            seed = (secret_key << self.__primary_key_len) + fingerprinted_data.primary_key[r[0]]
+        for r in fingerprinted_data_prep.dataframe.iterrows():
+            seed = (secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]]
             random.seed(seed)
 
             # this tuple was marked
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # this attribute was marked (skip the primary key)
-                attr_idx = random.randint(0, sys.maxsize) % fingerprinted_data.number_of_columns
+                attr_idx = random.randint(0, sys.maxsize) % fingerprinted_data_prep.number_of_columns
                 attribute_val = r[1][attr_idx]
                 # this LS bit was marked
                 bit_idx = random.randint(0, sys.maxsize) % self.xi

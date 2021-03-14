@@ -1,7 +1,8 @@
 import pandas as pd
 import unittest
 
-from scheme import NBNNScheme, BNNScheme
+from scheme import NBNNScheme, BNNScheme, Universal
+from datasets import *
 
 
 class TestNBNNScheme(unittest.TestCase):
@@ -104,3 +105,14 @@ class TestBNNScheme(unittest.TestCase):
         suspect_id = scheme.detection(fingerprinted_data)
         print(suspect_id)
         self.assertEqual(0, suspect_id)
+
+
+class TestUniversal(unittest.TestCase):
+    def test_insertion_path(self):
+        scheme = Universal(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/german_credit_sample.csv'
+        fingerprinted = scheme.insertion(data, recipient, secret_key)
+        # suspect = scheme.detection(fingerprinted, secret_key)
+        self.assertIsNotNone(fingerprinted)

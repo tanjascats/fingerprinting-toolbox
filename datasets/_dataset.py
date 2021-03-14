@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 import os
-import copy
+from sklearn.preprocessing import LabelEncoder
 
 
 class Dataset(ABC):
@@ -27,12 +27,17 @@ class Dataset(ABC):
         self._set_primary_key(primary_key_attribute)
 
         self.target_attribute = target_attribute
-        if not isinstance(self.target_attribute, str):
-            raise TypeError('Target attribute should be a string name of the attribute column')
-        self.target = self.dataframe[self.target_attribute]
+        if self.target_attribute is not None:
+            if not isinstance(self.target_attribute, str):
+                raise TypeError('Target attribute should be a string name of the attribute column')
+            self.target = self.dataframe[self.target_attribute]
+        else:
+            self.target = None
 
         self.columns = self.dataframe.columns
         self.number_of_rows, self.number_of_columns = self.dataframe.shape
+
+        self.categorical_attributes = None
 
     def _set_primary_key(self, primary_key_attribute):
         self.primary_key = None
@@ -69,7 +74,8 @@ class Dataset(ABC):
         return self
 
     def remove_target(self):
-        self.set_dataframe(self.dataframe.drop(self.target_attribute, axis=1))
+        if self.target_attribute is not None:
+            self.set_dataframe(self.dataframe.drop(self.target_attribute, axis=1))
         return self
 
     def remove_categorical(self):
@@ -100,6 +106,21 @@ class Dataset(ABC):
         clone = Dataset(target_attribute=self.target_attribute, dataframe=self.get_dataframe(),
                         primary_key_attribute=self.get_primary_key_attribute())
         return clone
+
+    def number_encode_categorical(self):
+        relation = self.dataframe
+        self.categorical_attributes = relation.select_dtypes(include='object').columns
+        label_encoders = dict()
+        for cat in self.categorical_attributes:
+            label_enc = LabelEncoder()  # the current version of label encoder works in alphanumeric order
+            relation[cat] = label_enc.fit_transform(relation[cat])
+            label_encoders[cat] = label_enc
+        self.set_dataframe(relation)
+        return self
+
+    def get_distinct(self, attribute_index):
+        attribute_name = self.columns[attribute_index]
+        return self.dataframe[attribute_name].unique()
 
 
 class GermanCredit(Dataset):

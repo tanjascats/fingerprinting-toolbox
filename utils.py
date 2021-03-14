@@ -7,23 +7,19 @@ import numbers
 import warnings
 from traceback import format_exc
 from astropy.table import Table
+from joblib import Parallel
 
 from sklearn.utils.validation import _check_fit_params, _num_samples
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils import indexable
 from sklearn.utils.fixes import delayed
-
 from sklearn.base import clone, is_classifier
-
 from sklearn.model_selection._validation import _score, _aggregate_score_dicts, _normalize_score_results, _insert_error_scores
 from sklearn.model_selection._split import check_cv
-
 from sklearn.exceptions import FitFailedWarning
-
 from sklearn.metrics._scorer import check_scoring, _check_multimetric_scoring
 
-from joblib import Parallel
-
+from datasets import Dataset
 
 # returns the pandas structure of the dataset and its primary key
 def import_dataset(dataset_name):
@@ -117,6 +113,37 @@ def count_differences(dataset1, dataset2):
     if len(dataset1) != len(dataset2):
         print("Please pass two datasets of same size.")
     # todo
+
+
+def _read_data(dataset, primary_key_attribute=None, target_attribute=None):
+    '''
+    Creates the instance of Dataset for given data.
+    :param dataset: string, pandas dataframe or Dataset
+    :param primary_key_attribute: name of the primary key attribute
+    :param target_attribute: name of the target attribute
+    :return: Dataset instance
+    '''
+    relation = None
+    if isinstance(dataset, str):  # assumed the path is given
+        relation = Dataset(path=dataset, target_attribute=target_attribute,
+                           primary_key_attribute=primary_key_attribute)
+    elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
+        relation = Dataset(dataframe=dataset, target_attribute=target_attribute,
+                           primary_key_attribute=primary_key_attribute)
+    elif isinstance(dataset, Dataset):
+        relation = dataset
+    else:
+        print('Wrong type of input data.')
+        exit()
+    return relation
+
+
+def _data_postprocess(fingerprinted_dataset, original_dataset):
+    diff = original_dataset.columns.difference(fingerprinted_dataset.columns)
+    for attribute in diff:
+        fingerprinted_dataset.add_column(attribute, original_dataset.dataframe[attribute])
+    fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
+    return fingerprinted_dataset
 
 
 def read_data_with_target(dataset_name, scheme_name=None, params=None, buyer_id=None):

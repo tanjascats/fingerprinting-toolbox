@@ -4,3 +4,7 @@ AK/__pycache__/
 __pycache__/
 .ipynb_checkpoints/
 parameter_guidelines/evaluation/
+tex-tables/
+architecture/
+parameter_guidelines/
+evaluation/

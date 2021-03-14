@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import BallTree
 
 from utils import *
+from utils import _read_data, _data_postprocess
 from ._base import Scheme
 
 
@@ -72,6 +73,33 @@ def _select_mark(fingerprint):
     _mask_bit = random.randint(0, sys.maxsize) % 2
     _mark_bit = (_mask_bit + fingerprint_bit) % 2
     return _mark_bit
+
+
+def _data_preprocess(dataset, exclude=None, include=None):
+    '''
+    Preprocess the data for fingerprinting with Universal scheme. That includes:
+    1) Remove user defined columns
+    2) Remove the primary key
+    3) Remove the target
+    4) Number-encode the categorical attributes
+    The method changes the passed dataset
+    :param dataset: Dataset instance
+    :return: Dataset instance
+    '''
+    relation = dataset
+    if exclude is not None:
+        if not isinstance(exclude, list):
+            print('Error! "exclude" parameter should be a list of attribute names')
+            exit(1)
+        for attribute in exclude:
+            relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
+        include = None
+    if include is not None:
+        relation.set_dataframe(relation.dataframe[include])
+    relation.remove_primary_key()
+    relation.remove_target()
+    relation.number_encode_categorical()
+    return relation
 
 
 class BNNScheme(Scheme):
@@ -390,7 +418,7 @@ class BNNScheme(Scheme):
 
 class NBNNScheme(Scheme):
     """
-    Fingerprints numerical and categorical types of data
+    Fingerprints numerical and categorical types of data with non-blind Nearest-Neighbors scheme
     """
 
     __primary_key_len = 20  # supports the data set size of up to 1,048,576 entries
@@ -625,3 +653,112 @@ class NBNNScheme(Scheme):
             print("None suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
         return buyer_no
+
+
+class Universal(Scheme):
+    '''
+    Fingerprinting scheme applicable to all data types. Unifies the AK scheme for numerical data and adapted AK for
+    categorical and decimal data.
+        - categorical data: sorted, encoded to numerical and modified with constraints
+        - decimal data: TBA
+    '''
+    __primary_key_len = 20
+
+    def __init__(self, gamma, fingerprint_bit_length=None, number_of_recipients=None, xi=1):
+        self.gamma = gamma
+        self.xi = xi
+
+        if fingerprint_bit_length is not None:
+            if number_of_recipients is not None:
+                super().__init__(fingerprint_bit_length, number_of_recipients)
+            else:
+                super().__init__(fingerprint_bit_length)
+        else:
+            if number_of_recipients is not None:
+                super().__init__(number_of_recipients)
+            else:
+                super().__init__()
+
+        self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
+                             "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
+
+    def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
+                  primary_key_attribute=None, target_attribute=None, write_to=None):
+        print(self._INIT_MESSAGE)
+
+        original_data = _read_data(dataset, target_attribute=target_attribute,
+                                   primary_key_attribute=primary_key_attribute)
+        # prep data for fingerprinting
+
+        # relation is original data but preprocessed
+        relation = original_data.clone()
+        relation = _data_preprocess(dataset=relation, exclude=exclude, include=include)
+        # fingerprinted_relation is a deep copy of an original and will be modified throughout the insertion phase
+        fingerprinted_relation = original_data.clone()
+        fingerprinted_relation = _data_preprocess(dataset=fingerprinted_relation, exclude=exclude, include=include)
+        fingerprint = super().create_fingerprint(recipient_id, secret_key)
+
+        # count marked tuples
+        count = count_omega = 0
+        start = time.time()
+        for r in relation.dataframe.iterrows():
+            # seed = concat(secret_key, primary_key)
+            seed = (secret_key << self.__primary_key_len) + relation.primary_key[r[0]]
+            random.seed(seed)
+
+            # select the tuple
+            if random.randint(0, sys.maxsize) % self.gamma == 0:
+                # select attribute (that is not the primary key)
+                attr_idx = random.randint(0, sys.maxsize) % relation.number_of_columns
+                attribute_val = r[1][attr_idx]
+                # select least significant bit
+                bit_idx = random.randint(0, sys.maxsize) % self.xi
+                # select mask bit
+                mask_bit = random.randint(0, sys.maxsize) % 2
+                # select fingerprint bit
+                fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
+                if fingerprint_idx == 0:
+                    count_omega += 1
+                fingerprint_bit = fingerprint[fingerprint_idx]
+                mark_bit = (mask_bit + fingerprint_bit) % 2
+                # todo: new parts
+                # if the value is categorical, the mark_bit indicates whether the new value will be odd or even
+                if fingerprinted_relation.dataframe.columns[attr_idx] in fingerprinted_relation.categorical_attributes:
+                    all_vals = fingerprinted_relation.get_distinct(attr_idx)
+                    if mark_bit == 1: # odd value
+                        possible_vals = [v for v in all_vals if v % 2 == 1]
+                    else:
+                        possible_vals = [v for v in all_vals if v % 2 == 0]
+                    marked_attribute = random.choice(possible_vals)
+                else:
+                    # alter the chosen value
+                    marked_attribute = set_bit(attribute_val, bit_idx, mark_bit)
+                fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
+                count += 1
+
+        # put back the excluded stuff
+        fingerprinted_relation = _data_postprocess(fingerprinted_relation, original_data)
+        print("Fingerprint inserted.")
+        print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows), 4) * 100) + "%")
+        print("\tsingle fingerprint bit embedded " + str(count_omega) + " times")
+        if save and write_to is None:
+            fingerprinted_relation.save("ak_scheme_{}_{}_{}".format(self.gamma, self.xi, recipient_id))
+            #write_dataset(fingerprinted_relation, "ak_scheme", dataset, [self.gamma, self.xi], recipient_id)
+            # todo: this will break
+        elif save and write_to is not None:
+            write_to_dir = "/".join(write_to.split("/")[:-1])
+            if not os.path.exists(write_to_dir):
+                os.mkdir(write_to_dir)
+            fullname = os.path.join(write_to)
+            fingerprinted_relation.to_csv(fullname)
+        runtime = int(time.time() - start)
+        if runtime == 0:
+            runtime_string = "<1"
+        else:
+            runtime_string = str(runtime)
+        print("Time: " + runtime_string + " sec.")
+        return fingerprinted_relation
+
+    def detection(self, dataset, secret_key):
+        pass
+
