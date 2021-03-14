@@ -1,13 +1,13 @@
 import time
 import sys
-import numpy.random as random
+import random
 import operator
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import BallTree
 
 from utils import *
-from utils import _read_data, _data_postprocess
+from utils import _read_data
 from ._base import Scheme
 
 
@@ -102,12 +102,23 @@ def _data_preprocess(dataset, exclude=None, include=None):
     return relation
 
 
+def _data_postprocess(fingerprinted_dataset, original_dataset):
+    diff = original_dataset.columns.difference(fingerprinted_dataset.columns)
+    for attribute in diff:
+        fingerprinted_dataset.add_column(attribute, original_dataset.dataframe[attribute])
+    fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
+    # todo: decode to categorical
+    # learn the label encoder on original and apply on fingerprinted numerical
+    fingerprinted_dataset.decode_categorical()
+    return fingerprinted_dataset
+
+
 class BNNScheme(Scheme):
     """
     Blind scheme for fingerprinting integer and categorical values based on nearest neighbourhood search.
     """
 
-    def __init__(self, gamma, xi, fingerprint_bit_length=32, secret_key=333, number_of_buyers=10,
+    def __init__(self, gamma, xi, fingerprint_bit_length=32, secret_key=333, number_of_recipients=10,
                  distance_based=False,
                  d=0, k=10):
         self.gamma = gamma
@@ -118,9 +129,9 @@ class BNNScheme(Scheme):
             self.d = d
         else:
             self.k = k
-        super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
+        super().__init__(fingerprint_bit_length, secret_key, number_of_recipients)
 
-    def insertion(self, dataset, buyer_id, secret_key=None, save=False, force_change=False, marking_randomness=False):
+    def insertion(self, dataset, recipient_id, secret_key=None, save=False, force_change=False, marking_randomness=False):
         init_msg = "Start the insertion algorithm of a scheme for fingerprinting categorical data (neighbourhood) ..." \
                    "\n\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
         print(init_msg)
@@ -130,7 +141,7 @@ class BNNScheme(Scheme):
         relation, primary_key = import_dataset(dataset)
         tot_attributes = _count_attributes(relation)
 
-        fingerprint = super().create_fingerprint(buyer_id)
+        fingerprint = super().create_fingerprint(recipient_id)
 
         start = time.time()
 
@@ -252,7 +263,7 @@ class BNNScheme(Scheme):
         if save:
             # todo: fix this
             write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset, [self.gamma, self.xi],
-                          buyer_id)
+                          recipient_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return fingerprinted_relation
 
@@ -407,13 +418,13 @@ class BNNScheme(Scheme):
         print(votes)
 
         # todo: add probabilistic matching
-        buyer_no = super().detect_potential_traitor(fingerprint_template_str)
-        if buyer_no >= 0:
-            print("Recipient " + str(buyer_no) + " is a suspect.")
+        recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
+        if recipient_no >= 0:
+            print("Recipient " + str(recipient_no) + " is a suspect.")
         else:
             print("None suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
-        return buyer_no
+        return recipient_no
 
 
 class NBNNScheme(Scheme):
@@ -423,7 +434,7 @@ class NBNNScheme(Scheme):
 
     __primary_key_len = 20  # supports the data set size of up to 1,048,576 entries
 
-    def __init__(self, gamma=2, xi=2, fingerprint_bit_length=32, secret_key=333, number_of_buyers=10,
+    def __init__(self, gamma=2, xi=2, fingerprint_bit_length=32, secret_key=333, number_of_recipients=10,
                  distance_based=False, d=0, k=10):
         self.gamma = gamma
         self.xi = xi
@@ -433,9 +444,9 @@ class NBNNScheme(Scheme):
             self.d = d
         else:
             self.k = k
-        super().__init__(fingerprint_bit_length, secret_key, number_of_buyers)
+        super().__init__(fingerprint_bit_length, secret_key, number_of_recipients)
 
-    def insertion(self, dataset, buyer_id, secret_key=None, save=False):
+    def insertion(self, dataset, recipient_id, secret_key=None, save=False):
         init_msg = "Start the insertion algorithm of a scheme for fingerprinting categorical data (neighbourhood) ..." \
                    "\n\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
         print(init_msg)
@@ -445,8 +456,8 @@ class NBNNScheme(Scheme):
         relation, primary_key = import_dataset(dataset)
         tot_attributes = len(relation.columns) - 1
 
-        fingerprint = super().create_fingerprint(buyer_id)
-        fp_msg = "\nGenerated fingerprint for buyer " + str(buyer_id) + ": " + fingerprint.bin + "Inserting the " \
+        fingerprint = super().create_fingerprint(recipient_id)
+        fp_msg = "\nGenerated fingerprint for recipient " + str(recipient_id) + ": " + fingerprint.bin + "Inserting the " \
                                                                                                  "fingerprint...\n"
         print(fp_msg)
 
@@ -556,7 +567,7 @@ class NBNNScheme(Scheme):
         print("Fingerprint inserted.")
         if secret_key is None and save is True:
             write_dataset(fingerprinted_relation, "categorical_neighbourhood", dataset, [self.gamma, self.xi],
-                          buyer_id)
+                          recipient_id)
         print("Time: " + str(int(time.time() - start)) + " sec.")
         return fingerprinted_relation
 
@@ -646,13 +657,13 @@ class NBNNScheme(Scheme):
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Fingerprint detected: " + list_to_string(fingerprint_template))
 
-        buyer_no = super().detect_potential_traitor(fingerprint_template_str)
-        if buyer_no >= 0:
-            print("Buyer " + str(buyer_no) + " is a traitor.")
+        recipient_no = super().detect_potential_traitor(fingerprint_template_str)
+        if recipient_no >= 0:
+            print("recipient " + str(recipient_no) + " is a traitor.")
         else:
             print("None suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
-        return buyer_no
+        return recipient_no
 
 
 class Universal(Scheme):
@@ -679,7 +690,7 @@ class Universal(Scheme):
             else:
                 super().__init__()
 
-        self._INIT_MESSAGE = "Start AK insertion algorithm...\n" \
+        self._INIT_MESSAGE = "Start insertion algorithm...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
 
     def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
@@ -721,7 +732,6 @@ class Universal(Scheme):
                     count_omega += 1
                 fingerprint_bit = fingerprint[fingerprint_idx]
                 mark_bit = (mask_bit + fingerprint_bit) % 2
-                # todo: new parts
                 # if the value is categorical, the mark_bit indicates whether the new value will be odd or even
                 if fingerprinted_relation.dataframe.columns[attr_idx] in fingerprinted_relation.categorical_attributes:
                     all_vals = fingerprinted_relation.get_distinct(attr_idx)
@@ -742,9 +752,8 @@ class Universal(Scheme):
         print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows), 4) * 100) + "%")
         print("\tsingle fingerprint bit embedded " + str(count_omega) + " times")
         if save and write_to is None:
-            fingerprinted_relation.save("ak_scheme_{}_{}_{}".format(self.gamma, self.xi, recipient_id))
-            #write_dataset(fingerprinted_relation, "ak_scheme", dataset, [self.gamma, self.xi], recipient_id)
-            # todo: this will break
+            fingerprinted_relation.save("ak_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length, recipient_id))
+            # todo: elif will break
         elif save and write_to is not None:
             write_to_dir = "/".join(write_to.split("/")[:-1])
             if not os.path.exists(write_to_dir):
@@ -759,6 +768,73 @@ class Universal(Scheme):
         print("Time: " + runtime_string + " sec.")
         return fingerprinted_relation
 
-    def detection(self, dataset, secret_key):
-        pass
+    def detection(self, dataset, secret_key, exclude=None, include=None, read=False, primary_key_attribute=None,
+                  real_recipient_id=None):
+        print("Start detection algorithm...")
+        print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
+        fingerprinted_data = _read_data(dataset)
+        fingerprinted_data_prep = fingerprinted_data.clone()
+        fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
+
+        start = time.time()
+        # init fingerprint template and counts
+        # for each of the fingerprint bit the votes if it is 0 or 1
+        count = [[0, 0] for x in range(self.fingerprint_bit_length)]
+
+        # scan all tuples and obtain counts for each fingerprint bit
+        for r in fingerprinted_data_prep.dataframe.iterrows():
+            seed = (secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]]
+            random.seed(seed)
+
+            # this tuple was marked
+            if random.randint(0, sys.maxsize) % self.gamma == 0:
+                # this attribute was marked (skip the primary key)
+                attr_idx = random.randint(0, sys.maxsize) % fingerprinted_data_prep.number_of_columns
+                attribute_val = r[1][attr_idx]
+                # this LS bit was marked
+                bit_idx = random.randint(0, sys.maxsize) % self.xi
+                # take care of negative values
+                if attribute_val < 0:
+                    attribute_val = -attribute_val
+                    # raise flag
+                if fingerprinted_data_prep.dataframe.columns[attr_idx] in fingerprinted_data_prep.categorical_attributes:
+                    if attribute_val % 2 == 0:
+                        mark_bit = 0
+                    else:
+                        mark_bit = 1
+                else:
+                    mark_bit = (attribute_val >> bit_idx) % 2
+
+                mask_bit = random.randint(0, sys.maxsize) % 2
+                # fingerprint bit = mark_bit xor mask_bit
+                fingerprint_bit = (mark_bit + mask_bit) % 2
+                fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
+                # update votes
+                count[fingerprint_idx][fingerprint_bit] += 1
+
+        # this fingerprint template will be upside-down from the real binary representation
+        fingerprint_template = [2] * self.fingerprint_bit_length
+        # recover fingerprint
+        for i in range(self.fingerprint_bit_length):
+            # certainty of a fingerprint value
+            T = 0.50
+            try:
+                if count[i][0]/(count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 0
+                elif count[i][1]/(count[i][0] + count[i][1]) > T:
+                    fingerprint_template[i] = 1
+            except ZeroDivisionError:
+                pass
+
+        fingerprint_template_str = ''.join(map(str, fingerprint_template))
+        print("Fingerprint detected: " + list_to_string(fingerprint_template))
+
+        recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
+        if recipient_no >= 0:
+            print("Recipient " + str(recipient_no) + " is suspected.")
+        else:
+            print("None suspected.")
+        print("Runtime: " + str(int(time.time() - start)) + " sec.")
+        return recipient_no
+
 

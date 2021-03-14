@@ -12,13 +12,13 @@ class TestNBNNScheme(unittest.TestCase):
         data = pd.DataFrame({'Id': [i for i in range(6)],
                              'Attr1': ['blue', 'red', 'blue', 'blue', 'yellow', 'red'],
                              'Attr2': ['yes', 'no', 'no', 'no', 'yes', 'yes']})
-        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
         self.assertFalse(data.equals(fingerprinted_data))
 
     def test_detection(self):
         data = 'german_credit_full'  # fails for small (150 rows, 11 columns) datasets
-        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = NBNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -38,14 +38,14 @@ class TestBNNScheme(unittest.TestCase):
         data = pd.DataFrame({'Id': [i for i in range(6)],
                              'Attr1': ['blue', 'red', 'blue', 'blue', 'yellow', 'red'],
                              'Attr2': ['yes', 'no', 'no', 'no', 'yes', 'yes']})
-        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
         print(fingerprinted_data)
         self.assertFalse(data.equals(fingerprinted_data))
 
     def test_detection_medium_dataset(self):
         data = 'german_credit_full'  # fails for small (150 rows, 11 columns) datasets
-        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -54,7 +54,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_very_small_dataset(self):
         data = 'german_credit_sample'  # fails for small (150 rows, 11 columns) datasets
-        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -63,7 +63,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_small_dataset(self):
         data = 'german_credit_medium_sample'
-        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=1, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -72,7 +72,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_adult_data(self):
         data = 'adult_full'
-        scheme = BNNScheme(gamma=5, secret_key=7, fingerprint_bit_length=16, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=5, secret_key=7, fingerprint_bit_length=16, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -81,7 +81,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_breast_cancer(self):
         data = 'breast_cancer_full'
-        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -90,7 +90,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_mushrooms(self):
         data = 'mushrooms_full'
-        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=8, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=8, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -99,7 +99,7 @@ class TestBNNScheme(unittest.TestCase):
 
     def test_detection_nursery(self):
         data = 'nursery_full'
-        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=16, k=3, number_of_buyers=3, xi=2)
+        scheme = BNNScheme(gamma=2, secret_key=7, fingerprint_bit_length=16, k=3, number_of_recipients=3, xi=2)
         fingerprinted_data = scheme.insertion(data, 0)
 
         suspect_id = scheme.detection(fingerprinted_data)
@@ -116,3 +116,30 @@ class TestUniversal(unittest.TestCase):
         fingerprinted = scheme.insertion(data, recipient, secret_key)
         # suspect = scheme.detection(fingerprinted, secret_key)
         self.assertIsNotNone(fingerprinted)
+
+    def test_insert_and_save(self):
+        scheme = Universal(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/german_credit_sample.csv'
+        fingerprinted = scheme.insertion(data, recipient, secret_key, save=True)
+        # suspect = scheme.detection(fingerprinted, secret_key)
+        self.assertIsNotNone(fingerprinted)
+
+    def test_detection_path(self):
+        scheme = Universal(gamma=2, fingerprint_bit_length=8)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/german_credit_sample.csv'
+        fingerprinted = scheme.insertion(data, recipient, secret_key)
+        suspect = scheme.detection(fingerprinted, secret_key)
+        self.assertEqual(recipient, suspect)
+
+    def test_detection_2(self):
+        scheme = Universal(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/adult.csv'
+        fingerprinted = scheme.insertion(data, recipient, secret_key)
+        suspect = scheme.detection(fingerprinted, secret_key)
+        self.assertEqual(recipient, suspect)

@@ -38,6 +38,7 @@ class Dataset(ABC):
         self.number_of_rows, self.number_of_columns = self.dataframe.shape
 
         self.categorical_attributes = None
+        self.label_encoders = None
 
     def _set_primary_key(self, primary_key_attribute):
         self.primary_key = None
@@ -110,13 +111,20 @@ class Dataset(ABC):
     def number_encode_categorical(self):
         relation = self.dataframe
         self.categorical_attributes = relation.select_dtypes(include='object').columns
-        label_encoders = dict()
+        self.label_encoders = dict()
         for cat in self.categorical_attributes:
             label_enc = LabelEncoder()  # the current version of label encoder works in alphanumeric order
             relation[cat] = label_enc.fit_transform(relation[cat])
-            label_encoders[cat] = label_enc
+            self.label_encoders[cat] = label_enc
         self.set_dataframe(relation)
         return self
+
+    def decode_categorical(self):
+        relation = self.dataframe
+        for cat in self.categorical_attributes:
+            label_enc = self.label_encoders[cat]  # the current version of label encoder works in alphanumeric order
+            relation[cat] = label_enc.inverse_transform(relation[cat])
+        self.set_dataframe(relation)
 
     def get_distinct(self, attribute_index):
         attribute_name = self.columns[attribute_index]

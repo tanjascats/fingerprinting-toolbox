@@ -138,14 +138,6 @@ def _read_data(dataset, primary_key_attribute=None, target_attribute=None):
     return relation
 
 
-def _data_postprocess(fingerprinted_dataset, original_dataset):
-    diff = original_dataset.columns.difference(fingerprinted_dataset.columns)
-    for attribute in diff:
-        fingerprinted_dataset.add_column(attribute, original_dataset.dataframe[attribute])
-    fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
-    return fingerprinted_dataset
-
-
 def read_data_with_target(dataset_name, scheme_name=None, params=None, buyer_id=None):
     if scheme_name is None:
         data = pd.read_csv("datasets/" + dataset_name + ".csv")

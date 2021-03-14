@@ -3,7 +3,7 @@ AK Scheme
 """
 
 from utils import *
-from utils import _read_data, _data_postprocess
+from utils import _read_data
 import sys
 import random
 import time
@@ -36,6 +36,14 @@ def _data_preprocess(dataset, exclude=None, include=None):
     relation.remove_target()
     relation.remove_categorical()
     return relation
+
+
+def _data_postprocess(fingerprinted_dataset, original_dataset):
+    diff = original_dataset.columns.difference(fingerprinted_dataset.columns)
+    for attribute in diff:
+        fingerprinted_dataset.add_column(attribute, original_dataset.dataframe[attribute])
+    fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
+    return fingerprinted_dataset
 
 
 class AKScheme(Scheme):
