@@ -54,7 +54,7 @@ class Universal(Scheme):
     Fingerprinting scheme applicable to all data types. Unifies the AK scheme for numerical data and adapted AK for
     categorical and decimal data.
         - categorical data: sorted, encoded to numerical and modified with constraints
-        - decimal data: TBA
+        - decimal data: least significant decimal place is modified
     '''
     __primary_key_len = 20
 
