@@ -1,11 +1,14 @@
 # Fingerprinting Relational Data
+Fingerprinting toolbox is a library that allows embedding and extracting fingerprints into the relational data.
 
 ## Usage
 You can use the toolbox by cloning this repository.
 ```
 $ git clone https://github.com/tanjascats/fingerprinting-toolbox.git
 ```
-Check out the notebook example.ipynb for an example of how to apply fingerprinting and detect a fingerprint from a dataset using the toolbox. 
+Check out the notebook example.ipynb to see how to apply fingerprinting and detect a fingerprint from a dataset.
+ 
 ## Support
-- Report the issues at <https://github.com/tanjascats/fingerprinting-toolbox/issues> or
-- Contact me by email: TSarcevic@sba-research.org
+The toolbox is in its early stage, but actively developing, so you can either:
+- Report the issues at [Issues](https://github.com/tanjascats/fingerprinting-toolbox/issues) or
+- Contact me by email: TSarcevic@sba-research.org for questions, suggestions or issues

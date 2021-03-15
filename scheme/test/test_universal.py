@@ -1,5 +1,6 @@
 import pandas as pd
 import unittest
+import os
 
 from scheme import NBNNScheme, BNNScheme, Universal
 from datasets import *
@@ -143,3 +144,14 @@ class TestUniversal(unittest.TestCase):
         fingerprinted = scheme.insertion(data, recipient, secret_key)
         suspect = scheme.detection(fingerprinted, secret_key)
         self.assertEqual(recipient, suspect)
+
+    def test_insert_and_save_custom(self):
+        scheme = Universal(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/german_credit_sample.csv'
+        outfile = "fingerprinted/gc.csv"
+        scheme.insertion(data, recipient, secret_key, write_to=outfile)
+        self.assertTrue(os.path.isfile(outfile))
+        os.remove(outfile)
+

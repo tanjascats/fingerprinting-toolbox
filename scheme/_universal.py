@@ -2,6 +2,7 @@ import time
 import sys
 import random
 import operator
+import numpy as np
 
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import BallTree
@@ -88,9 +89,6 @@ def _data_preprocess(dataset, exclude=None, include=None):
     '''
     relation = dataset
     if exclude is not None:
-        if not isinstance(exclude, list):
-            print('Error! "exclude" parameter should be a list of attribute names')
-            exit(1)
         for attribute in exclude:
             relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
         include = None
@@ -691,10 +689,24 @@ class Universal(Scheme):
                 super().__init__()
 
         self._INIT_MESSAGE = "Start insertion algorithm...\n" \
-                             "\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi)
+                             "\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + \
+                             str(self.fingerprint_bit_length)
 
     def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
                   primary_key_attribute=None, target_attribute=None, write_to=None):
+        '''
+        Embeds the fingerprint into the data.
+        :param dataset: data path, Pandas dataframe or datasets.Dataset class instance
+        :param recipient_id: Recipient ID
+        :param secret_key: Owner's secret key
+        :param save: If True, save the fingerprinted data to file <scheme_name>_<gamma>_<fingerprint_bit_length>_<recipient_id>.csv
+        :param exclude: List of columns to exclude from fingerprinting
+        :param include: List of columns to include to fingerprinting (this is ignored if excluded is defined)
+        :param primary_key_attribute: Name of the primary key attribute; optional
+        :param target_attribute: Name of the target attribute; optional
+        :param write_to: Name of the target datafile; if defined, 'save' is ignored
+        :return: datasets.Dataset instance of fingerprinted data
+        '''
         print(self._INIT_MESSAGE)
 
         original_data = _read_data(dataset, target_attribute=target_attribute,
@@ -711,6 +723,7 @@ class Universal(Scheme):
 
         # count marked tuples
         count = count_omega = 0
+        count_omega = [0 for i in range(self.fingerprint_bit_length)]
         start = time.time()
         for r in relation.dataframe.iterrows():
             # seed = concat(secret_key, primary_key)
@@ -728,8 +741,7 @@ class Universal(Scheme):
                 mask_bit = random.randint(0, sys.maxsize) % 2
                 # select fingerprint bit
                 fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
-                if fingerprint_idx == 0:
-                    count_omega += 1
+                count_omega[fingerprint_idx] += 1
                 fingerprint_bit = fingerprint[fingerprint_idx]
                 mark_bit = (mask_bit + fingerprint_bit) % 2
                 # if the value is categorical, the mark_bit indicates whether the new value will be odd or even
@@ -749,17 +761,16 @@ class Universal(Scheme):
         # put back the excluded stuff
         fingerprinted_relation = _data_postprocess(fingerprinted_relation, original_data)
         print("Fingerprint inserted.")
-        print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows), 4) * 100) + "%")
-        print("\tsingle fingerprint bit embedded " + str(count_omega) + " times")
+        print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows) * 100, 2)) + "%")
+        print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times")
         if save and write_to is None:
             fingerprinted_relation.save("ak_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length, recipient_id))
-            # todo: elif will break
-        elif save and write_to is not None:
+        elif write_to is not None:
             write_to_dir = "/".join(write_to.split("/")[:-1])
             if not os.path.exists(write_to_dir):
                 os.mkdir(write_to_dir)
             fullname = os.path.join(write_to)
-            fingerprinted_relation.to_csv(fullname)
+            fingerprinted_relation.dataframe.to_csv(fullname, index=False)
         runtime = int(time.time() - start)
         if runtime == 0:
             runtime_string = "<1"
@@ -769,11 +780,15 @@ class Universal(Scheme):
         return fingerprinted_relation
 
     def detection(self, dataset, secret_key, exclude=None, include=None, read=False, primary_key_attribute=None,
-                  real_recipient_id=None):
+                  real_recipient_id=None, target_attribute=None):
         print("Start detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
         fingerprinted_data = _read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
+        if target_attribute is not None:
+            fingerprinted_data_prep._set_target_attribute = target_attribute
+        if primary_key_attribute is not None:
+            fingerprinted_data_prep._set_primary_key(primary_key_attribute)
         fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
 
         start = time.time()
@@ -827,13 +842,13 @@ class Universal(Scheme):
                 pass
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
-        print("Fingerprint detected: " + list_to_string(fingerprint_template))
+        print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
             print("Recipient " + str(recipient_no) + " is suspected.")
         else:
-            print("None suspected.")
+            print("No one suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
         return recipient_no
 
