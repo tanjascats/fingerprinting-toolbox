@@ -1,7 +1,6 @@
 from ._ak import AKScheme
-from ._universal import NBNNScheme, BNNScheme, Universal
+from ._universal import Universal
+# from ._neighbour_based import BNNScheme, NBNNScheme
 
 __all__ = ['AKScheme',
-           'NBNNScheme',
-           'BNNScheme',
            'Universal']

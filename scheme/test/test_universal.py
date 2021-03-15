@@ -2,7 +2,7 @@ import pandas as pd
 import unittest
 import os
 
-from scheme import NBNNScheme, BNNScheme, Universal
+from scheme import Universal
 from datasets import *
 
 
@@ -155,3 +155,20 @@ class TestUniversal(unittest.TestCase):
         self.assertTrue(os.path.isfile(outfile))
         os.remove(outfile)
 
+    def test_decimal_data(self):
+        scheme = Universal(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/abalone_data.csv'
+        outfile = "fingerprinted/abalone.csv"
+        scheme.insertion(data, recipient, secret_key, write_to=outfile)
+        self.assertTrue(os.path.isfile(outfile))
+
+    def test_numerical_data(self):
+        scheme = Universal(gamma=2)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/breast_cancer_wisconsin.csv'
+        outfile = "fingerprinted/breast_cancer_wisconsin.csv"
+        scheme.insertion(data, recipient, secret_key, write_to=outfile)
+        self.assertTrue(os.path.isfile(outfile))
