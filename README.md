@@ -27,7 +27,7 @@ suspect = scheme.detection("suspicious_data.csv", secret_key=12345678)
 ```
 
 
-For more examples check out the notebook [example.ipynb](https://github.com/tanjascats/fingerprinting-toolbox/blob/master/example.ipynb) to see how to apply fingerprinting and detect a fingerprint from a dataset.
+For more examples and detailed explanations check out the notebook [example.ipynb](https://github.com/tanjascats/fingerprinting-toolbox/blob/master/example.ipynb).
  
 ## Support
 The toolbox is in its early stage, but actively developing, so you can either:
