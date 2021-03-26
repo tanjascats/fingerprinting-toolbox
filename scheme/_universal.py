@@ -162,7 +162,7 @@ class Universal(Scheme):
                     else:
                         fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
                 else:
-                    fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
+                    fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = round(marked_attribute)
                 count += 1
                 #print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, marked_attribute, fingerprint_idx, fingerprint_bit, mark_bit, mask_bit))
 
@@ -231,6 +231,8 @@ class Universal(Scheme):
                 if attribute_val < 0:
                     attribute_val = -attribute_val
                     # raise flag
+                if fingerprinted_data_prep.dataframe.columns[attr_idx] in fingerprinted_data_prep.categorical_attributes:
+                    attribute_val = round(attribute_val)
                 attribute_val_str = str(attribute_val)
                 decimal_places = attribute_val_str[::-1].find('.')
                 if fingerprinted_data_prep.dataframe.columns[attr_idx] in fingerprinted_data_prep.integer_attributes:
@@ -272,8 +274,8 @@ class Universal(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
-        # print('Counts:')
-        # pprint(count)
+        #print('Counts:')
+        #pprint(count)
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
