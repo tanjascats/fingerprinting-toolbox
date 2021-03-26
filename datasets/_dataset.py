@@ -26,19 +26,18 @@ class Dataset(ABC):
 
         self._set_primary_key(primary_key_attribute)
 
-        self.target_attribute = target_attribute
-        if self.target_attribute is not None:
-            if not isinstance(self.target_attribute, str):
-                raise TypeError('Target attribute should be a string name of the attribute column')
-            self.target = self.dataframe[self.target_attribute]
-        else:
-            self.target = None
+        self.set_target_attribute(target_attribute)
 
         self.columns = self.dataframe.columns
         self.number_of_rows, self.number_of_columns = self.dataframe.shape
+        self._set_types()
 
-        self.categorical_attributes = None
         self.label_encoders = None
+
+    def _set_types(self):
+        self.categorical_attributes = self.dataframe.select_dtypes(include='object').columns
+        self.decimal_attributes = self.dataframe.select_dtypes(include=['float64', 'float32'])
+        self.integer_attributes = self.dataframe.select_dtypes(include=['int64', 'int32'])
 
     def _set_primary_key(self, primary_key_attribute):
         self.primary_key = None
@@ -97,11 +96,31 @@ class Dataset(ABC):
     def get_target_attribute(self):
         return self.target_attribute
 
+    def set_target_attribute(self, target_attribute):
+        self.target_attribute = target_attribute
+        if self.target_attribute is not None:
+            if not isinstance(self.target_attribute, str):
+                raise TypeError('Target attribute should be a string name of the attribute column')
+            self.target = self.dataframe[self.target_attribute]
+        else:
+            self.target = None
+
+    def get_target(self):
+        return self.target
+
     def get_primary_key_attribute(self):
         return self.primary_key_attribute
 
     def get_dataframe(self):
         return self.dataframe.copy(deep=True)
+
+    def get_features(self):
+        non_features = []
+        if self.target_attribute is not None:
+            non_features.append(self.target_attribute)
+        if self.primary_key_attribute is not None:
+            non_features.append(self.primary_key_attribute)
+        return self.dataframe.drop(non_features, axis=1)
 
     def clone(self):
         clone = Dataset(target_attribute=self.target_attribute, dataframe=self.get_dataframe(),
@@ -110,7 +129,7 @@ class Dataset(ABC):
 
     def number_encode_categorical(self):
         relation = self.dataframe
-        self.categorical_attributes = relation.select_dtypes(include='object').columns
+        self.categorical_attributes = self.dataframe.select_dtypes(include='object').columns
         self.label_encoders = dict()
         for cat in self.categorical_attributes:
             label_enc = LabelEncoder()  # the current version of label encoder works in alphanumeric order
@@ -129,6 +148,9 @@ class Dataset(ABC):
     def get_distinct(self, attribute_index):
         attribute_name = self.columns[attribute_index]
         return self.dataframe[attribute_name].unique()
+
+    def get_types(self):
+        return self.dataframe.dtypes
 
 
 class GermanCredit(Dataset):

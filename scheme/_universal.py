@@ -1,5 +1,6 @@
 import sys
 import random
+from pprint import pprint
 
 from utils import *
 from utils import _read_data
@@ -130,6 +131,7 @@ class Universal(Scheme):
                 fingerprint_bit = fingerprint[fingerprint_idx]
                 mark_bit = (mask_bit + fingerprint_bit) % 2
                 # if the value is categorical, the mark_bit indicates whether the new value will be odd or even
+                decimal_places = None
                 if fingerprinted_relation.dataframe.columns[attr_idx] in fingerprinted_relation.categorical_attributes:
                     all_vals = fingerprinted_relation.get_distinct(attr_idx)
                     if mark_bit == 1:  # odd value
@@ -137,17 +139,32 @@ class Universal(Scheme):
                     else:
                         possible_vals = [v for v in all_vals if v % 2 == 0]
                     marked_attribute = random.choice(possible_vals)
-                else:
+                elif fingerprinted_relation.dataframe.columns[attr_idx] in fingerprinted_relation.decimal_attributes:
                     attribute_val_str = str(attribute_val)
                     decimal_places = attribute_val_str[::-1].find('.')
-                    attribute_val = int(attribute_val * (10**decimal_places))
+                    attribute_val = round(attribute_val * (10**decimal_places))
                     # alter the chosen value
                     marked_attribute = set_bit(attribute_val, bit_idx, mark_bit)
                     # return the decimal
                     if decimal_places > 0:
                         marked_attribute = marked_attribute / (10**decimal_places)
-                fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
+                else:
+                    decimal_places = 0
+                    attribute_val = round(attribute_val)
+                    marked_attribute = set_bit(attribute_val, bit_idx, mark_bit)
+                if decimal_places is not None:
+                    if decimal_places == 2:
+                        fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = f'{marked_attribute:.2f}'
+                    elif decimal_places == 3:
+                        fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = f'{marked_attribute:.3f}'
+                    elif decimal_places == 4:
+                        fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = f'{marked_attribute:.4f}'
+                    else:
+                        fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
+                else:
+                    fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = marked_attribute
                 count += 1
+                #print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, marked_attribute, fingerprint_idx, fingerprint_bit, mark_bit, mask_bit))
 
         # put back the excluded stuff
         fingerprinted_relation = _data_postprocess(fingerprinted_relation, original_data)
@@ -184,7 +201,7 @@ class Universal(Scheme):
         :return: suspected recipient ID
         '''
         print("Start detection algorithm...")
-        print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
+        print("\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + str(self.fingerprint_bit_length))
         fingerprinted_data = _read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
         if target_attribute is not None:
@@ -216,9 +233,11 @@ class Universal(Scheme):
                     # raise flag
                 attribute_val_str = str(attribute_val)
                 decimal_places = attribute_val_str[::-1].find('.')
+                if fingerprinted_data_prep.dataframe.columns[attr_idx] in fingerprinted_data_prep.integer_attributes:
+                    decimal_places = 0
                 if decimal_places == -1:
                     decimal_places = 0
-                attribute_val = int(attribute_val * (10 ** decimal_places))
+                attribute_val = round(attribute_val * (10 ** decimal_places))
 
                 if fingerprinted_data_prep.dataframe.columns[attr_idx] in fingerprinted_data_prep.categorical_attributes:
                     if attribute_val % 2 == 0:
@@ -234,6 +253,8 @@ class Universal(Scheme):
                 fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
                 # update votes
                 count[fingerprint_idx][fingerprint_bit] += 1
+                #print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, attribute_val, fingerprint_idx, 'True' if fingerprint_bit==1 else 'False', mark_bit, mask_bit))
+
 
         # this fingerprint template will be upside-down from the real binary representation
         fingerprint_template = [2] * self.fingerprint_bit_length
@@ -251,6 +272,8 @@ class Universal(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
+        # print('Counts:')
+        # pprint(count)
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
