@@ -172,3 +172,49 @@ class TestUniversal(unittest.TestCase):
         outfile = "fingerprinted/breast_cancer_wisconsin.csv"
         scheme.insertion(data, recipient, secret_key, write_to=outfile)
         self.assertTrue(os.path.isfile(outfile))
+
+    def test_decimal_detection(self):
+        scheme = Universal(gamma=2, fingerprint_bit_length=128)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/abalone_data.csv'
+        fp_data = scheme.insertion(data, recipient, secret_key)
+        suspect = scheme.detection(fp_data, secret_key)
+        self.assertEqual(suspect, recipient)
+
+    def test_decimal_detection_2(self):
+        scheme = Universal(gamma=2, fingerprint_bit_length=32)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/insurance.csv'
+        fp_data = scheme.insertion(data, recipient, secret_key)
+        suspect = scheme.detection(fp_data, secret_key)
+        self.assertEqual(suspect, recipient)
+
+    def test_subset_decimal(self):
+        scheme = Universal(gamma=5, fingerprint_bit_length=8)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/insurance.csv'
+        fp_data = scheme.insertion(data, recipient, secret_key, include=['bmi', 'age', 'charges'])
+        suspect = scheme.detection(fp_data, secret_key, include=['bmi', 'age', 'charges'])
+        self.assertEqual(suspect, recipient)
+
+    def test_insurance_default(self):
+        scheme = Universal(gamma=1)
+        secret_key = 123
+        recipient = 0
+        data = '../../datasets/insurance.csv'
+        fp_data = scheme.insertion(data, recipient, secret_key)
+        suspect = scheme.detection(fp_data, secret_key)
+        self.assertEqual(suspect, recipient)
+
+    def test_insurance(self):
+        scheme = Universal(gamma=10, fingerprint_bit_length=16)
+        secret_key = 1234
+        recipient = 0
+        data = '../../datasets/insurance.csv'
+        fp_data = scheme.insertion(data, recipient, secret_key, write_to='fingerprinted/insurance.csv')
+
+        suspect = scheme.detection(fp_data, secret_key)
+        self.assertEqual(suspect, recipient)

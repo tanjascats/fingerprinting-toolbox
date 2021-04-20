@@ -144,11 +144,15 @@ class AKScheme(Scheme):
     # todo: return fingerprint meta, i.e. gamma, xi, excluded attributes, primary key attribute, number of recipients
 
     def detection(self, dataset, secret_key, exclude=None, include=None, read=False, primary_key_attribute=None,
-                  real_recipient_id=None):
+                  target_attribute=None, real_recipient_id=None):
         print("Start AK detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
         fingerprinted_data = _read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
+        if target_attribute is not None:
+            fingerprinted_data_prep._set_target_attribute = target_attribute
+        if primary_key_attribute is not None:
+            fingerprinted_data_prep._set_primary_key(primary_key_attribute)
         fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
 
         start = time.time()
@@ -199,7 +203,7 @@ class AKScheme(Scheme):
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
-            print("Buyer " + str(recipient_no) + " is suspected.")
+            print("recipient " + str(recipient_no) + " is suspected.")
         else:
             print("None suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")

@@ -164,7 +164,7 @@ class Universal(Scheme):
                 else:
                     fingerprinted_relation.dataframe.at[r[0], r[1].keys()[attr_idx]] = round(marked_attribute)
                 count += 1
-                #print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, marked_attribute, fingerprint_idx, fingerprint_bit, mark_bit, mask_bit))
+                print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, marked_attribute, fingerprint_idx, fingerprint_bit, mark_bit, mask_bit))
 
         # put back the excluded stuff
         fingerprinted_relation = _data_postprocess(fingerprinted_relation, original_data)
@@ -255,7 +255,7 @@ class Universal(Scheme):
                 fingerprint_idx = random.randint(0, sys.maxsize) % self.fingerprint_bit_length
                 # update votes
                 count[fingerprint_idx][fingerprint_bit] += 1
-                #print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, attribute_val, fingerprint_idx, 'True' if fingerprint_bit==1 else 'False', mark_bit, mask_bit))
+                print('row:{} attr_idx:{} attr_name:{} val:{} marked_val:{} fp_idx:{} fp_bit:{} mark_bit:{} mask_bit:{}'.format(r[0], attr_idx, r[1].keys()[attr_idx], attribute_val, attribute_val, fingerprint_idx, 'True' if fingerprint_bit==1 else 'False', mark_bit, mask_bit))
 
 
         # this fingerprint template will be upside-down from the real binary representation
@@ -274,8 +274,8 @@ class Universal(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
-        #print('Counts:')
-        #pprint(count)
+        print('Counts:')
+        pprint(count)
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
