@@ -10,7 +10,7 @@ $ git clone https://github.com/tanjascats/fingerprinting-toolbox.git
 For fingerprint insertion, we can define the scheme with the parameter gamma and bit-length of a fingerprint. The number of modified rows in the data will then be approx. #rows/gamma (TIP: use gamma to control the amount of modifications in the data). 
 
 ```
-scheme = Universal(gamma=2, fingerprint_lenght=64)
+scheme = Universal(gamma=2, fingerprint_bit_length=64)
 ```
 
 After the scheme is initialized, we can embedd the fingerprint using our (owner's) secret key and specifying recipient's ID: 
