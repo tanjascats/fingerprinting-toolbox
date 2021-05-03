@@ -218,3 +218,13 @@ class TestUniversal(unittest.TestCase):
 
         suspect = scheme.detection(fp_data, secret_key)
         self.assertEqual(suspect, recipient)
+
+    def test_bank_personal_loan_modelling(self):
+        scheme = Universal(gamma=10, fingerprint_bit_length=16)
+        secret_key = 1234
+        recipient = 0
+        data = '../../datasets/Bank_Personal_Loan_Modelling.csv'
+        fp_data = scheme.insertion(data, recipient, secret_key)
+
+        suspect = scheme.detection(fp_data, secret_key)
+        self.assertEqual(suspect, recipient)
