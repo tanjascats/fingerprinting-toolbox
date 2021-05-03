@@ -79,7 +79,7 @@ class Universal(Scheme):
                              str(self.fingerprint_bit_length)
 
     def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
-                  primary_key_attribute=None, target_attribute=None, write_to=None):
+                  primary_key_attribute=None, target_attribute=None, write_to=None, attributes_weights=None):
         '''
         Embeds the fingerprint into the data.
         :param dataset: data path, Pandas dataframe or datasets.Dataset class instance
@@ -91,6 +91,7 @@ class Universal(Scheme):
         :param primary_key_attribute: Name of the primary key attribute; optional
         :param target_attribute: Name of the target attribute; optional
         :param write_to: Name of the target datafile; if defined, 'save' is ignored
+        :param attributes_weights: List of attributes weights that should sum up to 1, alter less relevant attributes more; optional
         :return: datasets.Dataset instance of fingerprinted data
         '''
         print(self._INIT_MESSAGE)
@@ -119,7 +120,10 @@ class Universal(Scheme):
             # select the tuple
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # select attribute (that is not the primary key)
-                attr_idx = random.randint(0, sys.maxsize) % relation.number_of_columns
+                if attributes_weights is not None:
+                    attr_idx = random.choices(range(relation.number_of_columns), weights=[1-x for x in attributes_weights])[0]
+                else:
+                    attr_idx = random.randint(0, sys.maxsize) % relation.number_of_columns
                 attribute_val = r[1][attr_idx]
                 # select least significant bit
                 bit_idx = random.randint(0, sys.maxsize) % self.xi
@@ -188,7 +192,7 @@ class Universal(Scheme):
         return fingerprinted_relation
 
     def detection(self, dataset, secret_key, exclude=None, include=None, primary_key_attribute=None,
-                  target_attribute=None):
+                  target_attribute=None, attributes_weights=None):
         '''
         Detects the fingerprint from the data and assigns a suspect.
         :param dataset: path, pandas.DataFrame or Dataset instance of the suspicious dataset
@@ -197,6 +201,7 @@ class Universal(Scheme):
         :param include: list of column names included in fingerprinting (ignored if 'exclude' is provided)
         :param primary_key_attribute: optional, name of the primary key attribute
         :param target_attribute: optional; name of the target attribute
+        :param attributes_weights: List of attributes weights that should sum up to 1, alter less relevant attributes more; optional
         :return: suspected recipient ID
         '''
         print("Start detection algorithm...")
@@ -222,7 +227,10 @@ class Universal(Scheme):
             # this tuple was marked
             if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # this attribute was marked (skip the primary key)
-                attr_idx = random.randint(0, sys.maxsize) % fingerprinted_data_prep.number_of_columns
+                if attributes_weights is not None:
+                    attr_idx = random.choices(range(fingerprinted_data_prep.number_of_columns), weights=[1-x for x in attributes_weights])[0]
+                else:
+                    attr_idx = random.randint(0, sys.maxsize) % fingerprinted_data_prep.number_of_columns
                 attribute_val = r[1][attr_idx]
                 # this LS bit was marked
                 bit_idx = random.randint(0, sys.maxsize) % self.xi

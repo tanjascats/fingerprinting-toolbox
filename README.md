@@ -29,7 +29,8 @@ suspect = scheme.detection("suspicious_data.csv", secret_key=12345678)
 
 For more examples and detailed explanations check out the notebook [example.ipynb](https://github.com/tanjascats/fingerprinting-toolbox/blob/master/example.ipynb).
  
-## Support
+## Support & Contribution
 The toolbox is in its early stage, but actively developing, so you can either:
 - Report the issues at [Issues](https://github.com/tanjascats/fingerprinting-toolbox/issues) or
 - Contact me by email: TSarcevic@sba-research.org for questions, suggestions or issues
+- Pull requests are welcome
