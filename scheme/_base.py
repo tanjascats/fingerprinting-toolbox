@@ -71,3 +71,6 @@ class Scheme(ABC):
 
     def summary(self, original_dataset, fingerprinted_dataset):
         self.plot_attribute_difference(original_dataset, fingerprinted_dataset)
+
+    def get_fplen(self):
+        return self.fingerprint_bit_length

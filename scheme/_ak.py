@@ -2,8 +2,8 @@
 AK Scheme
 """
 
-from utils import *
-from utils import _read_data
+from utilities import *
+from datasets import read_data
 import sys
 import random
 import time
@@ -78,8 +78,8 @@ class AKScheme(Scheme):
                   primary_key_attribute=None, target_attribute=None, write_to=None):
         print(self._INIT_MESSAGE)
 
-        original_data = _read_data(dataset, target_attribute=target_attribute,
-                                   primary_key_attribute=primary_key_attribute)
+        original_data = read_data(dataset, target_attribute=target_attribute,
+                                  primary_key_attribute=primary_key_attribute)
         # prep data for fingerprinting
 
         # relation is original data but preprocessed
@@ -147,7 +147,7 @@ class AKScheme(Scheme):
                   target_attribute=None, real_recipient_id=None):
         print("Start AK detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
-        fingerprinted_data = _read_data(dataset)
+        fingerprinted_data = read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
         if target_attribute is not None:
             fingerprinted_data_prep._set_target_attribute = target_attribute
