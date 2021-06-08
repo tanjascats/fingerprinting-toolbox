@@ -2,8 +2,8 @@ import sys
 import random
 from pprint import pprint
 
-from utilities import *
-from datasets import read_data
+from utils import *
+from utils import _read_data
 
 from ._base import Scheme
 
@@ -22,10 +22,7 @@ def _data_preprocess(dataset, exclude=None, include=None):
     relation = dataset
     if exclude is not None:
         for attribute in exclude:
-            try:
-                relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
-            except KeyError:
-                break
+            relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
         include = None
     if include is not None:
         relation.set_dataframe(relation.dataframe[include])
@@ -79,8 +76,7 @@ class Universal(Scheme):
 
         self._INIT_MESSAGE = "Start insertion algorithm...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + \
-                             str(self.fingerprint_bit_length) + "\n\txi: " + str(xi) + \
-                             "\n\t# recipients: " + str(number_of_recipients)
+                             str(self.fingerprint_bit_length)
 
     def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
                   primary_key_attribute=None, target_attribute=None, write_to=None, attributes_weights=None):
@@ -99,9 +95,9 @@ class Universal(Scheme):
         :return: datasets.Dataset instance of fingerprinted data
         '''
         print(self._INIT_MESSAGE)
-        print("\n\t(secret key -- for evaluation purposes): " + str(secret_key))
-        original_data = read_data(dataset, target_attribute=target_attribute,
-                                  primary_key_attribute=primary_key_attribute)
+
+        original_data = _read_data(dataset, target_attribute=target_attribute,
+                                   primary_key_attribute=primary_key_attribute)
         # prep data for fingerprinting
 
         # relation is original data but preprocessed
@@ -116,7 +112,6 @@ class Universal(Scheme):
         count = count_omega = 0
         count_omega = [0 for i in range(self.fingerprint_bit_length)]
         start = time.time()
-        print('\tInserting a fingerprint into columns: ' + str(relation.dataframe.columns))
         for r in relation.dataframe.iterrows():
             # seed = concat(secret_key, primary_key)
             seed = (secret_key << self.__primary_key_len) + relation.primary_key[r[0]]
@@ -211,7 +206,7 @@ class Universal(Scheme):
         '''
         print("Start detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + str(self.fingerprint_bit_length))
-        fingerprinted_data = read_data(dataset)
+        fingerprinted_data = _read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
         if target_attribute is not None:
             fingerprinted_data_prep._set_target_attribute = target_attribute
@@ -223,7 +218,7 @@ class Universal(Scheme):
         # init fingerprint template and counts
         # for each of the fingerprint bit the votes if it is 0 or 1
         count = [[0, 0] for x in range(self.fingerprint_bit_length)]
-        print("\tdetecting a fingerprint from columns: " + str(fingerprinted_data_prep.columns))
+
         # scan all tuples and obtain counts for each fingerprint bit
         for r in fingerprinted_data_prep.dataframe.iterrows():
             seed = (secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]]
@@ -295,6 +290,3 @@ class Universal(Scheme):
             print("No one suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
         return recipient_no
-
-    def get_gamma(self):
-        return self.gamma
