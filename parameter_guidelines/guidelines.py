@@ -2,12 +2,19 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from pprint import pprint
-from utils import *
-from scheme import AKScheme
+from utilities import *
+from scheme import AKScheme, Universal
 import numpy as np
 from attacks import *
 from datasets import *
 import time
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
 def get_experimental_gammae(amount, data_len, fp_len):
@@ -94,7 +101,7 @@ def inverse_robustness(attack, scheme, data,
     # attack_strength = attack.get_weaker(attack_strength, attack_granularity)
     while True:
         attack_strength += attack_granularity  # lower the strength of the attack
-        if round(attack_strength, 2) == 1.0:
+        if round(attack_strength, 2) >= 1.0:
             break
         robust = True
         success = n_experiments
@@ -102,13 +109,15 @@ def inverse_robustness(attack, scheme, data,
             # insert the data
             user = 1
             sk = exp_idx
-            scheme.set_secret_key(sk)
-            fingerprinted_data = scheme.insertion(data, user, exclude=exclude,
-                                                  primary_key_attribute=primary_key_attribute)
+            #fingerprinted_data = scheme.insertion(data, user, secret_key=sk, exclude=exclude,
+            #                                      primary_key_attribute=primary_key_attribute)
+            fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
+                                                                                               scheme.get_fplen(),
+                                                                                               user, sk))
             attacked_data = attack.run(fingerprinted_data, attack_strength)
 
             # try detection
-            suspect = scheme.detection(attacked_data, exclude=exclude, primary_key_attribute=primary_key_attribute)
+            suspect = scheme.detection(attacked_data, sk, exclude=exclude, primary_key_attribute=primary_key_attribute)
 
             if suspect != user:
                 success -= 1
@@ -181,20 +190,158 @@ def get_basic_utility(original_data, fingerprinted_data):
     return modification_percentage, delta_mean, delta_var
 
 
-def _utility_KNN():
-    model = KNeighborsClassifier()
-    score = cross_val_score(model, X, y, cv=5)
-
-
-def _split_features_target(original_data, fingerprinted_data):
-    X = data.drop([target, 'sample-code-number'], axis=1)
+# runs deterministic experiments on data utility via KNN
+def attack_utility_knn(data, target, attack, attack_granularity=0.1, n_folds=10):
+    X = data.drop(target, axis=1)
     y = data[target]
 
+    attack_strength = 0
+    utility = dict()
+    while True:
+        attack_strength += attack_granularity  # lower the strength of the attack
+        if round(attack_strength, 2) >= 1.0:
+            break
+        # score = cross_val_score(model, X, y, cv=5)
+        accuracy = []
+        for fold in range(n_folds):
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+            train = pd.concat([X_train, y_train], axis=1)
+            attacked_train = attack.run(train, attack_strength, random_state=fold)
+            attacked_X = attacked_train.drop(target, axis=1)
+            attacked_y = attacked_train[target]
 
-def get_ML_utility():
-    # todo: also baseline models (original) should be done only once
-    X, y, X_fp, y_fp = _split_features_target(original_data, fingerprinted_data)
-    _utility_KNN()
+            model = KNeighborsClassifier()
+            model.fit(attacked_X, attacked_y)
+            acc = accuracy_score(y_test, model.predict(X_test))
+            accuracy.append(acc)
+        utility[round(1-attack_strength, 2)] = accuracy
+    return utility
+    # returns estimated utility drop for each attack strength
+
+
+def fingerprint_utility_knn(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
+    # n_folds should be consistent with experiments done on attacked data
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        data = data.preprocessed()
+    X = data.drop(target, axis=1)
+    y = data[target]
+    model = KNeighborsClassifier()
+
+    fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+
+    accuracy = []
+    for exp in range(n_experiments):
+        fp_file_string = 'universal_g{}_x1_l32_u1_sk{}.csv'.format(gamma, exp)
+        fingerprinted_data = pd.read_csv(fingerprinted_data_dir+fp_file_string)
+        fingerprinted_data = Adult().preprocessed(fingerprinted_data)
+        X_fp = fingerprinted_data.drop(target, axis=1)
+        y_fp = fingerprinted_data[target]
+
+        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+        accuracy.append(acc)
+
+    # [[acc_fold1,acc_fold2,...],[],...n_experiments]
+    return accuracy
+
+
+def original_utility_knn(data, target, n_folds=10):
+    # n_folds should be consistent with experiments done on attacked data
+    X = data.drop(target, axis=1)
+    y = data[target]
+
+    accuracy = []
+    for fold in range(n_folds):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+
+        model = KNeighborsClassifier()
+        model.fit(X_train, y_train)
+        acc = accuracy_score(y_test, model.predict(X_test))
+        accuracy.append(acc)
+    return accuracy
+
+
+def fingerprint_utility_dt(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
+    # n_folds should be consistent with experiments done on attacked data
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        data = data.preprocessed()
+    X = data.drop(target, axis=1)
+    y = data[target]
+
+    fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+
+    accuracy = []
+    for exp in range(n_experiments):
+        fp_file_string = 'universal_g{}_x1_l32_u1_sk{}.csv'.format(gamma, exp)
+        fingerprinted_data = pd.read_csv(fingerprinted_data_dir+fp_file_string)
+        fingerprinted_data = Adult().preprocessed(fingerprinted_data)
+        X_fp = fingerprinted_data.drop(target, axis=1)
+        y_fp = fingerprinted_data[target]
+
+        model = DecisionTreeClassifier(random_state=0)
+        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+        accuracy.append(acc)
+
+    # [[acc_fold1,acc_fold2,...],[],...n_experiments]
+    return accuracy
+
+
+def fingerprint_utility_gb(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
+    # n_folds should be consistent with experiments done on attacked data
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        data = data.preprocessed()
+    X = data.drop(target, axis=1)
+    y = data[target]
+
+    fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+
+    accuracy = []
+    for exp in range(n_experiments):
+        fp_file_string = 'universal_g{}_x1_l32_u1_sk{}.csv'.format(gamma, exp)
+        fingerprinted_data = pd.read_csv(fingerprinted_data_dir + fp_file_string)
+        fingerprinted_data = Adult().preprocessed(fingerprinted_data)
+        X_fp = fingerprinted_data.drop(target, axis=1)
+        y_fp = fingerprinted_data[target]
+
+        model = GradientBoostingClassifier(random_state=0)
+        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+        accuracy.append(acc)
+
+    # [[acc_fold1,acc_fold2,...],[],...n_experiments]
+    return accuracy
+
+
+def attack_utility_bounds(original_utility, attack_utility):
+    # returns the attack strengths that yield at least 1%, 2%, ... utility loss and
+    # the largest accuracy drop of attacked data
+    # the returned values are absolute
+    attack_bounds = []
+    max_utility_drop = np.mean(original_utility) - \
+                       min(np.mean(acc) for acc in attack_utility.values())
+    drop = 0.01
+    while drop < max_utility_drop:
+        # attack strength that yields at least 1%(or p%) of accuracy loss
+
+        attack_strength = max([strength for strength in attack_utility
+                          if np.mean(original_utility) - np.mean(attack_utility[strength])
+                               <= drop])
+        attack_bounds.append(attack_strength)
+        drop += 0.01
+    attack_bounds.append(max_utility_drop)
+    return attack_bounds
+
+
+#def _split_features_target(original_data, fingerprinted_data):
+#    X = data.drop([target, 'sample-code-number'], axis=1)
+#    y = data[target]
+
+
+#def get_ML_utility():
+#    # todo: also baseline models (original) should be done only once
+#    X, y, X_fp, y_fp = _split_features_target(original_data, fingerprinted_data)
+#    _utility_KNN()
 
 
 def master_evaluation(dataset,
@@ -241,6 +388,43 @@ def master_evaluation(dataset,
 
     changed_vals, mean, var = get_basic_utility(data.get_dataframe(), fingerprinted_data.get_dataframe())
 
-    get_ML_utility()
+#    get_ML_utility()
 
     return meta
+
+
+def test_interactive_plot():
+    fig, ax = plt.subplots(figsize=(14, 8))
+
+    y = np.random.randint(0, 100, size=50)
+    x = np.random.choice(np.arange(len(y)), size=10)
+
+    line, = ax.plot(y, '-', label='line')
+    dot, = ax.plot(x, y[x], 'o', label='dot')
+
+    legend = plt.legend(loc='upper right')
+    line_legend, dot_legend = legend.get_lines()
+    line_legend.set_picker(True)
+    line_legend.set_pickradius(10)
+    dot_legend.set_picker(True)
+    dot_legend.set_pickradius(10)
+
+    graphs = {}
+    graphs[line_legend] = line
+    graphs[dot_legend] = dot
+
+    def on_pick(event):
+        legend = event.artist
+        isVisible = legend.get_visible()
+
+        graphs[legend].set_visible(not isVisible)
+        legend.set_visible(not isVisible)
+
+        fig.canvas.draw()
+
+    plt.connect('pick_event', on_pick)
+    plt.show()
+
+
+if __name__ == '__main__':
+    test_interactive_plot()
