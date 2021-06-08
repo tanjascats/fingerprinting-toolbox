@@ -210,34 +210,13 @@ class TestUniversal(unittest.TestCase):
         self.assertEqual(suspect, recipient)
 
     def test_insurance(self):
-        scheme = Universal(gamma=10, fingerprint_bit_length=8)
+        scheme = Universal(gamma=10, fingerprint_bit_length=16)
         secret_key = 1234
         recipient = 0
         data = '../../datasets/insurance.csv'
-        fp_data = scheme.insertion(data, recipient, secret_key,
-                                   write_to='fingerprinted/insurance.csv')
-        suspect = scheme.detection(fp_data, secret_key)
-        self.assertEqual(suspect, recipient)
+        fp_data = scheme.insertion(data, recipient, secret_key, write_to='fingerprinted/insurance.csv')
 
-    def test_adult_insertion_write(self):
-        scheme = Universal(gamma=10, fingerprint_bit_length=8)
-        secret_key = 1234
-        recipient = 0
-        data = pd.read_csv('../../datasets/adult.csv', na_values='?')
-        data = data.dropna(axis=0).reset_index().drop('index', axis=1)
-        fp_data = scheme.insertion(dataset=data,
-                                   recipient_id=recipient,
-                                   secret_key=secret_key,
-                                   write_to='fingerprinted/adult.csv')
         suspect = scheme.detection(fp_data, secret_key)
-        self.assertEqual(suspect, recipient)
-
-    def test_adult_detection_from_file(self):
-        scheme = Universal(gamma=10, fingerprint_bit_length=8)
-        secret_key = 1234
-        recipient = 0
-        fp_data_path = 'fingerprinted/adult.csv'
-        suspect = scheme.detection(fp_data_path, secret_key=secret_key)
         self.assertEqual(suspect, recipient)
 
     def test_bank_personal_loan_modelling(self):
