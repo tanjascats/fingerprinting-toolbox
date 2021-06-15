@@ -81,6 +81,7 @@ class Universal(Scheme):
                              "\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + \
                              str(self.fingerprint_bit_length) + "\n\txi: " + str(xi) + \
                              "\n\t# recipients: " + str(number_of_recipients)
+        self.original_attributes = None
 
     def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
                   primary_key_attribute=None, target_attribute=None, write_to=None, attributes_weights=None):
@@ -108,6 +109,8 @@ class Universal(Scheme):
         relation = original_data.clone()
         relation = _data_preprocess(dataset=relation, exclude=exclude, include=include)
         # fingerprinted_relation is a deep copy of an original and will be modified throughout the insertion phase
+        self.original_attributes = relation.columns
+
         fingerprinted_relation = original_data.clone()
         fingerprinted_relation = _data_preprocess(dataset=fingerprinted_relation, exclude=exclude, include=include)
         fingerprint = super().create_fingerprint(recipient_id, secret_key)
@@ -197,7 +200,7 @@ class Universal(Scheme):
         return fingerprinted_relation
 
     def detection(self, dataset, secret_key, exclude=None, include=None, primary_key_attribute=None,
-                  target_attribute=None, attributes_weights=None):
+                  target_attribute=None, attributes_weights=None, original_attributes=None):
         '''
         Detects the fingerprint from the data and assigns a suspect.
         :param dataset: path, pandas.DataFrame or Dataset instance of the suspicious dataset
@@ -217,7 +220,23 @@ class Universal(Scheme):
             fingerprinted_data_prep._set_target_attribute = target_attribute
         if primary_key_attribute is not None:
             fingerprinted_data_prep._set_primary_key(primary_key_attribute)
+        if original_attributes is not None:
+            self.original_attributes = original_attributes
         fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
+        # return the original attribute list and fill out the missing with zeroes
+        if not fingerprinted_data_prep.columns.equals(self.original_attributes):
+            difference = self.original_attributes.difference(fingerprinted_data_prep.columns)
+            for diff in difference:
+                fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
+                                                                range(len(fingerprinted_data_prep.dataframe))])
+            fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[self.original_attributes.tolist()])
+            # if not relation_orig.columns.equals(relation_fp.columns):
+            #    print(relation_fp.columns)
+            #    difference = relation_orig.columns.difference(relation_fp.columns)
+            #    for diff in difference:
+            #        relation_fp[diff] = relation_orig[diff]
+            # bring back the original order of columns
+            # relation_fp = relation_fp[relation_orig.columns.tolist()]
 
         start = time.time()
         # init fingerprint template and counts

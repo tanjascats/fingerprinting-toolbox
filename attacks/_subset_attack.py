@@ -48,14 +48,19 @@ class VerticalSubsetAttack(Attack):
     """
     Runs the attack; gets a subset of columns without random 'number_of_columns' columns
     """
-    def run_random(self, dataset, number_of_columns):
+    def run_random(self, dataset, number_of_columns, seed):
         if number_of_columns >= len(dataset.columns)-1:
             print("Cannot delete all columns.")
             return None
-
+        random.seed(seed)
         start = time.time()
-        column_subset = random.choices(dataset.columns.drop(labels=["Id"]), k=number_of_columns)
+        if 'Id' in dataset.columns:
+            column_subset = random.choices(dataset.columns.drop(labels=["Id"]),
+                                           k=number_of_columns)
+        else:
+            column_subset = random.choices(dataset.columns, k=number_of_columns)
         subset = dataset.drop(column_subset, axis=1)
+        print(column_subset)
 
         print("Vertical subset attack runtime on " + str(number_of_columns) + " out of " + str(len(dataset.columns)-1) +
               " columns: " + str(time.time() - start) + " sec.")

@@ -45,3 +45,18 @@ class TestGuidelines(unittest.TestCase):
         scheme = Universal(gamma=1, fingerprint_bit_length=32, number_of_recipients=100, xi=1)
         suspect = scheme.detection(fp_data, secret_key=0, exclude='income')
         self.assertEqual(suspect, 1)
+
+    def test_inverse_robustness_vertical_adult(self):
+        attack = VerticalSubsetAttack()
+        scheme = Universal(gamma=1, xi=1, fingerprint_bit_length=32, number_of_recipients=100)
+        data = Adult().preprocessed()
+        target = 'income'
+        attack_granularity = 0.05
+        n_experiments = 100
+        confidence_rate = 0.9
+        remaining = inverse_robustness(attack, scheme, data, exclude=[target],
+                                       attack_granularity=attack_granularity,
+                                       n_experiments=n_experiments,
+                                       confidence_rate=confidence_rate)
+        print(remaining)
+        self.assertIsNotNone(remaining)

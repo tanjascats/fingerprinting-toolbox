@@ -93,16 +93,19 @@ def get_insights(data, target, primary_key_attribute=None, exclude=None, include
 
 # from how much remaining data can the fingerprint still be extracted?
 # todo: create a class Dataset that contains these stuff like primary-key-attr, exclude, include and other related stuffs
-def inverse_robustness(attack, scheme, data,
+def inverse_robustness(attack, scheme,
                        primary_key_attribute=None, exclude=None, n_experiments=100, confidence_rate=0.99,
                        attack_granularity=0.10):
     attack_strength = 0
     # attack_strength = attack.get_strongest(attack_granularity)  # this should return 0+attack_granularity in case of horizontal subset attack
     # attack_strength = attack.get_weaker(attack_strength, attack_granularity)
     while True:
-        attack_strength += attack_granularity  # lower the strength of the attack
-        if round(attack_strength, 2) >= 1.0:
-            break
+        if isinstance(attack, VerticalSubsetAttack):
+            attack_strength += 1
+        else:
+            attack_strength += attack_granularity  # lower the strength of the attack
+            if round(attack_strength, 2) >= 1.0:
+                break
         robust = True
         success = n_experiments
         for exp_idx in range(n_experiments):
@@ -114,7 +117,12 @@ def inverse_robustness(attack, scheme, data,
             fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
                                                                                                scheme.get_fplen(),
                                                                                                user, sk))
-            attacked_data = attack.run(fingerprinted_data, attack_strength)
+            if isinstance(attack, VerticalSubsetAttack):
+                attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk)
+                if attacked_data is None:
+                    break  # the strongest attack has been reached
+            else:
+                attacked_data = attack.run(fingerprinted_data, attack_strength, random_state=sk)
 
             # try detection
             suspect = scheme.detection(attacked_data, sk, exclude=exclude, primary_key_attribute=primary_key_attribute)
@@ -255,6 +263,38 @@ def original_utility_knn(data, target, n_folds=10):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
 
         model = KNeighborsClassifier()
+        model.fit(X_train, y_train)
+        acc = accuracy_score(y_test, model.predict(X_test))
+        accuracy.append(acc)
+    return accuracy
+
+
+def original_utility_dt(data, target, n_folds=10):
+    # n_folds should be consistent with experiments done on attacked data
+    X = data.drop(target, axis=1)
+    y = data[target]
+
+    accuracy = []
+    for fold in range(n_folds):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+
+        model = DecisionTreeClassifier(random_state=0)
+        model.fit(X_train, y_train)
+        acc = accuracy_score(y_test, model.predict(X_test))
+        accuracy.append(acc)
+    return accuracy
+
+
+def original_utility_gb(data, target, n_folds=10):
+    # n_folds should be consistent with experiments done on attacked data
+    X = data.drop(target, axis=1)
+    y = data[target]
+
+    accuracy = []
+    for fold in range(n_folds):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+
+        model = GradientBoostingClassifier(random_state=0)
         model.fit(X_train, y_train)
         acc = accuracy_score(y_test, model.predict(X_test))
         accuracy.append(acc)
