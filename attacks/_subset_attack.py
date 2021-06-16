@@ -13,9 +13,15 @@ class HorizontalSubsetAttack(Attack):
     Runs the attack; gets a random subset of a dataset of size fraction*data_size
     fraction [0,1]
     """
-    def run(self, dataset, fraction, random_state=None):
+    def run(self, dataset, strength=None, fraction=None, random_state=None):
         if isinstance(dataset, Dataset):
             dataset = dataset.get_dataframe()
+        if strength is None and fraction is None:  # if strength is none and fraction also
+            return None
+        if strength is not None and fraction is not None:
+            print('Both fraction and strength of horizontal attack are provided -- using fraction.')
+        if strength is not None and fraction is None:
+            fraction = 1.0 - strength
         if fraction < 0 or fraction > 1:
             return None
 

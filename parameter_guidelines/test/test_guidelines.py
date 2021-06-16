@@ -60,3 +60,15 @@ class TestGuidelines(unittest.TestCase):
                                        confidence_rate=confidence_rate)
         print(remaining)
         self.assertIsNotNone(remaining)
+
+    def test_inverse_robustness_vertical(self):
+        attack = VerticalSubsetAttack()
+        scheme = Universal(gamma=1, xi=1, fingerprint_bit_length=32, number_of_recipients=100)
+        data = Adult().preprocessed()
+        target = 'income'
+        n_experiments = 5
+        confidence_rate = 0.9
+        remaining = inverse_robustness(attack, scheme, exclude=[target],
+                                       n_experiments=n_experiments,
+                                       confidence_rate=confidence_rate)
+        print(remaining)

@@ -100,3 +100,42 @@ class TestVerticalSubset(unittest.TestCase):
         attack_strength = 14
         attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=1)
         self.assertIsNone(attacked_data)
+
+
+class TestHorizontalSubset(unittest.TestCase):
+    def test_parameters_strength(self):
+        attack = HorizontalSubsetAttack()
+        recipient = 1
+        fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/'
+                                         'universal_g1_x1_l32_u{}_sk0.csv'.format(recipient))
+        attack_strength = 0.9
+        attacked_data = attack.run(fingerprinted_data, strength=attack_strength)
+        self.assertEqual(len(attacked_data), int(0.1*len(fingerprinted_data)))
+
+    def test_parameters_fraction(self):
+        attack = HorizontalSubsetAttack()
+        recipient = 1
+        fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/'
+                                         'universal_g1_x1_l32_u{}_sk0.csv'.format(recipient))
+        fraction = 0.2
+        attacked_data = attack.run(fingerprinted_data, fraction=fraction)
+        self.assertEqual(len(attacked_data), int(0.2 * len(fingerprinted_data)))
+
+    def test_parameters_strength_fraction(self):
+        attack = HorizontalSubsetAttack()
+        recipient = 1
+        fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/'
+                                         'universal_g1_x1_l32_u{}_sk0.csv'.format(recipient))
+        fraction = 0.2
+        attack_strength = 0.9
+        attacked_data = attack.run(fingerprinted_data, fraction=fraction, strength=attack_strength)
+        self.assertEqual(len(attacked_data), int(0.2 * len(fingerprinted_data)))
+
+    def test_parameters_none(self):
+        attack = HorizontalSubsetAttack()
+        recipient = 1
+        fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/'
+                                         'universal_g1_x1_l32_u{}_sk0.csv'.format(recipient))
+
+        attacked_data = attack.run(fingerprinted_data)
+        self.assertIsNone(attacked_data)

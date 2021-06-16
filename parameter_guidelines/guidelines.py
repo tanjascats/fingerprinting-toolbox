@@ -101,8 +101,12 @@ def inverse_robustness(attack, scheme,
     # attack_strength = attack.get_weaker(attack_strength, attack_granularity)
     while True:
         if isinstance(attack, VerticalSubsetAttack):
-            attack_strength += 1
+            attack_strength -= 1  # lower the strength of the attack
+            if attack_strength == 0:
+                break
         else:
+            # in case of horizontal attack, the attack strength is actually (1-attack_strength), i.e.
+            # how much data will stay in the release, not how much it will be deleted
             attack_strength += attack_granularity  # lower the strength of the attack
             if round(attack_strength, 2) >= 1.0:
                 break
@@ -117,15 +121,18 @@ def inverse_robustness(attack, scheme,
             fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
                                                                                                scheme.get_fplen(),
                                                                                                user, sk))
+            if attack_strength == -1:  # remember the strongest attack
+                attack_vertical_max = len(fingerprinted_data.columns.drop('income'))
+                attack_strength = attack_vertical_max - 1
             if isinstance(attack, VerticalSubsetAttack):
                 attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk)
-                if attacked_data is None:
-                    break  # the strongest attack has been reached
             else:
                 attacked_data = attack.run(fingerprinted_data, attack_strength, random_state=sk)
 
             # try detection
-            suspect = scheme.detection(attacked_data, sk, exclude=exclude, primary_key_attribute=primary_key_attribute)
+            orig_attr = fingerprinted_data.columns.drop('income')
+            suspect = scheme.detection(attacked_data, sk, exclude=exclude, primary_key_attribute=primary_key_attribute,
+                                       original_attributes=orig_attr)
 
             if suspect != user:
                 success -= 1
@@ -134,12 +141,17 @@ def inverse_robustness(attack, scheme,
                 print('-------------------------------------------------------------------')
                 print('-------------------------------------------------------------------')
                 print(
-                    'Attack ' + str(attack_strength) + " is too strong. Halting after " + str(exp_idx) + " iterations.")
+                    'Attack with strength ' + str(attack_strength) + " is too strong. Halting after " + str(exp_idx) +
+                    " iterations.")
                 print('-------------------------------------------------------------------')
                 print('-------------------------------------------------------------------')
                 break  # attack too strong, continue with a lighter one
         if robust:
+            if isinstance(attack, VerticalSubsetAttack):
+                attack_strength = round(attack_strength / attack_vertical_max, 2)
             return round(attack_strength, 2)
+    if isinstance(attack, VerticalSubsetAttack):
+        attack_strength = round(attack_strength / attack_vertical_max, 2)
     return round(attack_strength, 2)
 
 

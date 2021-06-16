@@ -225,11 +225,15 @@ class Universal(Scheme):
         fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
         # return the original attribute list and fill out the missing with zeroes
         if not fingerprinted_data_prep.columns.equals(self.original_attributes):
-            difference = self.original_attributes.difference(fingerprinted_data_prep.columns)
-            for diff in difference:
-                fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
-                                                                range(len(fingerprinted_data_prep.dataframe))])
-            fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[self.original_attributes.tolist()])
+            try:
+                difference = self.original_attributes.difference(fingerprinted_data_prep.columns)
+                for diff in difference:
+                    fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
+                                                                    range(len(fingerprinted_data_prep.dataframe))])
+                fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[self.original_attributes.tolist()])
+            except AttributeError:
+                print('\nWARNING!\n\t->Provide the original attribute names, if available, to improve the '
+                      'performance of detection algorithm.\n')
             # if not relation_orig.columns.equals(relation_fp.columns):
             #    print(relation_fp.columns)
             #    difference = relation_orig.columns.difference(relation_fp.columns)
