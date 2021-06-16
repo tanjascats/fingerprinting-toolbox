@@ -127,7 +127,7 @@ def inverse_robustness(attack, scheme,
             if isinstance(attack, VerticalSubsetAttack):
                 attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk)
             else:
-                attacked_data = attack.run(fingerprinted_data, attack_strength, random_state=sk)
+                attacked_data = attack.run(fingerprinted_data, fraction=attack_strength, random_state=sk)
 
             # try detection
             orig_attr = fingerprinted_data.columns.drop('income')
@@ -155,34 +155,65 @@ def inverse_robustness(attack, scheme,
     return round(attack_strength, 2)
 
 
-def get_robustness(data, primary_key_attribute, target, exclude=None):
-    dataset = None
-    if isinstance(data, pd.DataFrame):
-        dataset = data
-    elif isinstance(data, str):
-        print('given the data path')
-        dataset = pd.read_csv(data)
-    if exclude is None:
-        exclude = []
-    exclude.append(target)
+def robustness(attack, scheme, primary_key_attribute=None, exclude=None, n_experiments=100, confidence_rate=0.99,
+               attack_granularity=0.10):
+    attack_strength = 1  # defining the strongest attack
+    attack_vertical_max = -1
+    # attack_strength = attack.get_strongest(attack_granularity)  # this should return 0+attack_granularity in case of horizontal subset attack
+    # attack_strength = attack.get_weaker(attack_strength, attack_granularity)
+    while True:
+        if isinstance(attack, VerticalSubsetAttack):
+            attack_strength -= 1  # lower the strength of the attack
+            if attack_strength == 0 and attack_vertical_max != -1:
+                break
+        else:
+            # how much data will stay in the release, not how much it will be deleted
+            attack_strength -= attack_granularity  # lower the strength of the attack
+            if round(attack_strength, 2) <= 0:  # break if the weakest attack is reached
+                break
+        robust = True  # for now it's robust
+        success = n_experiments
+        for exp_idx in range(n_experiments):
+            # insert the data
+            user = 1
+            sk = exp_idx
+            #fingerprinted_data = scheme.insertion(data, user, secret_key=sk, exclude=exclude,
+            #                                      primary_key_attribute=primary_key_attribute)
+            fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
+                                                                                               scheme.get_fplen(),
+                                                                                               user, sk))
+            if isinstance(attack, VerticalSubsetAttack):
+                if attack_vertical_max == -1:  # remember the strongest attack and initiate the attack strength
+                    attack_vertical_max = len(fingerprinted_data.columns.drop('income'))
+                    attack_strength = attack_vertical_max - 1
+                attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk)
+            else:
+                attacked_data = attack.run(fingerprinted_data, strength=attack_strength, random_state=sk)
 
-    gammae = [3, 6, 12, 25, 50]
-    results = {g: 0 for g in gammae}
-    xi = 1
-    fplen = 32
-    numbuyers = 10
-    sk = 123
-    attacks = ['horisontal_subset', 'vertical_subset', 'flipping']
-    attack = HorizontalSubsetAttack()
-    for gamma in gammae:
-        scheme = AKScheme(gamma, xi, fplen, sk, numbuyers)
-        remaining = inverse_robustness(attack, scheme, dataset, primary_key_attribute=primary_key_attribute,
-                                       exclude=[target],
-                                       attack_granularity=0.05)
-        results[gamma] = remaining
-    # todo:plot
+            # try detection
+            orig_attr = fingerprinted_data.columns.drop('income')
+            suspect = scheme.detection(attacked_data, sk, exclude=exclude, primary_key_attribute=primary_key_attribute,
+                                       original_attributes=orig_attr)
 
-    return results
+            if suspect != user:
+                success -= 1
+            if success / n_experiments < confidence_rate:
+                robust = False
+                print('-------------------------------------------------------------------')
+                print('-------------------------------------------------------------------')
+                print(
+                    'Attack with strength ' + str(attack_strength) + " is too strong. Halting after " + str(exp_idx) +
+                    " iterations.")
+                print('-------------------------------------------------------------------')
+                print('-------------------------------------------------------------------')
+                break  # attack too strong, continue with a lighter one
+        if robust:
+            if isinstance(attack, VerticalSubsetAttack):
+                attack_strength = round(attack_strength / attack_vertical_max, 2)
+            return round(attack_strength, 2)
+    if isinstance(attack, VerticalSubsetAttack):
+        attack_strength = round(attack_strength / attack_vertical_max, 2)
+    return round(attack_strength, 2)
 
 
 def get_basic_utility(original_data, fingerprinted_data):

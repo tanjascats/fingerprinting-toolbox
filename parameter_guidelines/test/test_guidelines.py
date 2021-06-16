@@ -24,13 +24,12 @@ class TestGuidelines(unittest.TestCase):
 
     def test_inverse_robustness(self):
         scheme = Universal(gamma=1, xi=1, fingerprint_bit_length=32, number_of_recipients=100)
-        data = Adult()
         target = 'income'
         attack_granularity = 0.1
         n_exp = 100
         conf = 0.95
         attack = HorizontalSubsetAttack()
-        inverse_rob_results = inverse_robustness(attack, scheme, data, exclude=[target],
+        inverse_rob_results = inverse_robustness(attack, scheme, exclude=[target],
                                                  attack_granularity=attack_granularity,
                                                  n_experiments=n_exp,
                                                  confidence_rate=conf)
@@ -54,7 +53,7 @@ class TestGuidelines(unittest.TestCase):
         attack_granularity = 0.05
         n_experiments = 100
         confidence_rate = 0.9
-        remaining = inverse_robustness(attack, scheme, data, exclude=[target],
+        remaining = inverse_robustness(attack, scheme, exclude=[target],
                                        attack_granularity=attack_granularity,
                                        n_experiments=n_experiments,
                                        confidence_rate=confidence_rate)
@@ -72,3 +71,15 @@ class TestGuidelines(unittest.TestCase):
                                        n_experiments=n_experiments,
                                        confidence_rate=confidence_rate)
         print(remaining)
+
+    def test_robustness_horizontal(self):
+        attack = HorizontalSubsetAttack()
+        scheme = Universal(gamma=2,
+                            xi=1,
+                            fingerprint_bit_length=32,
+                            number_of_recipients=100)
+        remaining = inverse_robustness(attack, scheme, exclude=['income'],
+                                       attack_granularity=0.10,
+                                       n_experiments=2,
+                                       confidence_rate=0.9)
+        self.assertIsNotNone(remaining)
