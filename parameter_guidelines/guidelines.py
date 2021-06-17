@@ -125,9 +125,10 @@ def inverse_robustness(attack, scheme,
                 attack_vertical_max = len(fingerprinted_data.columns.drop('income'))
                 attack_strength = attack_vertical_max - 1
             if isinstance(attack, VerticalSubsetAttack):
-                attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk)
+                attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk,
+                                                  keep_columns=['income'])
             else:
-                attacked_data = attack.run(fingerprinted_data, fraction=attack_strength, random_state=sk)
+                attacked_data = attack.run(fingerprinted_data, strength=attack_strength, random_state=sk)
 
             # try detection
             orig_attr = fingerprinted_data.columns.drop('income')
@@ -186,7 +187,8 @@ def robustness(attack, scheme, primary_key_attribute=None, exclude=None, n_exper
                 if attack_vertical_max == -1:  # remember the strongest attack and initiate the attack strength
                     attack_vertical_max = len(fingerprinted_data.columns.drop('income'))
                     attack_strength = attack_vertical_max - 1
-                attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=sk)
+                attacked_data = attack.run_random(fingerprinted_data, attack_strength,
+                                                  keep_columns=['income'], seed=sk)
             else:
                 attacked_data = attack.run(fingerprinted_data, strength=attack_strength, random_state=sk)
 

@@ -101,6 +101,34 @@ class TestVerticalSubset(unittest.TestCase):
         attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=1)
         self.assertIsNone(attacked_data)
 
+    def test_repetitions(self):
+        recipient = 1
+        fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/'
+                                         'universal_g1_x1_l32_u{}_sk0.csv'.format(recipient))
+        print(fingerprinted_data.columns)
+        print(type(fingerprinted_data.columns))
+        attack = VerticalSubsetAttack()
+
+        attack_strength = 10
+        attacked_data = attack.run_random(fingerprinted_data, attack_strength, seed=4)
+        print(attacked_data.columns)
+        self.assertEqual(len(attacked_data.columns), 15-attack_strength)
+
+    def test_keep_columns(self):
+        recipient = 1
+        fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/'
+                                         'universal_g1_x1_l32_u{}_sk0.csv'.format(recipient))
+        print(fingerprinted_data.columns)
+        print(type(fingerprinted_data.columns))
+        attack = VerticalSubsetAttack()
+
+        attack_strength = 12
+        keep = ['income']
+        attacked_data = attack.run_random(fingerprinted_data, attack_strength, keep_columns=keep,
+                                          seed=4)
+        print(attacked_data.columns)
+        self.assertIn('income', attacked_data.columns)
+
 
 class TestHorizontalSubset(unittest.TestCase):
     def test_parameters_strength(self):
@@ -139,3 +167,4 @@ class TestHorizontalSubset(unittest.TestCase):
 
         attacked_data = attack.run(fingerprinted_data)
         self.assertIsNone(attacked_data)
+
