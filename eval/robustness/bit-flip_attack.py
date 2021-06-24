@@ -15,10 +15,10 @@ NUMBER_OF_BUYERS = 10
 
 
 def main():
-    gamma = 3
-    filepath = "../fingerprinted_datasets/german_credit_" + str(gamma) + "_2_5.csv"
+    gamma = 5
+    filepath = "eval/fingerprinted_datasets/ak_scheme_" + str(gamma) + "_8_0.csv"
     # !!! immidiatelly set this after specifying the dataset
-    xi = 2
+    xi = 1
     relation = pd.read_csv(filepath)
     relation = relation.select_dtypes(exclude="object")
 

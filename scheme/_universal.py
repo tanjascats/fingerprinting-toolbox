@@ -183,7 +183,7 @@ class Universal(Scheme):
         print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows) * 100, 2)) + "%")
         print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times")
         if save and write_to is None:
-            fingerprinted_relation.save("ak_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length,
+            fingerprinted_relation.save("universal_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length,
                                                                         recipient_id))
         elif write_to is not None:
             write_to_dir = "/".join(write_to.split("/")[:-1])

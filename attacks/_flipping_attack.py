@@ -1,6 +1,7 @@
 from attacks._base import Attack
 import time
 import random
+from scipy.stats import binom
 
 
 class FlippingAttack(Attack):
@@ -49,3 +50,16 @@ class FlippingAttack(Attack):
               str(round(time.time() - start, 2)) + " sec.")
 
         return altered
+
+    def false_miss_estimation(self, dataset, strength, scheme):
+        # calculates the cumulative binomial probability - estimation of attack SUCCESS
+        # fm = 1- (1 - B(0.5*omega; omega, p=strenght)); omega = len(dataset)/(gamma*fp_len)
+        fp_len = scheme.get_fplen()
+        gamma = scheme.get_gamma()
+        omega = len(dataset) / (gamma * fp_len)
+
+        # probability that the attack is successful
+        b = 1-(binom.cdf(int(0.5*omega), omega, strength) - binom.pmf(int(0.5*omega), omega, strength))
+        fm = 1 - pow(1 - b, fp_len)
+        return fm
+

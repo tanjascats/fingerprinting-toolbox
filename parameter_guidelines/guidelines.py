@@ -215,6 +215,7 @@ def robustness(attack, scheme, primary_key_attribute=None, exclude=None, n_exper
             return round(attack_strength, 2)
     if isinstance(attack, VerticalSubsetAttack):
         attack_strength = round(attack_strength / attack_vertical_max, 2)
+    # todo: mirror the performance for >0.5 flipping attacks
     return round(attack_strength, 2)
 
 
