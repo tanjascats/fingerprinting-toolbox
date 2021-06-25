@@ -31,6 +31,15 @@ class HorizontalSubsetAttack(Attack):
               " entries: " + str(time.time()-start) + " sec.")
         return subset
 
+    def false_miss_estimation(self, dataset, strength, scheme):
+        # fm = 1 - (1 - (1 -p)^omega)^fp_len
+        fp_len = scheme.get_fplen()
+        gamma = scheme.get_gamma()
+        omega = len(dataset) / (gamma * fp_len)
+
+        fm = 1 - pow(1 - pow(strength, omega), fp_len)
+        return fm
+
 
 class VerticalSubsetAttack(Attack):
 
