@@ -83,3 +83,24 @@ class VerticalSubsetAttack(Attack):
         print("Vertical subset attack runtime on " + str(number_of_columns) + " out of " + str(len(dataset.columns)-1) +
               " columns: " + str(time.time() - start) + " sec.")
         return subset
+
+    def false_miss_estimation(self, dataset, number_of_columns, scheme, keep_columns=None):
+        # fm = #columns * fp_len * strength * (1/gamma*fp_len*#columns)^omega
+        # omega = N/(gamma*fp_len)
+        fp_len = scheme.get_fplen()
+        gamma = scheme.get_gamma()
+        omega = len(dataset) / (gamma * fp_len)
+
+        if 'Id' in dataset.columns:
+            tot_columns = len(list(dataset.columns.drop(labels=["Id"])))
+        elif keep_columns is not None:
+            tot_columns = len(list(dataset.columns.drop(labels=keep_columns)))
+        else:
+            tot_columns = len(list(dataset.columns))
+        if number_of_columns >= tot_columns:
+            print("Cannot delete all columns.")
+            return None
+        strength = number_of_columns/tot_columns
+
+        fm = tot_columns * fp_len * strength * pow(1/(gamma*fp_len*tot_columns), omega)
+        return fm
