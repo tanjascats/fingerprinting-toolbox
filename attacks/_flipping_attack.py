@@ -56,7 +56,7 @@ class FlippingAttack(Attack):
         # fm = 1- (1 - B(0.5*omega; omega, p=strenght)); omega = len(dataset)/(gamma*fp_len)
         fp_len = scheme.get_fplen()
         gamma = scheme.get_gamma()
-        omega = len(dataset) / (gamma * fp_len)
+        omega = round(len(dataset) / (gamma * fp_len), 0)
 
         # probability that the attack is successful
         b = 1-(binom.cdf(int(0.5*omega), omega, strength) - binom.pmf(int(0.5*omega), omega, strength))

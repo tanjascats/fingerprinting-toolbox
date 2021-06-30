@@ -2,7 +2,7 @@ from attacks._base import Attack
 import time
 import random
 from datasets import Dataset
-
+import math
 
 class HorizontalSubsetAttack(Attack):
 
@@ -35,7 +35,7 @@ class HorizontalSubsetAttack(Attack):
         # fm = 1 - (1 - (1 -p)^omega)^fp_len
         fp_len = scheme.get_fplen()
         gamma = scheme.get_gamma()
-        omega = len(dataset) / (gamma * fp_len)
+        omega = round(len(dataset) / (gamma * fp_len),2)
 
         fm = 1 - pow(1 - pow(strength, omega), fp_len)
         return fm
@@ -85,11 +85,13 @@ class VerticalSubsetAttack(Attack):
         return subset
 
     def false_miss_estimation(self, dataset, number_of_columns, scheme, keep_columns=None):
-        # fm = #columns * fp_len * strength * (1/gamma*fp_len*#columns)^omega
+        # fm_ = 1 / comb(tot_columns, number_of_columns) * pp
+        # pp = fp_len * comb(tot_columns, number_of_columns) * (number_of_columns/tot_columns)^omega - intersections
+        # intersections = for i in [2,fp_len]: comb(fp_len, i)*(comb(tot_columns, number_of_columns)*(number_of_columns/tot_columns)^omega)^i
         # omega = N/(gamma*fp_len)
         fp_len = scheme.get_fplen()
         gamma = scheme.get_gamma()
-        omega = len(dataset) / (gamma * fp_len)
+        omega = round(len(dataset) / (gamma * fp_len), 0)
 
         if 'Id' in dataset.columns:
             tot_columns = len(list(dataset.columns.drop(labels=["Id"])))
@@ -100,7 +102,11 @@ class VerticalSubsetAttack(Attack):
         if number_of_columns >= tot_columns:
             print("Cannot delete all columns.")
             return None
-        strength = number_of_columns/tot_columns
 
-        fm = tot_columns * fp_len * strength * pow(1/(gamma*fp_len*tot_columns), omega)
+        intersections = 0
+        for i in range(2, fp_len+1):
+            intersections += math.comb(fp_len, i) * pow(
+                        math.comb(tot_columns, number_of_columns) * pow((number_of_columns / tot_columns),omega), i)
+        pp = fp_len * math.comb(tot_columns, number_of_columns) * pow(number_of_columns / tot_columns, omega) - intersections
+        fm = 1 / math.comb(tot_columns, number_of_columns) * pp
         return fm
