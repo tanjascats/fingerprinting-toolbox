@@ -160,6 +160,23 @@ class GermanCredit(Dataset):
         path = 'datasets/german_credit_full.csv'
         super().__init__(path=path, target_attribute='target', primary_key_attribute='Id')
 
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+            preprocessed = preprocessed.dataframe
+        else:
+            preprocessed = fp_data
+
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        X = X.drop('Id', axis=1)
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        y = preprocessed[self.target_attribute]
+        preprocessed = pd.concat([X, y], axis=1)
+
+        return preprocessed
+
     def to_string(self):
         return 'german_credit'
 
@@ -262,6 +279,37 @@ class Mushrooms(Dataset):
 
     def clone(self):
         clone = Mushrooms()
+        clone.set_target_attribute(self.target_attribute)
+        clone.set_dataframe(self.get_dataframe())
+        clone._set_primary_key(self.get_primary_key_attribute())
+        return clone
+
+
+class Abalone(Dataset):
+    def __init__(self):
+        path = 'datasets/abalone_data.csv'
+        super().__init__(path=path, target_attribute='Rings')
+
+    def to_string(self):
+        return 'abalone'
+
+    def clone(self):
+        clone = Abalone()
+        clone.set_target_attribute(self.target_attribute)
+        clone.set_dataframe(self.get_dataframe())
+        return clone
+
+
+class Stroke(Dataset):
+    def __init__(self):
+        path = 'datasets/healthcare-dataset-stroke-data.csv'
+        super().__init__(path=path, target_attribute='stroke', primary_key_attribute='id')
+
+    def to_string(self):
+        return 'stroke'
+
+    def clone(self):
+        clone = Stroke()
         clone.set_target_attribute(self.target_attribute)
         clone.set_dataframe(self.get_dataframe())
         clone._set_primary_key(self.get_primary_key_attribute())

@@ -120,13 +120,14 @@ class Universal(Scheme):
         count_omega = [0 for i in range(self.fingerprint_bit_length)]
         start = time.time()
         print('\tInserting a fingerprint into columns: ' + str(relation.dataframe.columns))
+
         for r in relation.dataframe.iterrows():
             # seed = concat(secret_key, primary_key)
-            seed = (secret_key << self.__primary_key_len) + relation.primary_key[r[0]]
+            seed = (secret_key << self.__primary_key_len) + relation.primary_key[r[0]]  # seed of the row
             random.seed(seed)
 
             # select the tuple
-            if random.randint(0, sys.maxsize) % self.gamma == 0:
+            if random.choices([0, 1], [1/self.gamma, 1-1/self.gamma]) == [0]:
                 # select attribute (that is not the primary key)
                 if attributes_weights is not None:
                     attr_idx = random.choices(range(relation.number_of_columns), weights=[1-x for x in attributes_weights])[0]
@@ -217,7 +218,7 @@ class Universal(Scheme):
         fingerprinted_data = read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
         if target_attribute is not None:
-            fingerprinted_data_prep._set_target_attribute = target_attribute
+            fingerprinted_data_prep.set_target_attribute(target_attribute)
         if primary_key_attribute is not None:
             fingerprinted_data_prep._set_primary_key(primary_key_attribute)
         if original_attributes is not None:
@@ -226,7 +227,7 @@ class Universal(Scheme):
         # return the original attribute list and fill out the missing with zeroes
         if not fingerprinted_data_prep.columns.equals(self.original_attributes):
             try:
-                difference = self.original_attributes.difference(fingerprinted_data_prep.columns)
+                difference = set(self.original_attributes).difference(set(fingerprinted_data_prep.columns))
                 for diff in difference:
                     fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
                                                                     range(len(fingerprinted_data_prep.dataframe))])
@@ -248,12 +249,14 @@ class Universal(Scheme):
         count = [[0, 0] for x in range(self.fingerprint_bit_length)]
         print("\tdetecting a fingerprint from columns: " + str(fingerprinted_data_prep.columns))
         # scan all tuples and obtain counts for each fingerprint bit
+
         for r in fingerprinted_data_prep.dataframe.iterrows():
             seed = (secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]]
             random.seed(seed)
 
             # this tuple was marked
-            if random.randint(0, sys.maxsize) % self.gamma == 0:
+            if random.choices([0, 1], [1 / self.gamma, 1 - 1 / self.gamma]) == [0]:
+            # if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # this attribute was marked (skip the primary key)
                 if attributes_weights is not None:
                     attr_idx = random.choices(range(fingerprinted_data_prep.number_of_columns), weights=[1-x for x in attributes_weights])[0]
@@ -321,3 +324,9 @@ class Universal(Scheme):
 
     def get_gamma(self):
         return self.gamma
+
+    def get_xi(self):
+        return self.xi
+
+    def to_string(self):
+        return 'universal'

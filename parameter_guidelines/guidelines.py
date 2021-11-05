@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
+import pickle
 from pprint import pprint
 from utilities import *
-from scheme import AKScheme, Universal
+from scheme import AKScheme, Universal, NBNNScheme
 import numpy as np
 from attacks import *
 from datasets import *
@@ -11,6 +12,7 @@ import time
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import make_pipeline
@@ -155,8 +157,11 @@ def inverse_robustness(attack, scheme,
         attack_strength = round(attack_strength / attack_vertical_max, 2)
     return round(attack_strength, 2)
 
-
-def robustness(attack, scheme, primary_key_attribute=None, exclude=None, n_experiments=100, confidence_rate=0.99,
+# returns robustness (=from how much remaining data can the fingerprint still be extracted with confidence_rate based
+# on n_experiments)
+# can be applied for horizontal and vertical subset attack and bit-flipping attack
+# attack and scheme need to be provided as instances of Attack and Scheme abstract classes, respectively
+def robustness(attack, scheme, data, exclude=None, include=None, n_experiments=100, confidence_rate=0.99,
                attack_granularity=0.10):
     attack_strength = 1  # defining the strongest attack
     attack_vertical_max = -1
@@ -180,22 +185,46 @@ def robustness(attack, scheme, primary_key_attribute=None, exclude=None, n_exper
             sk = exp_idx
             #fingerprinted_data = scheme.insertion(data, user, secret_key=sk, exclude=exclude,
             #                                      primary_key_attribute=primary_key_attribute)
-            fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/adult/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
-                                                                                               scheme.get_fplen(),
-                                                                                               user, sk))
+            if include is None:
+                fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/' + data.to_string() +
+                                                 '/attr_subset_20' +
+                                                 '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
+                                                                                                   scheme.get_fplen(),
+                                                                                                   user, sk))
+            else:
+                fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/' + data.to_string() +
+                                                 '/attr_subset_' + str(len(include)) +
+                                                 '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
+                                                                                              scheme.get_fplen(),
+                                                                                              user, sk))
             if isinstance(attack, VerticalSubsetAttack):
                 if attack_vertical_max == -1:  # remember the strongest attack and initiate the attack strength
-                    attack_vertical_max = len(fingerprinted_data.columns.drop('income'))
+                    attack_vertical_max = len(fingerprinted_data.columns.drop([data.get_target_attribute(),
+                                                                               data.get_primary_key_attribute()]))
                     attack_strength = attack_vertical_max - 1
                 attacked_data = attack.run_random(fingerprinted_data, attack_strength,
-                                                  keep_columns=['income'], seed=sk)
+                                                  keep_columns=[data.get_target_attribute(),
+                                                                data.get_primary_key_attribute()], seed=sk)
             else:
                 attacked_data = attack.run(fingerprinted_data, strength=attack_strength, random_state=sk)
 
             # try detection
-            orig_attr = fingerprinted_data.columns.drop('income')
-            suspect = scheme.detection(attacked_data, sk, exclude=exclude, primary_key_attribute=primary_key_attribute,
-                                       original_attributes=orig_attr)
+            orig_attr = fingerprinted_data.columns.drop([data.get_target_attribute(),
+                                                        data.get_primary_key_attribute()])
+            #suspect = scheme.detection(attacked_data, sk, exclude=exclude,
+            #                           primary_key_attribute=data.primary_key_attribute(),
+            #                           original_attributes=orig_attr)
+            if include is not None:
+                original_attributes = pd.Series(data=include)
+            else:
+                original_attributes = pd.Series(
+                    data=['checking_account', 'duration', 'credit_hist', 'purpose',
+                          'credit_amount', 'savings', 'employment_since', 'installment_rate',
+                          'sex_status', 'debtors', 'residence_since', 'property', 'age',
+                          'installment_other', 'housing', 'existing_credits', 'job',
+                          'liable_people', 'tel', 'foreign'])
+            suspect = scheme.detection(attacked_data, secret_key=sk, primary_key_attribute='Id',
+                                       original_attributes=original_attributes)
 
             if suspect != user:
                 success -= 1
@@ -272,6 +301,94 @@ def attack_utility_knn(data, target, attack, attack_granularity=0.1, n_folds=10)
     return utility
     # returns estimated utility drop for each attack strength
 
+# runs deterministic experiments on data utility via gb
+def attack_utility_gb(data, target, attack, exclude=None, attack_granularity=0.1, n_folds=10):
+    X = data.drop(target, axis=1)
+    X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = data[target]
+
+    attack_strength = 0
+    utility = dict()
+    while True:
+        attack_strength += attack_granularity  # lower the strength of the attack
+        if round(attack_strength, 2) >= 1.0:
+            break
+        # score = cross_val_score(model, X, y, cv=5)
+        accuracy = []
+        for fold in range(n_folds):
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+            train = pd.concat([X_train, y_train], axis=1)
+            attacked_train = attack.run(train, attack_strength, random_state=fold)
+            attacked_X = attacked_train.drop(target, axis=1)
+            attacked_y = attacked_train[target]
+
+            model = GradientBoostingClassifier()
+            model.fit(attacked_X, attacked_y)
+            acc = accuracy_score(y_test, model.predict(X_test))
+            accuracy.append(acc)
+        utility[round(1-attack_strength, 2)] = accuracy
+    return utility
+    # returns estimated utility drop for each attack strength
+
+
+# runs deterministic experiments on data utility via gb
+def vertical_attack_utility_gb(data, target, attack, gamma, exp, exclude=None, attack_granularity=0.1, n_folds=10,
+                               fingerprinted_data_subdir=None):
+    # this function estimates the utility based on gb classifier on attacked datasets
+    # it outputs the difference in the performance compared to fingerprinted (non attacked) dataset
+
+    # load original dataset (for model evaluation)
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        data = data.preprocessed()
+    X = data.drop(target, axis=1)
+    X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = data[target]
+
+    # import the baseline fingerprinted data -- for now only one dataset
+    # define number of experiments, i.e. number of different fingerprinted datasets -- done: exp parameter
+    if fingerprinted_data_subdir is None:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+    else:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/{}/'.format(data_string,
+                                                                                         fingerprinted_data_subdir)
+    fp_file_string = 'universal_g{}_x1_l8_u1_sk{}.csv'.format(gamma, exp)
+    fingerprinted_data = pd.read_csv(fingerprinted_data_dir + fp_file_string)
+    fingerprinted_data = GermanCredit().preprocessed(fingerprinted_data)
+    X_fp = fingerprinted_data.drop(target, axis=1)
+    X_fp = X_fp.drop('Id', axis=1)
+    y_fp = fingerprinted_data[target]
+    model = GradientBoostingClassifier(random_state=0)
+    baseline_acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+    # this is something that is already in the results
+
+    attack_strength = 0
+    utility = dict()
+    while True:
+        attack_strength += attack_granularity  # lower the strength of the attack
+        if round(attack_strength, 2) >= 1.0:
+            break
+        # score = cross_val_score(model, X, y, cv=5)
+        accuracy = []
+        for fold in range(n_folds):
+            X_train, X_test, y_train, y_test = train_test_split(X_fp, y_fp, test_size=0.2, random_state=fold, shuffle=True)
+            train = pd.concat([X_train, y_train], axis=1)
+            attacked_train = attack.run(train, attack_strength, random_state=fold)
+            attacked_X = attacked_train.drop(target, axis=1)
+            attacked_y = attacked_train[target]
+
+            model = GradientBoostingClassifier()
+            model.fit(attacked_X, attacked_y)
+            acc = accuracy_score(y_test, model.predict(X_test))
+            accuracy.append(acc)
+        utility[round(1-attack_strength, 2)] = accuracy
+    return utility
+    # returns estimated utility drop for each attack strength
+
 
 def fingerprint_utility_knn(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
     # n_folds should be consistent with experiments done on attacked data
@@ -299,9 +416,12 @@ def fingerprint_utility_knn(data, target, gamma, n_folds=10, n_experiments=10, d
     return accuracy
 
 
-def original_utility_knn(data, target, n_folds=10):
+def original_utility_knn(data, target, exclude=None, n_folds=10):
     # n_folds should be consistent with experiments done on attacked data
+    # data is pandas frame
     X = data.drop(target, axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
     y = data[target]
 
     accuracy = []
@@ -315,9 +435,11 @@ def original_utility_knn(data, target, n_folds=10):
     return accuracy
 
 
-def original_utility_dt(data, target, n_folds=10):
+def original_utility_dt(data, target, exclude=None, n_folds=10):
     # n_folds should be consistent with experiments done on attacked data
     X = data.drop(target, axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
     y = data[target]
 
     accuracy = []
@@ -331,9 +453,11 @@ def original_utility_dt(data, target, n_folds=10):
     return accuracy
 
 
-def original_utility_gb(data, target, n_folds=10):
+def original_utility_gb(data, target, exclude=None, n_folds=10):
     # n_folds should be consistent with experiments done on attacked data
     X = data.drop(target, axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
     y = data[target]
 
     accuracy = []
@@ -345,6 +469,23 @@ def original_utility_gb(data, target, n_folds=10):
         acc = accuracy_score(y_test, model.predict(X_test))
         accuracy.append(acc)
     return accuracy
+
+def original_utility_lr(data, target, exclude=None, n_folds=10):
+    X = data.drop(target, axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = data[target]
+
+    accuracy = []
+    for fold in range(n_folds):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+
+        model = LogisticRegression(random_state=0)
+        model.fit(X_train, y_train)
+        acc = accuracy_score(y_test, model.predict(X_test))
+        accuracy.append(acc)
+    return accuracy
+
 
 
 def fingerprint_utility_dt(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
@@ -373,27 +514,136 @@ def fingerprint_utility_dt(data, target, gamma, n_folds=10, n_experiments=10, da
     return accuracy
 
 
-def fingerprint_utility_gb(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
+def fingerprint_utility_gb(data, target, gamma, exclude=None, n_folds=10, n_experiments=10, data_string=None,
+                           baseline_utility=False, fingerprinted_data_subdir=None):
     # n_folds should be consistent with experiments done on attacked data
+    # data - original data
+
     if isinstance(data, Dataset):
         data_string = data.to_string()
         data = data.preprocessed()
-    X = data.drop(target, axis=1)
+    X = data
+    if target in data.columns:
+        X = data.drop(target, axis=1)
+    if 'Id' in data.columns:
+        X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
     y = data[target]
 
-    fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+    if fingerprinted_data_subdir is None:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+    else:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/{}/'.format(data_string,
+                                                                                        fingerprinted_data_subdir)
 
     accuracy = []
     for exp in range(n_experiments):
-        fp_file_string = 'universal_g{}_x1_l32_u1_sk{}.csv'.format(gamma, exp)
+        fp_file_string = 'universal_g{}_x1_l8_u1_sk{}.csv'.format(gamma, exp)
         fingerprinted_data = pd.read_csv(fingerprinted_data_dir + fp_file_string)
-        fingerprinted_data = Adult().preprocessed(fingerprinted_data)
+        fingerprinted_data = GermanCredit().preprocessed(fingerprinted_data)
         X_fp = fingerprinted_data.drop(target, axis=1)
+        if 'Id' in X_fp.columns:
+            X_fp = X_fp.drop('Id', axis=1)
         y_fp = fingerprinted_data[target]
-
+        if baseline_utility:
+            X_fp = X
+            y_fp = y
         model = GradientBoostingClassifier(random_state=0)
         acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
         accuracy.append(acc)
+        if baseline_utility:
+            break
+
+    # [[acc_fold1,acc_fold2,...],[],...n_experiments]
+    return accuracy
+
+
+def fingerprint_utility_lr(data, target, gamma, exclude=None, n_folds=10, n_experiments=10, data_string=None,
+                           baseline_utility=False, fingerprinted_data_subdir=None):
+    # n_folds should be consistent with experiments done on attacked data
+    # data - original data
+
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        data = data.preprocessed()
+    X = data
+    if target in data.columns:
+        X = data.drop(target, axis=1)
+    if 'Id' in data.columns:
+        X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = data[target]
+
+    if fingerprinted_data_subdir is None:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+    else:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/{}/'.format(data_string,
+                                                                                        fingerprinted_data_subdir)
+
+    accuracy = []
+    for exp in range(n_experiments):
+        fp_file_string = 'universal_g{}_x1_l8_u1_sk{}.csv'.format(gamma, exp)
+        fingerprinted_data = pd.read_csv(fingerprinted_data_dir + fp_file_string)
+        fingerprinted_data = GermanCredit().preprocessed(fingerprinted_data)
+        X_fp = fingerprinted_data.drop(target, axis=1)
+        if 'Id' in X_fp.columns:
+            X_fp = X_fp.drop('Id', axis=1)
+        y_fp = fingerprinted_data[target]
+        if baseline_utility:
+            X_fp = X
+            y_fp = y
+        model = LogisticRegression(random_state=0)
+        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+        accuracy.append(acc)
+        if baseline_utility:
+            break
+
+    # [[acc_fold1,acc_fold2,...],[],...n_experiments]
+    return accuracy
+
+
+def fingerprint_utility_knn(data, target, gamma, exclude=None, n_folds=10, n_experiments=10, data_string=None,
+                           baseline_utility=False, fingerprinted_data_subdir=None):
+    # n_folds should be consistent with experiments done on attacked data
+    # data - original data
+
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        data = data.preprocessed()
+    X = data
+    if target in data.columns:
+        X = data.drop(target, axis=1)
+    if 'Id' in data.columns:
+        X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = data[target]
+
+    if fingerprinted_data_subdir is None:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+    else:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/{}/'.format(data_string,
+                                                                                        fingerprinted_data_subdir)
+
+    accuracy = []
+    for exp in range(n_experiments):
+        fp_file_string = 'universal_g{}_x1_l8_u1_sk{}.csv'.format(gamma, exp)
+        fingerprinted_data = pd.read_csv(fingerprinted_data_dir + fp_file_string)
+        fingerprinted_data = GermanCredit().preprocessed(fingerprinted_data)
+        X_fp = fingerprinted_data.drop(target, axis=1)
+        if 'Id' in X_fp.columns:
+            X_fp = X_fp.drop('Id', axis=1)
+        y_fp = fingerprinted_data[target]
+        if baseline_utility:
+            X_fp = X
+            y_fp = y
+        model = KNeighborsClassifier()
+        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+        accuracy.append(acc)
+        if baseline_utility:
+            break
 
     # [[acc_fold1,acc_fold2,...],[],...n_experiments]
     return accuracy
@@ -513,4 +763,46 @@ def test_interactive_plot():
 
 
 if __name__ == '__main__':
-    test_interactive_plot()
+    #test_interactive_plot()
+    #data = GermanCredit().number_encode_categorical().get_dataframe()
+    #knn_acc = original_utility_knn(data, target='target', exclude='Id', n_folds=5)
+    #dt_acc = original_utility_dt(data, target='target', exclude='Id', n_folds=5)
+    #gb_acc = original_utility_gb(data, target='target', exclude='Id', n_folds=5)
+    #lr_acc = original_utility_lr(data, target='target', exclude='Id', n_folds=5)
+    #baseline_accuracies = {'knn': knn_acc, 'dt': dt_acc, 'gb': gb_acc, 'lr': lr_acc}
+    #print(baseline_accuracies)
+    #with open('parameter_guidelines/evaluation/german_credit/utility_ml_baseline.pickle', 'wb') as outfile:
+    #    pickle.dump(baseline_accuracies, outfile)
+    # GRADIENT BOOSTING IS THE BEST
+
+    # FOR COMPARABLE RESULTS
+    #baseline_knn = fingerprint_utility_knn(data=GermanCredit(), target='target', gamma=1, n_folds=5, baseline_utility=True)
+    #baseline_accuracies = {'gb': baseline_gb}
+    #with open('parameter_guidelines/evaluation/german_credit/utility_ml_baseline.pickle', 'rb') as infile:
+    #    baseline = pickle.load(infile)
+    #    baseline['knn'] = baseline_knn
+    #with open('parameter_guidelines/evaluation/german_credit/utility_ml_baseline.pickle', 'wb') as outfile:
+    #    pickle.dump(baseline, outfile)
+    #print(baseline)
+    #exit()
+
+    gammae = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18]
+    #gammae = [2.5, 1.67, 1.43, 1.25, 1.11]
+    #utilities_knn = dict()
+    attr_subset = 16
+    if os.path.isfile('parameter_guidelines/evaluation/german_credit/utility_fp_gb_fpattr{}_e80.pickle'.format(attr_subset)):
+        with open('parameter_guidelines/evaluation/german_credit/utility_fp_gb_fpattr{}_e80.pickle'.format(attr_subset), 'rb') as infile:
+            utilities_gb = pickle.load(infile)
+    else:
+        utilities_gb = dict()
+    print(utilities_gb)
+    for g in gammae:
+        #utilities_knn[g] = fingerprint_utility_knn(data=GermanCredit(), target='target', gamma=g, n_folds=5,
+        #                                         n_experiments=80, fingerprinted_data_subdir='attr_subset_4')
+        #print(utilities_knn[g])
+        utilities_gb[g] = fingerprint_utility_gb(data=GermanCredit(), target='target', gamma=g, n_folds=5,
+                                                 n_experiments=80, fingerprinted_data_subdir='attr_subset_{}'.format(attr_subset))
+
+    pprint(utilities_gb)
+    with open('parameter_guidelines/evaluation/german_credit/utility_fp_gb_fpattr{}_e80.pickle'.format(attr_subset), 'wb') as outfile:
+        pickle.dump(utilities_gb, outfile)

@@ -32,10 +32,16 @@ class HorizontalSubsetAttack(Attack):
         return subset
 
     def false_miss_estimation(self, dataset, strength, scheme):
+        # probability of a successful attack
         # fm = 1 - (1 - (1 -p)^omega)^fp_len
+        if isinstance(dataset, Dataset):
+            data_len = dataset.number_of_rows
+        else:
+            data_len = len(dataset)
+
         fp_len = scheme.get_fplen()
         gamma = scheme.get_gamma()
-        omega = round(len(dataset) / (gamma * fp_len),2)
+        omega = round(data_len / (gamma * fp_len), 2)
 
         fm = 1 - pow(1 - pow(strength, omega), fp_len)
         return fm
@@ -63,25 +69,26 @@ class VerticalSubsetAttack(Attack):
     """
     Runs the attack; gets a subset of columns without random 'number_of_columns' columns
     """
-    def run_random(self, dataset, number_of_columns, seed, keep_columns=None):
-        if number_of_columns >= len(dataset.columns)-1:
+    def run_random(self, dataset, number_of_columns_to_del, seed, keep_columns=None):
+        if number_of_columns_to_del >= len(dataset.columns)-1:
             print("Cannot delete all columns.")
             return None
         random.seed(seed)
         start = time.time()
+        untacked_cols = []
         if 'Id' in dataset.columns:
-            column_subset = random.sample(list(dataset.columns.drop(labels=["Id"])),
-                                          k=number_of_columns)
-        elif keep_columns is not None:
-            column_subset = random.sample(list(dataset.columns.drop(labels=keep_columns)),
-                                          k=number_of_columns)
+            untacked_cols.append('Id')
+        if keep_columns is not None:
+            untacked_cols.extend(keep_columns)
+        if len(untacked_cols) != 0:
+            column_subset = random.sample(list(dataset.columns.drop(labels=untacked_cols)), k=number_of_columns_to_del)
         else:
-            column_subset = random.sample(list(dataset.columns), k=number_of_columns)
+            column_subset = random.sample(list(dataset.columns), k=number_of_columns_to_del)
         subset = dataset.drop(column_subset, axis=1)
         print(column_subset)
 
-        print("Vertical subset attack runtime on " + str(number_of_columns) + " out of " + str(len(dataset.columns)-1) +
-              " columns: " + str(time.time() - start) + " sec.")
+        print("Vertical subset attack runtime on " + str(number_of_columns_to_del) + " out of " +
+              str(len(dataset.columns) - len(untacked_cols)) + " columns: " + str(time.time() - start) + " sec.")
         return subset
 
     def false_miss_estimation(self, dataset, number_of_columns, scheme, keep_columns=None):
@@ -100,7 +107,7 @@ class VerticalSubsetAttack(Attack):
         else:
             tot_columns = len(list(dataset.columns))
         if number_of_columns >= tot_columns:
-            print("Cannot delete all columns.")
+            print("Cannot delete all columns {}.".format(tot_columns))
             return None
 
         intersections = 0
