@@ -7,4 +7,6 @@ __all__ = ['Dataset',
            'Adult',
            'Mushrooms',
            'Nursery',
-           'Abalone']
+           'Abalone',
+           'BankPersonalLoan',
+           'DiabeticData']

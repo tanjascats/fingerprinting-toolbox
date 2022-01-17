@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import os
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
-import numpy as np
 from utilities import number_encode_features
 
 
@@ -38,8 +37,11 @@ class Dataset(ABC):
 
     def _set_types(self):
         self.categorical_attributes = self.dataframe.select_dtypes(include='object').columns
-        self.decimal_attributes = self.dataframe.select_dtypes(include=['float64', 'float32'])
-        self.integer_attributes = self.dataframe.select_dtypes(include=['int64', 'int32'])
+        self.decimal_attributes = self.dataframe.select_dtypes(include=['float64', 'float32']).columns.to_list()
+        self.integer_attributes = self.dataframe.select_dtypes(include=['int64', 'int32']).columns.to_list()
+        if self.primary_key_attribute is not None:
+            self.integer_attributes.remove(self.primary_key_attribute)
+        self.numerical_attributes = self.decimal_attributes + self.integer_attributes
 
     def _set_primary_key(self, primary_key_attribute):
         self.primary_key = None
@@ -154,6 +156,12 @@ class Dataset(ABC):
     def get_types(self):
         return self.dataframe.dtypes
 
+    def get_categorical(self):
+        return self.categorical_attributes
+
+    def get_numerical(self):
+        return self.numerical_attributes
+
 
 class GermanCredit(Dataset):
     def __init__(self):
@@ -182,6 +190,39 @@ class GermanCredit(Dataset):
 
     def clone(self):
         clone = GermanCredit()
+        clone.set_target_attribute(self.target_attribute)
+        clone.set_dataframe(self.get_dataframe())
+        clone._set_primary_key(self.get_primary_key_attribute())
+        return clone
+
+
+class BankPersonalLoan(Dataset):
+    def __init__(self):
+        path = 'datasets/Bank_Personal_Loan_Modelling.csv'
+        super().__init__(path=path, target_attribute='CreditCard', primary_key_attribute='ID')
+
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+            preprocessed = preprocessed.dataframe
+        else:
+            preprocessed = fp_data
+
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        X = X.drop(self.primary_key_attribute, axis=1)
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        y = preprocessed[self.target_attribute]
+        preprocessed = pd.concat([X, y], axis=1)
+
+        return preprocessed
+
+    def to_string(self):
+        return 'bank_personal_loan'
+
+    def clone(self):
+        clone = BankPersonalLoan()
         clone.set_target_attribute(self.target_attribute)
         clone.set_dataframe(self.get_dataframe())
         clone._set_primary_key(self.get_primary_key_attribute())
@@ -237,10 +278,61 @@ class Adult(Dataset):
         return clone
 
 
+class DiabeticData(Dataset):
+    def __init__(self):
+        path = 'datasets/diabetic_data.csv'
+        super().__init__(path=path, target_attribute='readmitted', primary_key_attribute='patient_nbr') #, na_values='?')
+
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+            # drop rows with missing values
+            preprocessed = preprocessed.dataframe #.dropna().reset_index().drop('index', axis=1)
+        else:
+            preprocessed = fp_data
+
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        y = preprocessed[self.target_attribute]
+
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        preprocessed = pd.concat([X, y], axis=1)
+        return preprocessed
+
+    def to_string(self):
+        return 'diabetic_data'
+
+    def clone(self):
+        clone = DiabeticData()
+        clone.set_target_attribute(self.target_attribute)
+        clone.set_dataframe(self.get_dataframe())
+        clone._set_primary_key(self.get_primary_key_attribute())
+        return clone
+
+
 class BreastCancer(Dataset):
     def __init__(self):
         path = 'datasets/breast_cancer_full.csv'
-        super().__init__(path=path, primary_key_attribute='Id', target_attribute='recurrence')
+        super().__init__(path=path, primary_key_attribute='Id', target_attribute='recurrence')  #, na_values='?')
+
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+        # we do not drop rows with missing values because they are all in one column; we will treat the unknown as the third value
+            preprocessed = preprocessed.dataframe  #.dropna().reset_index().drop('index', axis=1)
+        else:
+            preprocessed = fp_data
+
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        X = X.drop(self.primary_key_attribute, axis=1)
+        y = preprocessed[self.target_attribute]
+
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        preprocessed = pd.concat([X, y], axis=1)
+        return preprocessed
 
     def to_string(self):
         return 'breast_cancer'
@@ -261,6 +353,22 @@ class Nursery(Dataset):
     def to_string(self):
         return 'nursery'
 
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+            preprocessed = preprocessed.dataframe
+        else:
+            preprocessed = fp_data
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        X = X.drop(self.primary_key_attribute, axis=1)
+        y = preprocessed[self.target_attribute]
+
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        preprocessed = pd.concat([X, y], axis=1)
+        return preprocessed
+
     def clone(self):
         clone = Nursery()
         clone.set_target_attribute(self.target_attribute)
@@ -271,8 +379,26 @@ class Nursery(Dataset):
 
 class Mushrooms(Dataset):
     def __init__(self):
-        path = 'datasets/mushroom_full.csv'
+        path = 'datasets/mushrooms.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')
+
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+        # drop rows with missing values
+            preprocessed = preprocessed.dataframe.dropna().reset_index().drop('index', axis=1)
+        else:
+            preprocessed = fp_data
+
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        X = X.drop(self.primary_key_attribute, axis=1)
+        y = preprocessed[self.target_attribute]
+
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        preprocessed = pd.concat([X, y], axis=1)
+        return preprocessed
 
     def to_string(self):
         return 'mushrooms'
@@ -286,9 +412,26 @@ class Mushrooms(Dataset):
 
 
 class Abalone(Dataset):
+    # regression
     def __init__(self):
         path = 'datasets/abalone_data.csv'
         super().__init__(path=path, target_attribute='Rings')
+
+    def preprocessed(self, fp_data=None):
+        if fp_data is None:
+            preprocessed = self.clone()
+            preprocessed = preprocessed.dataframe
+        else:
+            preprocessed = fp_data
+
+        preprocessed, encoders = number_encode_features(preprocessed)
+        X = preprocessed.drop(self.target_attribute, axis=1)
+        scaler = StandardScaler()
+        X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+        y = preprocessed[self.target_attribute]
+        preprocessed = pd.concat([X, y], axis=1)
+
+        return preprocessed
 
     def to_string(self):
         return 'abalone'
