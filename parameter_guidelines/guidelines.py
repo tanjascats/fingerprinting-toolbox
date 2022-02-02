@@ -1,22 +1,24 @@
+import sys
+sys.path.append("/home/sarcevic/fingerprinting-toolbox/")
+
 import matplotlib.pyplot as plt
-import pandas as pd
-import os
 import pickle
 from pprint import pprint
 from utilities import *
-from scheme import AKScheme, Universal, NBNNScheme
+from scheme import AKScheme
 import numpy as np
 from attacks import *
 from datasets import *
 import time
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+import collections
 
 
 def get_experimental_gammae(amount, data_len, fp_len):
@@ -274,6 +276,34 @@ def get_basic_utility(original_data, fingerprinted_data):
 
 
 # runs deterministic experiments on data utility via KNN
+def attack_utility(model, data, target, attack, attack_granularity=0.1, n_folds=10):
+    X = data.drop(target, axis=1)
+    y = data[target]
+
+    attack_strength = 0
+    utility = dict()
+    while True:
+        attack_strength += attack_granularity  # lower the strength of the attack
+        if round(attack_strength, 2) >= 1.0:
+            break
+        # score = cross_val_score(model, X, y, cv=5)
+        accuracy = []
+        for fold in range(n_folds):
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+            train = pd.concat([X_train, y_train], axis=1)
+            attacked_train = attack.run(train, attack_strength, random_state=fold)
+            attacked_X = attacked_train.drop(target, axis=1)
+            attacked_y = attacked_train[target]
+
+            model.fit(attacked_X, attacked_y)
+            acc = accuracy_score(y_test, model.predict(X_test))
+            accuracy.append(acc)
+        utility[round(1-attack_strength, 2)] = accuracy
+    return utility
+    # returns estimated utility drop for each attack strength
+
+
+# runs deterministic experiments on data utility via KNN
 def attack_utility_knn(data, target, attack, attack_granularity=0.1, n_folds=10):
     X = data.drop(target, axis=1)
     y = data[target]
@@ -304,7 +334,7 @@ def attack_utility_knn(data, target, attack, attack_granularity=0.1, n_folds=10)
 # runs deterministic experiments on data utility via gb
 def attack_utility_gb(data, target, attack, exclude=None, attack_granularity=0.1, n_folds=10):
     X = data.drop(target, axis=1)
-    X = X.drop('Id', axis=1)
+    # X = X.drop('Id', axis=1)
     if exclude is not None:
         X = X.drop(exclude, axis=1)
     y = data[target]
@@ -331,6 +361,36 @@ def attack_utility_gb(data, target, attack, exclude=None, attack_granularity=0.1
         utility[round(1-attack_strength, 2)] = accuracy
     return utility
     # returns estimated utility drop for each attack strength
+
+
+def attack_utility_rf(data, target, attack, exclude=None, attack_granularity=0.1, n_folds=10):
+    X = data.drop(target, axis=1)
+    # X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = data[target]
+
+    attack_strength = 0
+    utility = dict()
+    while True:
+        attack_strength += attack_granularity  # lower the strength of the attack
+        if round(attack_strength, 2) >= 1.0:
+            break
+        # score = cross_val_score(model, X, y, cv=5)
+        accuracy = []
+        for fold in range(n_folds):
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=fold, shuffle=True)
+            train = pd.concat([X_train, y_train], axis=1)
+            attacked_train = attack.run(train, attack_strength, random_state=fold)
+            attacked_X = attacked_train.drop(target, axis=1)
+            attacked_y = attacked_train[target]
+
+            model = RandomForestClassifier(random_state=100)
+            model.fit(attacked_X, attacked_y)
+            acc = accuracy_score(y_test, model.predict(X_test))
+            accuracy.append(acc)
+        utility[round(1-attack_strength, 2)] = accuracy
+    return utility
 
 
 # runs deterministic experiments on data utility via gb
@@ -390,30 +450,30 @@ def vertical_attack_utility_gb(data, target, attack, gamma, exp, exclude=None, a
     # returns estimated utility drop for each attack strength
 
 
-def fingerprint_utility_knn(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
-    # n_folds should be consistent with experiments done on attacked data
-    if isinstance(data, Dataset):
-        data_string = data.to_string()
-        data = data.preprocessed()
-    X = data.drop(target, axis=1)
-    y = data[target]
-    model = KNeighborsClassifier()
+#def fingerprint_utility_knn(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
+#    # n_folds should be consistent with experiments done on attacked data
+#    if isinstance(data, Dataset):
+#        data_string = data.to_string()
+#        data = data.preprocessed()
+#    X = data.drop(target, axis=1)
+#    y = data[target]
+#    model = KNeighborsClassifier()
 
-    fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+#    fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
 
-    accuracy = []
-    for exp in range(n_experiments):
-        fp_file_string = 'universal_g{}_x1_l32_u1_sk{}.csv'.format(gamma, exp)
-        fingerprinted_data = pd.read_csv(fingerprinted_data_dir+fp_file_string)
-        fingerprinted_data = Adult().preprocessed(fingerprinted_data)
-        X_fp = fingerprinted_data.drop(target, axis=1)
-        y_fp = fingerprinted_data[target]
+#    accuracy = []
+#    for exp in range(n_experiments):
+#        fp_file_string = 'universal_g{}_x1_l32_u1_sk{}.csv'.format(gamma, exp)
+#        fingerprinted_data = pd.read_csv(fingerprinted_data_dir+fp_file_string)
+#        fingerprinted_data = Adult().preprocessed(fingerprinted_data)
+#        X_fp = fingerprinted_data.drop(target, axis=1)
+#        y_fp = fingerprinted_data[target]
 
-        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
-        accuracy.append(acc)
+ #       acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+ #       accuracy.append(acc)
 
     # [[acc_fold1,acc_fold2,...],[],...n_experiments]
-    return accuracy
+ #   return accuracy
 
 
 def original_utility_knn(data, target, exclude=None, n_folds=10):
@@ -470,6 +530,7 @@ def original_utility_gb(data, target, exclude=None, n_folds=10):
         accuracy.append(acc)
     return accuracy
 
+
 def original_utility_lr(data, target, exclude=None, n_folds=10):
     X = data.drop(target, axis=1)
     if exclude is not None:
@@ -487,9 +548,11 @@ def original_utility_lr(data, target, exclude=None, n_folds=10):
     return accuracy
 
 
-
+# outdated
 def fingerprint_utility_dt(data, target, gamma, n_folds=10, n_experiments=10, data_string=None):
     # n_folds should be consistent with experiments done on attacked data
+    print('Warning: deprecated')
+
     if isinstance(data, Dataset):
         data_string = data.to_string()
         data = data.preprocessed()
@@ -518,6 +581,8 @@ def fingerprint_utility_gb(data, target, gamma, exclude=None, n_folds=10, n_expe
                            baseline_utility=False, fingerprinted_data_subdir=None):
     # n_folds should be consistent with experiments done on attacked data
     # data - original data
+    print('Warning: deprecated')
+
 
     if isinstance(data, Dataset):
         data_string = data.to_string()
@@ -562,6 +627,8 @@ def fingerprint_utility_gb(data, target, gamma, exclude=None, n_folds=10, n_expe
 def fingerprint_utility_lr(data, target, gamma, exclude=None, n_folds=10, n_experiments=10, data_string=None,
                            baseline_utility=False, fingerprinted_data_subdir=None):
     # n_folds should be consistent with experiments done on attacked data
+    print('Warning: deprecated')
+
     # data - original data
 
     if isinstance(data, Dataset):
@@ -606,6 +673,7 @@ def fingerprint_utility_lr(data, target, gamma, exclude=None, n_folds=10, n_expe
 
 def fingerprint_utility_knn(data, target, gamma, exclude=None, n_folds=10, n_experiments=10, data_string=None,
                            baseline_utility=False, fingerprinted_data_subdir=None):
+    print('Warning: deprecated')
     # n_folds should be consistent with experiments done on attacked data
     # data - original data
 
@@ -645,6 +713,72 @@ def fingerprint_utility_knn(data, target, gamma, exclude=None, n_folds=10, n_exp
         if baseline_utility:
             break
 
+    # [[acc_fold1,acc_fold2,...],[],...n_experiments]
+    return accuracy
+
+
+def fingerprint_utility(model_name, data, target, gamma, fp_len=8, exclude=None, n_folds=10, n_experiments=10,
+                        data_string=None, baseline_utility=False, fingerprinted_data_subdir=None, progress_bar=True):
+    if model_name == 'knn':
+        model = KNeighborsClassifier()
+    elif model_name == 'lr':
+        model = LogisticRegression(random_state=0)
+    elif model_name == 'rf':
+        model = RandomForestClassifier(random_state=0)
+    elif model_name == 'gb':
+        model = GradientBoostingClassifier(random_state=0)
+    elif model_name == 'mlp':
+        model = MLPClassifier(random_state=0, max_iter=150, n_iter_no_change=6)
+    elif model_name == 'svm':
+        model = SVC(random_state=0)
+    else:
+        model = None
+        print('Invalid model name!')
+        exit()
+
+    if isinstance(data, Dataset):
+        data_string = data.to_string()
+        dataframe = data.preprocessed()
+    X = dataframe
+
+    if target in dataframe.columns:
+        X = dataframe.drop(target, axis=1)
+    if 'Id' in dataframe.columns:
+        X = X.drop('Id', axis=1)
+    if exclude is not None:
+        X = X.drop(exclude, axis=1)
+    y = dataframe[target]
+
+    if fingerprinted_data_subdir is None:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/'.format(data_string)
+    else:
+        fingerprinted_data_dir = 'parameter_guidelines/fingerprinted_data/{}/{}/'.format(data_string,
+                                                                                        fingerprinted_data_subdir)
+
+    accuracy = []
+    if progress_bar:
+        print('|'+' '*(n_experiments-2)+'|')
+    for exp in range(n_experiments):
+        if progress_bar:
+            sys.stdout.write('|')
+        if baseline_utility:
+            X_fp = X
+            y_fp = y
+        else:
+            fp_file_string = 'universal_g{}_x1_l{}_u1_sk{}.csv'.format(gamma, fp_len, exp)
+            fingerprinted_data = pd.read_csv(fingerprinted_data_dir + fp_file_string)
+            fingerprinted_data = data.preprocessed(fingerprinted_data)
+            X_fp = fingerprinted_data.drop(target, axis=1)
+            if 'Id' in X_fp.columns:
+                X_fp = X_fp.drop('Id', axis=1)
+            y_fp = fingerprinted_data[target]
+
+        acc = fp_cross_val_score(model, X, y, X_fp, y_fp, cv=n_folds, scoring='accuracy')['test_score']
+        accuracy.append(acc)
+        if baseline_utility:
+            break
+    if progress_bar:
+        print()
     # [[acc_fold1,acc_fold2,...],[],...n_experiments]
     return accuracy
 
@@ -762,47 +896,134 @@ def test_interactive_plot():
     plt.show()
 
 
-if __name__ == '__main__':
-    #test_interactive_plot()
-    #data = GermanCredit().number_encode_categorical().get_dataframe()
-    #knn_acc = original_utility_knn(data, target='target', exclude='Id', n_folds=5)
-    #dt_acc = original_utility_dt(data, target='target', exclude='Id', n_folds=5)
-    #gb_acc = original_utility_gb(data, target='target', exclude='Id', n_folds=5)
-    #lr_acc = original_utility_lr(data, target='target', exclude='Id', n_folds=5)
-    #baseline_accuracies = {'knn': knn_acc, 'dt': dt_acc, 'gb': gb_acc, 'lr': lr_acc}
-    #print(baseline_accuracies)
-    #with open('parameter_guidelines/evaluation/german_credit/utility_ml_baseline.pickle', 'wb') as outfile:
-    #    pickle.dump(baseline_accuracies, outfile)
-    # GRADIENT BOOSTING IS THE BEST
+def merge_server_results(data_name, model_name, n_experiments, fpattr):
+    with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'rb') as infile:
+        utilities = pickle.load(infile)
+    print(utilities.keys())
+    with open('parameter_guidelines/evaluation/{}/from_server/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'rb') as infile:
+        utilities_server = pickle.load(infile)
+    print(utilities_server.keys())
+    for g in utilities_server:
+        utilities[g] = utilities_server[g]
+    utilities_ordered = dict(collections.OrderedDict(sorted(utilities.items())))
+    with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'wb') as outfile:
+        pickle.dump(utilities_ordered, outfile)
+    print()
+    print(utilities_ordered.keys())
 
-    # FOR COMPARABLE RESULTS
-    #baseline_knn = fingerprint_utility_knn(data=GermanCredit(), target='target', gamma=1, n_folds=5, baseline_utility=True)
-    #baseline_accuracies = {'gb': baseline_gb}
-    #with open('parameter_guidelines/evaluation/german_credit/utility_ml_baseline.pickle', 'rb') as infile:
-    #    baseline = pickle.load(infile)
-    #    baseline['knn'] = baseline_knn
-    #with open('parameter_guidelines/evaluation/german_credit/utility_ml_baseline.pickle', 'wb') as outfile:
-    #    pickle.dump(baseline, outfile)
-    #print(baseline)
-    #exit()
 
-    gammae = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18]
-    #gammae = [2.5, 1.67, 1.43, 1.25, 1.11]
-    #utilities_knn = dict()
-    attr_subset = 16
-    if os.path.isfile('parameter_guidelines/evaluation/german_credit/utility_fp_gb_fpattr{}_e80.pickle'.format(attr_subset)):
-        with open('parameter_guidelines/evaluation/german_credit/utility_fp_gb_fpattr{}_e80.pickle'.format(attr_subset), 'rb') as infile:
-            utilities_gb = pickle.load(infile)
+def show_current_results(data_name, model_name, n_experiments, fpattr):
+    if os.path.isfile(
+            'parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                data_name, model_name, fpattr, n_experiments)):
+        with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'rb') as infile:
+            utilities = pickle.load(infile)
+        print('local')
+        print(utilities.keys())
+    if os.path.isfile(
+            'parameter_guidelines/evaluation/{}/from_server/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                data_name, model_name, fpattr, n_experiments)):
+        with open('parameter_guidelines/evaluation/{}/from_server/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'rb') as infile:
+            utilities_server = pickle.load(infile)
+        print('server (as transferred to local -- might differ from actual server)')
+        print(utilities_server.keys())
+    exit()
+
+
+def baseline(model_name, data, n_folds=5):
+    baseline_accuracies = fingerprint_utility(model_name=model_name, data=data, target=data.get_target_attribute(),
+                                              gamma=1, n_folds=n_folds, baseline_utility=True)
+    if os.path.isfile(
+            'parameter_guidelines/evaluation/{}/utility_ml_baseline.pickle'.format(data.to_string())):
+        with open('parameter_guidelines/evaluation/{}/utility_ml_baseline.pickle'.format(data.to_string()), 'rb') as infile:
+            baseline = pickle.load(infile)
     else:
-        utilities_gb = dict()
-    print(utilities_gb)
-    for g in gammae:
-        #utilities_knn[g] = fingerprint_utility_knn(data=GermanCredit(), target='target', gamma=g, n_folds=5,
-        #                                         n_experiments=80, fingerprinted_data_subdir='attr_subset_4')
-        #print(utilities_knn[g])
-        utilities_gb[g] = fingerprint_utility_gb(data=GermanCredit(), target='target', gamma=g, n_folds=5,
-                                                 n_experiments=80, fingerprinted_data_subdir='attr_subset_{}'.format(attr_subset))
+        baseline = dict()
+    baseline[model_name] = baseline_accuracies
+    with open('parameter_guidelines/evaluation/{}/utility_ml_baseline.pickle'.format(data.to_string()), 'wb') as outfile:
+        pickle.dump(baseline, outfile)
+    pprint(baseline)
+    exit()
 
-    pprint(utilities_gb)
-    with open('parameter_guidelines/evaluation/german_credit/utility_fp_gb_fpattr{}_e80.pickle'.format(attr_subset), 'wb') as outfile:
-        pickle.dump(utilities_gb, outfile)
+
+def order_results(data_name, model_name, n_experiments, fpattr):
+    if os.path.isfile(
+            'parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                data_name, model_name, fpattr, n_experiments)):
+        with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'rb') as infile:
+            utilities = pickle.load(infile)
+        utilities_ordered = dict(collections.OrderedDict(sorted(utilities.items())))
+        with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'wb') as outfile:
+            pickle.dump(utilities_ordered, outfile)
+        print('local')
+        print(utilities_ordered.keys())
+
+    if os.path.isfile(
+            'parameter_guidelines/evaluation/{}/from_server/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                data_name, model_name,fpattr,  n_experiments)):
+        with open('parameter_guidelines/evaluation/{}/from_server/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'rb') as infile:
+            utilities_server = pickle.load(infile)
+        utilities_server_ordered = dict(collections.OrderedDict(sorted(utilities_server.items())))
+        with open('parameter_guidelines/evaluation/{}/from_server/utility_fp_{}_fpattr{}_e{}.pickle'.format(data_name, model_name, fpattr, n_experiments), 'wb') as outfile:
+            pickle.dump(utilities_server_ordered, outfile)
+        print('server')
+        print(utilities_server_ordered.keys())
+    exit()
+
+
+if __name__ == '__main__':
+    #order_results('diabetic_data', 'lr', n_experiments=20, fpattr=45)
+    show_current_results('diabetic_data', 'svm', n_experiments=20, fpattr=45)
+    merge_server_results('adult', 'svm', n_experiments=30, fpattr=12); exit()
+    gammae = [1, 2, 3, 4, 5, 10, 18]  # 7, 8, 9, 10, 12, 15, 18]
+    #gammae = [1.11, 1.25, 1.43, 1.67, 2.5]
+    # utilities_knn = dict()
+    attr_subset = 45
+    model_name = 'svm'; print(model_name)
+    data = DiabeticData()
+    n_experiments = 20
+    fp_len = 32
+    # test_interactive_plot()
+    # GRADIENT BOOSTING IS THE BEST FOR GERMAN CREDIT
+
+    # BASELINE FOR COMPARABLE RESULTS
+    baseline(model_name, data, n_folds=5)
+
+    if os.path.isfile(
+            'parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                data.to_string(), model_name, attr_subset, n_experiments)):
+        with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                data.to_string(), model_name, attr_subset, n_experiments),
+                  'rb') as infile:
+            utilities = pickle.load(infile)
+
+    else:
+        # utilities_gb = dict()
+        utilities = dict()
+    pprint(utilities)
+    for g in gammae:
+        print('({}) gamma = {}'.format(model_name, g))
+        if g not in utilities:
+            utilities[g] = fingerprint_utility(model_name=model_name, data=data, target=data.get_target_attribute(),
+                                               gamma=g, n_folds=3, n_experiments=n_experiments, fp_len=fp_len,
+                                               fingerprinted_data_subdir='attr_subset_{}'.format(attr_subset),
+                                               progress_bar=True)   # disable progress bar for server
+            print(utilities[g])
+        # saves with every iteration so that it doesn't get interrupted by the errors
+        # for parallel processes: update the utilities with up-to-date results
+        if os.path.isfile(
+                'parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                    data.to_string(), model_name, attr_subset, n_experiments)):
+            with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(
+                    data.to_string(), model_name, attr_subset, n_experiments),
+                      'rb') as infile:
+                temp_utilities = pickle.load(infile)
+            for g in temp_utilities:
+                if g not in utilities:
+                    utilities[g] = temp_utilities[g]
+
+        with open('parameter_guidelines/evaluation/{}/utility_fp_{}_fpattr{}_e{}.pickle'.format(data.to_string(), model_name, attr_subset, n_experiments), 'wb') as outfile:
+                    pickle.dump(utilities, outfile)
+
+    # SORT THE DICTIONARY
+    # UPDATES THE EXISTING RESULTS

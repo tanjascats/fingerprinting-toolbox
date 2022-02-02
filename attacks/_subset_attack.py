@@ -13,7 +13,7 @@ class HorizontalSubsetAttack(Attack):
     Runs the attack; gets a random subset of a dataset of size fraction*data_size
     fraction [0,1]
     """
-    def run(self, dataset, strength=None, fraction=None, random_state=None):
+    def run(self, dataset, strength=None, fraction=None, random_state=None, log=False):
         if isinstance(dataset, Dataset):
             dataset = dataset.get_dataframe()
         if strength is None and fraction is None:  # if strength is none and fraction also
@@ -27,8 +27,9 @@ class HorizontalSubsetAttack(Attack):
 
         start = time.time()
         subset = dataset.sample(frac=fraction, random_state=random_state)
-        print("Subset attack runtime on " + str(int(fraction*len(dataset))) + " out of " + str(len(dataset)) +
-              " entries: " + str(time.time()-start) + " sec.")
+        if log:
+            print("Subset attack runtime on " + str(int(fraction*len(dataset))) + " out of " + str(len(dataset)) +
+                  " entries: " + str(time.time()-start) + " sec.")
         return subset
 
     def false_miss_estimation(self, dataset, strength, scheme):

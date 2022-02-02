@@ -6,11 +6,10 @@ import glob
 import random
 
 
-def main():
-    #data = pd.read_csv('datasets/adult.csv', na_values='?')
-    #data = data.dropna(axis=0).reset_index().drop('index', axis=1)
+def german_credit():
     data = GermanCredit()
-    gammae = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18] #[2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    gammae = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15,
+              18]  # [2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
     fplen = 8
     numbuyers = 100
     # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
@@ -24,11 +23,154 @@ def main():
                 scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
                 # define exclude param for fingerprinting a subset of columns
                 exclude = ['foreign', 'liable_people', 'tel', 'job'
-                          ,'age', 'installment_other', 'housing', 'existing_credits'
-                           ,'sex_status', 'debtors', 'residence_since', 'property'
-                         ,'credit_amount','savings','employment_since','installment_rate'
-                ]
+                    , 'age', 'installment_other', 'housing', 'existing_credits'
+                    , 'sex_status', 'debtors', 'residence_since', 'property'
+                    , 'credit_amount', 'savings', 'employment_since', 'installment_rate'
+                           ]
                 fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk, exclude=exclude,
+                                                      write_to=file_string)
+                fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
+            else:
+                print('File already exists; skipping gamma={}, no.{}'.format(g, sk))
+
+
+def adult():
+    # data = pd.read_csv('datasets/adult.csv', na_values='?')
+    # data = data.dropna(axis=0).reset_index().drop('index', axis=1)
+    data = Adult()
+    gammae = [1.11, 1.25, 1.43, 1.67, 2.5]  #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    fplen = 32
+    numbuyers = 100
+    # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
+    for g in gammae:
+        for sk in range(30):
+            column_subset = 12
+            file_string = 'parameter_guidelines/fingerprinted_data/' + data.to_string() + \
+                          '/attr_subset_' + str(column_subset) + \
+                          '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(g, 1, fplen, 1, sk)  # u -> user
+            if not os.path.isfile(file_string):
+                scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
+                # define exclude param for fingerprinting a subset of columns
+                exclude = ['education', 'fnlwgt']
+                fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk, exclude=exclude,
+                                                      write_to=file_string)
+                fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
+            else:
+                print('File already exists; skipping gamma={}, no.{}'.format(g, sk))
+
+
+def bank_personal_loan():
+    data = BankPersonalLoan()
+    gammae = [1.11, 1.25, 1.43, 1.67, 2.5]  # [2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    fplen = 16
+    numbuyers = 100
+    # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
+    for g in gammae:
+        for sk in range(100):
+            column_subset = 12
+            file_string = 'parameter_guidelines/fingerprinted_data/' + data.to_string() + \
+                          '/attr_subset_' + str(column_subset) + \
+                          '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(g, 1, fplen, 1, sk)  # u -> user
+            if not os.path.isfile(file_string):
+                scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
+                # define exclude param for fingerprinting a subset of columns
+                fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk,
+                                                      write_to=file_string)
+                fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
+            else:
+                print('File already exists; skipping gamma={}, no.{}'.format(g, sk))
+
+
+def breast_cancer():
+    data = BreastCancer()
+    gammae = [1.11, 1.25, 1.43, 1.67, 2.5]
+    # [2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    gammae = [1, 2, 3, 4, 5, 10, 18]
+    fplen = 8
+    numbuyers = 100
+    # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
+    for g in gammae:
+        for sk in range(50):
+            column_subset = 9
+            file_string = 'parameter_guidelines/fingerprinted_data/' + data.to_string() + \
+                          '/attr_subset_' + str(column_subset) + \
+                          '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(g, 1, fplen, 1, sk)  # u -> user
+            if not os.path.isfile(file_string):
+                scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
+                # define exclude param for fingerprinting a subset of columns
+                fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk,
+                                                      write_to=file_string)
+                fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
+            else:
+                print('File already exists; skipping gamma={}, no.{}'.format(g, sk))
+
+
+def diabetic_data():
+    data = DiabeticData()
+    gammae = [1.11, 1.25, 1.43, 1.67, 2.5]
+    # [2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    #gammae = [1, 2, 3, 4, 5, 10, 18]
+    fplen = 32
+    numbuyers = 100
+    # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
+    for g in gammae:
+        for sk in range(20):
+            column_subset = 45
+            file_string = 'parameter_guidelines/fingerprinted_data/' + data.to_string() + \
+                          '/attr_subset_' + str(column_subset) + \
+                          '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(g, 1, fplen, 1, sk)  # u -> user
+            if not os.path.isfile(file_string):
+                scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
+                # define exclude param for fingerprinting a subset of columns
+                fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk,
+                                                      write_to=file_string)
+                fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
+            else:
+                print('File already exists; skipping gamma={}, no.{}'.format(g, sk))
+
+
+def mushrooms():
+    data = Mushrooms()
+    gammae = [1.11, 1.25, 1.43, 1.67, 2.5]
+    # [2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    #gammae = [1, 2, 3, 4, 5, 10, 18]
+    fplen = 16
+    numbuyers = 100
+    # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
+    for g in gammae:
+        for sk in range(30):
+            column_subset = 22
+            file_string = 'parameter_guidelines/fingerprinted_data/' + data.to_string() + \
+                          '/attr_subset_' + str(column_subset) + \
+                          '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(g, 1, fplen, 1, sk)  # u -> user
+            if not os.path.isfile(file_string):
+                scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
+                # define exclude param for fingerprinting a subset of columns
+                fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk,
+                                                      write_to=file_string)
+                fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
+            else:
+                print('File already exists; skipping gamma={}, no.{}'.format(g, sk))
+
+
+def nursery():
+    data = Nursery()
+    #gammae = [1.11, 1.25, 1.43, 1.67, 2.5]
+    # [2.5, 1.67, 1.43, 1.25, 1.11] #[2.5]#[1,2,3,4,5,6,7,8,9,10,12,15,18]#,20,25,30,35,40,50]
+    gammae = [1, 2, 3, 4, 5, 10, 18]
+    fplen = 32
+    numbuyers = 100
+    # exclude = [data.get_target_attribute(), data.get_primary_key_attribute()]
+    for g in gammae:
+        for sk in range(30):
+            column_subset = 8
+            file_string = 'parameter_guidelines/fingerprinted_data/' + data.to_string() + \
+                          '/attr_subset_' + str(column_subset) + \
+                          '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(g, 1, fplen, 1, sk)  # u -> user
+            if not os.path.isfile(file_string):
+                scheme = Universal(gamma=g, xi=1, fingerprint_bit_length=fplen, number_of_recipients=numbuyers)
+                # define exclude param for fingerprinting a subset of columns
+                fingerprinted_data = scheme.insertion(data, recipient_id=1, secret_key=sk,
                                                       write_to=file_string)
                 fingerprinted_data.get_dataframe().to_csv(file_string, index=False)
             else:
@@ -84,6 +226,10 @@ def test_specific_file():
                                              'age', 'installment_other', 'housing', 'existing_credits',
                                              'job', 'liable_people', 'tel', 'foreign']))
     print(suspect)
+
+
+def main():
+    nursery()
 
 
 if __name__ == '__main__':

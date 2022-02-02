@@ -1,4 +1,5 @@
 from ._dataset import *
+from ._fingerprint_utils import *
 
 __all__ = ['Dataset',
            'BreastCancerWisconsin',
@@ -9,4 +10,5 @@ __all__ = ['Dataset',
            'Nursery',
            'Abalone',
            'BankPersonalLoan',
-           'DiabeticData']
+           'DiabeticData',
+           'read_fingerprinted_data']

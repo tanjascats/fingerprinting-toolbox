@@ -6,7 +6,7 @@ import time
 import numbers
 import warnings
 from traceback import format_exc
-from astropy.table import Table
+#from astropy.table import Table
 from joblib import Parallel
 
 from sklearn.utils.validation import _check_fit_params, _num_samples
@@ -361,7 +361,7 @@ def fp_cross_val_score(estimator, X_original, y_original, X_fingerprint, y_finge
     return ret
 
 
-def latex_to_pandas(path):
-    tab = Table.read(path).to_pandas()
-    # todo: in the latex version there might be necessary to remove some parts like \toprule
-    return tab
+#def latex_to_pandas(path):
+#    tab = Table.read(path).to_pandas()
+#    # todo: in the latex version there might be necessary to remove some parts like \toprule
+#    return tab
