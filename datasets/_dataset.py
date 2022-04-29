@@ -177,7 +177,8 @@ class GermanCredit(Dataset):
 
         preprocessed, encoders = number_encode_features(preprocessed)
         X = preprocessed.drop(self.target_attribute, axis=1)
-        X = X.drop('Id', axis=1)
+        if 'Id' in X.columns:
+            X = X.drop('Id', axis=1)
         scaler = StandardScaler()
         X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
         y = preprocessed[self.target_attribute]
@@ -359,10 +360,12 @@ class Nursery(Dataset):
             preprocessed = preprocessed.dataframe
         else:
             preprocessed = fp_data
+        preprocessed = preprocessed[preprocessed['target'] != 'recommend']
+        preprocessed = preprocessed[preprocessed['target'] != 'spec_priorjupy']
         preprocessed, encoders = number_encode_features(preprocessed)
         X = preprocessed.drop(self.target_attribute, axis=1)
         X = X.drop(self.primary_key_attribute, axis=1)
-        y = preprocessed[self.target_attribute]
+        y = preprocessed[self.target_attribute].reset_index().drop(['index'], axis=1)
 
         scaler = StandardScaler()
         X = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
@@ -375,6 +378,9 @@ class Nursery(Dataset):
         clone.set_dataframe(self.get_dataframe())
         clone._set_primary_key(self.get_primary_key_attribute())
         return clone
+
+    def get_target_attribute(self):
+        return self.target_attribute
 
 
 class Mushrooms(Dataset):

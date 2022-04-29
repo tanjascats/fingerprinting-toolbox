@@ -25,7 +25,7 @@ def _data_preprocess(dataset, exclude=None, include=None):
             try:
                 relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
             except KeyError:
-                break
+                print('Warning! Trying to exclude non existing columns:{}'.format(attribute))
         include = None
     if include is not None:
         relation.set_dataframe(relation.dataframe[include])
@@ -224,25 +224,55 @@ class Universal(Scheme):
         if original_attributes is not None:
             self.original_attributes = original_attributes
         fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
-        # return the original attribute list and fill out the missing with zeroes
-        if not fingerprinted_data_prep.columns.equals(self.original_attributes):
-            try:
-                difference = set(self.original_attributes).difference(set(fingerprinted_data_prep.columns))
+        # return the original attribute list and fill out the missing with zeroes in case of vertical attack
+        # todo: this is terribly wrong but works for now
+        #print(fingerprinted_data.dataframe)
+        #print(fingerprinted_data.dataframe.drop([primary_key_attribute,target_attribute], axis=1).columns.to_list())
+        #print(self.original_attributes.to_list())
+        if primary_key_attribute is not None:
+            #if not fingerprinted_data.dataframe.drop([primary_key_attribute,target_attribute], axis=1).columns.to_list() == self.original_attributes.to_list():
+            if not fingerprinted_data.dataframe.drop([primary_key_attribute,target_attribute], axis=1).columns.to_list() == self.original_attributes:
+                print('Vertical attack detected. The detection might have a reduced success.')
+                #try:
+                if exclude is None:
+                    _exclude = []
+                else:
+                    _exclude = exclude
+                difference = set(self.original_attributes).difference(set(_exclude)).difference(set(fingerprinted_data_prep.columns))
                 for diff in difference:
                     fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
                                                                     range(len(fingerprinted_data_prep.dataframe))])
-                fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[self.original_attributes.tolist()])
-            except AttributeError:
-                print('\nWARNING!\n\t->Provide the original attribute names, if available, to improve the '
-                      'performance of detection algorithm.\n')
-            # if not relation_orig.columns.equals(relation_fp.columns):
-            #    print(relation_fp.columns)
-            #    difference = relation_orig.columns.difference(relation_fp.columns)
-            #    for diff in difference:
-            #        relation_fp[diff] = relation_orig[diff]
-            # bring back the original order of columns
-            # relation_fp = relation_fp[relation_orig.columns.tolist()]
-
+                #original_order = self.original_attributes.to_list()
+                original_order = self.original_attributes
+                for el in _exclude:
+                    original_order.remove(el)
+                fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[original_order])
+                #except AttributeError:
+                #    print('\nWARNING!\n\t->Provide the original attribute names, if available, to improve the '
+                #          'performance of detection algorithm.\n')
+                # if not relation_orig.columns.equals(relation_fp.columns):
+                #    print(relation_fp.columns)
+                #    difference = relation_orig.columns.difference(relation_fp.columns)
+                #    for diff in difference:
+                #        relation_fp[diff] = relation_orig[diff]
+                # bring back the original order of columns
+                # relation_fp = relation_fp[relation_orig.columns.tolist()]
+        else:
+            if not fingerprinted_data.dataframe.drop([target_attribute], axis=1).columns.to_list() == self.original_attributes.to_list():
+                print('Vertical attack detected. The detection might have a reduced success.')
+                #try:
+                if exclude is None:
+                    _exclude = []
+                else:
+                    _exclude = exclude
+                difference = set(self.original_attributes).difference(set(_exclude)).difference(set(fingerprinted_data_prep.columns))
+                for diff in difference:
+                    fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
+                                                                    range(len(fingerprinted_data_prep.dataframe))])
+                original_order = self.original_attributes.to_list()
+                for el in _exclude:
+                    original_order.remove(el)
+                fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[original_order])
         start = time.time()
         # init fingerprint template and counts
         # for each of the fingerprint bit the votes if it is 0 or 1

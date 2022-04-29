@@ -77,7 +77,7 @@ class VerticalSubsetAttack(Attack):
         random.seed(seed)
         start = time.time()
         untacked_cols = []
-        if 'Id' in dataset.columns:
+        if 'Id' in dataset.columns and 'Id' not in untacked_cols:
             untacked_cols.append('Id')
         if keep_columns is not None:
             untacked_cols.extend(keep_columns)

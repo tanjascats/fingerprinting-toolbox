@@ -233,6 +233,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    #main()
     #test_detection()
-    #test_specific_file()
+    test_specific_file()

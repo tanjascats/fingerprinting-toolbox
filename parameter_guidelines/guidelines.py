@@ -188,11 +188,18 @@ def robustness(attack, scheme, data, exclude=None, include=None, n_experiments=1
             #fingerprinted_data = scheme.insertion(data, user, secret_key=sk, exclude=exclude,
             #                                      primary_key_attribute=primary_key_attribute)
             if include is None:
-                fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/' + data.to_string() +
-                                                 '/attr_subset_20' +
-                                                 '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
-                                                                                                   scheme.get_fplen(),
-                                                                                                   user, sk))
+                if isinstance(data, GermanCredit):
+                    fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/' + data.to_string() +
+                                                     '/attr_subset_20' +
+                                                     '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
+                                                                                                       scheme.get_fplen(),
+                                                                                                       user, sk))
+                elif isinstance(data, Nursery):
+                    fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/' + data.to_string() +
+                                                     '/attr_subset_8' +
+                                                     '/universal_g{}_x{}_l{}_u{}_sk{}.csv'.format(scheme.get_gamma(), 1,
+                                                                                                       scheme.get_fplen(),
+                                                                                                       user, sk))
             else:
                 fingerprinted_data = pd.read_csv('parameter_guidelines/fingerprinted_data/' + data.to_string() +
                                                  '/attr_subset_' + str(len(include)) +
@@ -226,7 +233,8 @@ def robustness(attack, scheme, data, exclude=None, include=None, n_experiments=1
                           'installment_other', 'housing', 'existing_credits', 'job',
                           'liable_people', 'tel', 'foreign'])
             suspect = scheme.detection(attacked_data, secret_key=sk, primary_key_attribute='Id',
-                                       original_attributes=original_attributes)
+                                       original_attributes=original_attributes,
+                                       target_attribute='target')
 
             if suspect != user:
                 success -= 1
