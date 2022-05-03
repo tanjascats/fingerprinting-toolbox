@@ -6,5 +6,12 @@ __pycache__/
 tex-tables/
 architecture/
 evaluation/
+eval/
+models/
 main.py
 scheme/_neighbour_based.py
+parameter_guidelines/fingerprinted_data/
+archive/
+parameter_guidelines/evaluation/german_credit/backup/
+parameter_guidelines/archive/
+parameter_guidelines/evaluation/adult/
