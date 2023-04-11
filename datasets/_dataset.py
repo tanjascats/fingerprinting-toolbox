@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 
 class Dataset(ABC):
     """
-    Abstract scheme for structuring the dataset within the toolbox
+    Abstract class used to represent the dataset within the toolbox
     """
     def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None):
         if path is None and dataframe is None:
@@ -129,7 +129,6 @@ class Dataset(ABC):
 
     def number_encode_categorical(self):
         relation = self.dataframe
-        self.categorical_attributes = self.dataframe.select_dtypes(include='object').columns
         self.label_encoders = dict()
         for cat in self.categorical_attributes:
             label_enc = LabelEncoder()  # the current version of label encoder works in alphanumeric order

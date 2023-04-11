@@ -26,8 +26,14 @@ def _data_preprocess(dataset, exclude=None, include=None):
         include = None
     if include is not None:
         relation.set_dataframe(relation.dataframe[include])
+
+    # reinitialise the Dataset object
     relation.remove_primary_key()
     relation.remove_target()
+    relation.columns = relation.dataframe.columns
+    relation.number_of_rows, relation.number_of_columns = relation.dataframe.shape
+    relation._set_types()
+
     relation.number_encode_categorical()
     return relation
 
@@ -47,6 +53,9 @@ def _data_postprocess(fingerprinted_dataset, original_dataset):
     fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
     # learn the label encoder on original and apply on fingerprinted numerical
     fingerprinted_dataset.decode_categorical()
+    # fix decimal types
+    for dec in original_dataset.decimal_attributes:
+        fingerprinted_dataset.dataframe[dec] = pd.to_numeric(fingerprinted_dataset.dataframe[dec])
     return fingerprinted_dataset
 
 
@@ -62,6 +71,8 @@ class Universal(Scheme):
     def __init__(self, gamma, fingerprint_bit_length=None, number_of_recipients=None, xi=1):
         self.gamma = gamma
         self.xi = xi
+
+        self.detection_counts = None
 
         if fingerprint_bit_length is not None:
             if number_of_recipients is not None:
@@ -114,7 +125,7 @@ class Universal(Scheme):
         start = time.time()
         for r in relation.dataframe.iterrows():
             # seed = concat(secret_key, primary_key)
-            seed = (secret_key << self.__primary_key_len) + relation.primary_key[r[0]]
+            seed = int((secret_key << self.__primary_key_len) + relation.primary_key[r[0]])
             random.seed(seed)
 
             # select the tuple
@@ -173,7 +184,8 @@ class Universal(Scheme):
         fingerprinted_relation = _data_postprocess(fingerprinted_relation, original_data)
         print("Fingerprint inserted.")
         print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows) * 100, 2)) + "%")
-        print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times")
+        print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times (\"amount of "
+                                                                                      "redundancy\")")
         if save and write_to is None:
             fingerprinted_relation.save("ak_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length,
                                                                         recipient_id))
@@ -221,7 +233,7 @@ class Universal(Scheme):
 
         # scan all tuples and obtain counts for each fingerprint bit
         for r in fingerprinted_data_prep.dataframe.iterrows():
-            seed = (secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]]
+            seed = int((secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]])
             random.seed(seed)
 
             # this tuple was marked
@@ -263,7 +275,6 @@ class Universal(Scheme):
                 # update votes
                 count[fingerprint_idx][fingerprint_bit] += 1
 
-
         # this fingerprint template will be upside-down from the real binary representation
         fingerprint_template = [2] * self.fingerprint_bit_length
         # recover fingerprint
@@ -280,8 +291,7 @@ class Universal(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
-        print('Counts:')
-        pprint(count)
+        self.detection_counts = count
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
@@ -290,3 +300,11 @@ class Universal(Scheme):
             print("No one suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
         return recipient_no
+
+    def get_counts(self):
+        """
+        Returns the array of detected marks (evidence) of each fingerprint bit from the last detection execution
+        """
+        if self.detection_counts is None:
+            print("WARNING: Detection not yet executed.")
+        return self.detection_counts

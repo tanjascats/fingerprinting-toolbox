@@ -1,5 +1,4 @@
 import pandas as pd
-import bitstring
 import unittest
 
 from scheme import AKScheme
@@ -7,7 +6,7 @@ from datasets import *
 
 
 class TestScheme(unittest.TestCase):
-    def test_base_fingerprint_creation(self):
+    def test_create_fingerprint(self):
         scheme = AKScheme(gamma=2)
         secret_key = 123
         recipient = 0
