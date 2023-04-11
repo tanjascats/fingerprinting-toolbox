@@ -1,5 +1,4 @@
 import pandas as pd
-import bitstring
 import unittest
 
 from scheme import AKScheme

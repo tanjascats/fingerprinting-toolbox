@@ -72,6 +72,8 @@ class Universal(Scheme):
         self.gamma = gamma
         self.xi = xi
 
+        self.detection_counts = None
+
         if fingerprint_bit_length is not None:
             if number_of_recipients is not None:
                 super().__init__(fingerprint_bit_length, number_of_recipients)
@@ -182,7 +184,8 @@ class Universal(Scheme):
         fingerprinted_relation = _data_postprocess(fingerprinted_relation, original_data)
         print("Fingerprint inserted.")
         print("\tmarked tuples: ~" + str(round((count / relation.number_of_rows) * 100, 2)) + "%")
-        print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times")
+        print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times (\"amount of "
+                                                                                      "redundancy\")")
         if save and write_to is None:
             fingerprinted_relation.save("ak_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length,
                                                                         recipient_id))
@@ -272,7 +275,6 @@ class Universal(Scheme):
                 # update votes
                 count[fingerprint_idx][fingerprint_bit] += 1
 
-
         # this fingerprint template will be upside-down from the real binary representation
         fingerprint_template = [2] * self.fingerprint_bit_length
         # recover fingerprint
@@ -289,8 +291,7 @@ class Universal(Scheme):
 
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
-        print('Counts:')
-        pprint(count)
+        self.detection_counts = count
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
@@ -299,3 +300,11 @@ class Universal(Scheme):
             print("No one suspected.")
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
         return recipient_no
+
+    def get_counts(self):
+        """
+        Returns the array of detected marks (evidence) of each fingerprint bit from the last detection execution
+        """
+        if self.detection_counts is None:
+            print("WARNING: Detection not yet executed.")
+        return self.detection_counts
