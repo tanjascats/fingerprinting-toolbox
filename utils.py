@@ -26,7 +26,7 @@ def import_dataset(dataset_name):
     """
     :returns relation, primary key
     """
-    print("Warning! Method is deprecated and will be replaced. Please use import_dataset_from_file")
+    print("(utils.import_dataset) Warning! Method is deprecated and will be replaced. Please use import_dataset_from_file")
     filepath = "../../datasets/" + str(dataset_name) + ".csv"
     if os.path.isfile(filepath):
         relation = pd.read_csv(filepath)
@@ -59,7 +59,7 @@ def import_fingerprinted_dataset(scheme_string, dataset_name, scheme_params, rea
         params_string = ""
         for param in scheme_params:
             params_string += str(param) + "_"
-        filepath = "schemes/" + scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
+        filepath = "achive_schemes/" + scheme_string + "/fingerprinted_datasets/" + dataset_name + "_" + params_string + \
                    str(real_buyer_id) + ".csv"
         relation = pd.read_csv(filepath)
         print("Dataset: " + filepath)
@@ -96,7 +96,7 @@ def write_dataset(fingerprinted_relation, scheme_string, dataset_name, scheme_pa
     params_string = ""
     for param in scheme_params:
         params_string += str(param) + "_"
-    new_path = "schemes/" + scheme_string + "/fingerprinted_datasets/" + \
+    new_path = "achive_schemes/" + scheme_string + "/fingerprinted_datasets/" + \
                dataset_name + "_" + params_string + str(buyer_id) + ".csv"
     fingerprinted_relation.to_csv(new_path, index=False)
     print("\tfingerprinted dataset written to: " + new_path)
@@ -145,7 +145,7 @@ def read_data_with_target(dataset_name, scheme_name=None, params=None, buyer_id=
         params_string = ""
         for param in params:
             params_string += str(param) + "_"
-        data = pd.read_csv("schemes/" + scheme_name + "/fingerprinted_datasets/" + dataset_name +
+        data = pd.read_csv("achive_schemes/" + scheme_name + "/fingerprinted_datasets/" + dataset_name +
                            "_" + params_string + str(buyer_id) + ".csv")
     target_file = pd.read_csv("datasets/_" + dataset_name + ".csv")
     data["target"] = target_file["target"]

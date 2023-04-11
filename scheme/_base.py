@@ -6,7 +6,7 @@ import bitstring
 
 class Scheme(ABC):
     """
-    Abstract scheme for all schemes implemented within the toolbox
+    Abstract scheme for all achive_schemes implemented within the toolbox
     """
     # todo: default values
     def __init__(self, fingerprint_bit_length=32, number_of_recipients=100):
