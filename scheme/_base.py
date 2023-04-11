@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from bitstring import BitArray
-import pyblake2
+import hashlib
 import bitstring
 
 
@@ -36,7 +36,7 @@ class Scheme(ABC):
         shift = 10
         # seed is 42 bit long
         seed = (secret_key << shift) + recipient_id
-        b = pyblake2.blake2b(key=seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
+        b = hashlib.blake2b(key=seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
         fingerprint = BitArray(hex=b.hexdigest())
         fp_msg = "\nGenerated fingerprint for recipient " + str(recipient_id) + ": " + fingerprint.bin
         print(fp_msg)
@@ -56,7 +56,8 @@ class Scheme(ABC):
         # for each buyer
         for recipient_id in range(self.number_of_recipients):
             recipient_seed = (secret_key << shift) + recipient_id
-            b = pyblake2.blake2b(key=recipient_seed.to_bytes(6, 'little'), digest_size=int(self.fingerprint_bit_length / 8))
+            b = hashlib.blake2b(key=recipient_seed.to_bytes(6, 'little'),
+                                digest_size=int(self.fingerprint_bit_length / 8))
             recipient_fp = BitArray(hex=b.hexdigest())
             recipient_fp = recipient_fp.bin
             if recipient_fp == fingerprint:

@@ -26,8 +26,14 @@ def _data_preprocess(dataset, exclude=None, include=None):
         include = None
     if include is not None:
         relation.set_dataframe(relation.dataframe[include])
+
+    # reinitialise the Dataset object
     relation.remove_primary_key()
     relation.remove_target()
+    relation.columns = relation.dataframe.columns
+    relation.number_of_rows, relation.number_of_columns = relation.dataframe.shape
+    relation._set_types()
+
     relation.number_encode_categorical()
     return relation
 
@@ -47,6 +53,9 @@ def _data_postprocess(fingerprinted_dataset, original_dataset):
     fingerprinted_dataset.set_dataframe(fingerprinted_dataset.dataframe[original_dataset.dataframe.columns])
     # learn the label encoder on original and apply on fingerprinted numerical
     fingerprinted_dataset.decode_categorical()
+    # fix decimal types
+    for dec in original_dataset.decimal_attributes:
+        fingerprinted_dataset.dataframe[dec] = pd.to_numeric(fingerprinted_dataset.dataframe[dec])
     return fingerprinted_dataset
 
 
@@ -114,7 +123,7 @@ class Universal(Scheme):
         start = time.time()
         for r in relation.dataframe.iterrows():
             # seed = concat(secret_key, primary_key)
-            seed = (secret_key << self.__primary_key_len) + relation.primary_key[r[0]]
+            seed = int((secret_key << self.__primary_key_len) + relation.primary_key[r[0]])
             random.seed(seed)
 
             # select the tuple
@@ -221,7 +230,7 @@ class Universal(Scheme):
 
         # scan all tuples and obtain counts for each fingerprint bit
         for r in fingerprinted_data_prep.dataframe.iterrows():
-            seed = (secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]]
+            seed = int((secret_key << self.__primary_key_len) + fingerprinted_data_prep.primary_key[r[0]])
             random.seed(seed)
 
             # this tuple was marked
