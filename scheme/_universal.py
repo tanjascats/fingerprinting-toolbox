@@ -1,6 +1,5 @@
 import sys
 import random
-from pprint import pprint
 
 from utils import *
 from utils import _read_data
@@ -85,7 +84,7 @@ class Universal(Scheme):
             else:
                 super().__init__()
 
-        self._INIT_MESSAGE = "Start insertion algorithm...\n" \
+        self._INIT_MESSAGE = "Universal fingerprinting scheme - initialised.\nEmbedding started...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + \
                              str(self.fingerprint_bit_length)
 
