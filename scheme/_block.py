@@ -9,7 +9,12 @@ from ._base import Scheme
 
 
 class BlockScheme(Scheme):
+    '''
+    Implements the fingerprinting scheme by Liu et al. (2005), aka. Block Scheme*.
+    Applies to data sets with numerical integer values
 
+    * Liu, Siyuan, et al. "A block oriented fingerprinting scheme in relational database." Information Security and Cryptology–ICISC 2004: 7th International Conference, Seoul, Korea, December 2-3, 2004, Revised Selected Papers 7. Springer Berlin Heidelberg, 2005.
+    '''
     def __init__(self, beta, xi=1, fingerprint_bit_length=None, number_of_recipients=None):
         self.beta = beta
         self.xi = xi

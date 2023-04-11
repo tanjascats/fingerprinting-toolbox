@@ -28,4 +28,3 @@ class TestBlockScheme(unittest.TestCase):
         suspect = scheme.detection(fingerprinted, secret_key)
         self.assertEquals(suspect, recipient)
 
-
