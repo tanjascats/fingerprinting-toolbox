@@ -10,7 +10,7 @@ evaluation/
 eval/
 models/
 main.py
-scheme/_neighbour_based.py
+scheme/_nn.py
 parameter_guidelines/fingerprinted_data/
 archive/
 parameter_guidelines/evaluation/german_credit/backup/
