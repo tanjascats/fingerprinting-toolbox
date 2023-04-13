@@ -10,9 +10,8 @@ evaluation/
 eval/
 models/
 main.py
-scheme/_nn.py
 parameter_guidelines/fingerprinted_data/
-archive/
+scheme/archive_schemes/
 parameter_guidelines/evaluation/german_credit/backup/
 parameter_guidelines/archive/
 parameter_guidelines/evaluation/adult/
