@@ -186,6 +186,9 @@ class CategoricalNeighbourhood(Scheme):
         return fingerprinted_relation
 
     def detection(self, dataset, secret_key, original_data=None):
+        if original_data is None:
+            print("Please provide the path to original data and re-run the detection algorithm.")
+            exit()
         print("Start detection algorithm of fingerprinting scheme for categorical data (neighbourhood)...")
         print("\tgamma: " + str(self.gamma) + "\n\txi: " + str(self.xi))
 
