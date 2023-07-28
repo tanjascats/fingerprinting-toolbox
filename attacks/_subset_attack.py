@@ -9,14 +9,15 @@ class HorizontalSubsetAttack(Attack):
         super().__init__()
 
     """
-    Runs the attack; gets a random subset of a dataset of size fraction*data_size
-    fraction [0,1]
+    Runs the attack; removes strength*data_size records
+        strength [0,1]
     """
-    def run(self, dataset, fraction):
-        if fraction < 0 or fraction > 1:
+    def run(self, dataset, strength):
+        if strength < 0 or strength > 1:
             return None
 
         start = time.time()
+        fraction = 1.0 - strength
         subset = dataset.sample(frac=fraction)
         print("Subset attack runtime on " + str(int(fraction*len(dataset))) + " out of " + str(len(dataset)) +
               " entries: " + str(time.time()-start) + " sec.")
