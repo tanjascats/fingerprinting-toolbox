@@ -154,7 +154,7 @@ class Dataset(ABC):
 
 class GermanCredit(Dataset):
     def __init__(self):
-        path = 'datasets/german_credit_full.csv'
+        path = os.path.dirname(os.path.realpath(__file__)) + '/german_credit_full.csv'
         super().__init__(path=path, target_attribute='target', primary_key_attribute='Id')
 
 
@@ -166,23 +166,29 @@ class BreastCancerWisconsin(Dataset):
 
 class Adult(Dataset):
     def __init__(self):
-        path = 'datasets/adult.csv'
+        path = os.path.dirname(os.path.realpath(__file__)) + '/adult.csv'
         super().__init__(path=path, target_attribute='income')
 
 
 class BreastCancer(Dataset):
     def __init__(self):
-        path = 'datasets/breast_cancer_full.csv'
+        path = os.path.dirname(os.path.realpath(__file__)) + '/breast_cancer_full.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='recurrence')
 
 
 class Nursery(Dataset):
     def __init__(self):
-        path = 'datasets/nursery_full.csv'
+        path = os.path.dirname(os.path.realpath(__file__)) + '/nursery_full.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')
 
 
 class Mushrooms(Dataset):
     def __init__(self):
-        path = 'datasets/mushroom_full.csv'
+        path = os.path.dirname(os.path.realpath(__file__)) + '/mushroom_full.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')
+
+
+class CovTypeNumeric(Dataset):
+    def __init__(self):
+        path = os.path.dirname(os.path.realpath(__file__)) + '/covtype_numeric.csv'
+        super().__init__(path=path, primary_key_attribute='Id', target_attribute='Cover_Type')
