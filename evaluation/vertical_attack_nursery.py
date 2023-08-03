@@ -112,7 +112,7 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
                'scheme': 'universal',
                'attack': 'vertical subset',
                'modified files': modified_files}
-    with open('robustness/run_log_{}.json'.format(timestamp.replace(' ', '-').replace(':','-')), 'w') as outfile:
+    with open('robustness/run_logs/run_log_{}.json'.format(timestamp.replace(' ', '-').replace(':','-')), 'w') as outfile:
         json.dump(run_log, outfile)
 
 

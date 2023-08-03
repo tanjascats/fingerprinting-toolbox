@@ -76,19 +76,18 @@ def rounding_attack(): # prerequisite is that the fingerprinted datasets are ava
 
 
 def rounding_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
+    fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x4_4370315727_4.csv',
                                       target_attribute='class', primary_key_attribute='sample-code-number')
 
     # sanity check
-    scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)
+    scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=4)
     suspect = scheme.detection(fp_dataset, secret_key=4370315727)
     if suspect != 4:
         #baseline -= 1
          # this line should not print !
         print('Detection went wrong: parameters {},{},{} ......................'.format(32, 1, 1))
     attack = attacks.RoundingAttack()
-    attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, strength=0.5, xi=1, random_state=1)
-    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.5, random_state=1)
+    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.3, random_state=1, xi=4)
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
     attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='class', primary_key_attribute='sample-code-number')
@@ -96,7 +95,7 @@ def rounding_check():
 
 
 def main():
-    rounding_check()
+    rounding_attack()
 
 
 if __name__ == '__main__':

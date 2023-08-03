@@ -1,0 +1,3 @@
+If some directories are missing fingerprinted data from the parameter space grid,
+it is because a robust fingerprint could not be created with such setting
+(e.g. small data with large fp_len)

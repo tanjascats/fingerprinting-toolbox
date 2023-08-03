@@ -1,7 +1,7 @@
 from attacks._base import Attack
 import time
 import random
-
+from datasets import Dataset
 
 class HorizontalSubsetAttack(Attack):
 
@@ -26,6 +26,19 @@ class HorizontalSubsetAttack(Attack):
         print("Subset attack runtime on removing " + str(int(strength*len(dataset))) + " out of " + str(len(dataset)) +
               " entries: " + str(time.time()-start) + " sec.")
         return subset
+
+    def false_miss_estimation(self, dataset, strength, scheme):
+        if isinstance(dataset, Dataset):
+            data_len = dataset.number_of_rows
+        else:
+            data_len = len(dataset)
+        fp_len = scheme.fingerprint_bit_length
+        gamma = scheme.get_gamma()
+        omega = round(data_len / (gamma * fp_len), 0)
+
+        false_miss = 1.0 - (1.0 - strength**omega)**fp_len
+
+        return false_miss
 
 
 class VerticalSubsetAttack(Attack):

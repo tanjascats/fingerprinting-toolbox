@@ -23,13 +23,6 @@ import vertical_attack_nursery
 import horizontal_attack_nursery
 
 def flipping_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
-    # modify this to a class
-    # parameter_grid = {'fp_len': [32, 64, 128],
-    #                   'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
-    #                   # frequency of marks (100%, 90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%, 10%) -> sometimes it needs more granularity towards small percentages e
-    #                   'xi': [1, 2, 4]}  # 90 combinations
-    baseline = 100
-
     # read existing experiments
     all_experiment_results = os.listdir('robustness/flipping/nursery')
     existing_results = []
@@ -78,7 +71,7 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
             for i in range(100):
                 attack = attacks.FlippingAttack()
                 attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=strength,
-                                                 random_state=i*int(strength*100))
+                                                 random_state=i*int(strength*100), xi=xi)
                 attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target',
                                                        primary_key_attribute='Id')
                 suspect = scheme.detection(attacked_fp_dataset, secret_key=secret_key)
@@ -132,7 +125,6 @@ def flipping_check():
 
 
 def main():
-    vertical_attack_nursery.vertical_attack()
     flipping_attack()
 
 
