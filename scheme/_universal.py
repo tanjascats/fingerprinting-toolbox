@@ -229,6 +229,9 @@ class Universal(Scheme):
         print("\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + str(self.fingerprint_bit_length))
         fingerprinted_data = _read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
+        if isinstance(dataset, Dataset):
+            target_attribute = dataset.target_attribute
+            primary_key_attribute = dataset.primary_key_attribute
         if target_attribute is not None:
             fingerprinted_data_prep._set_target_attribute = target_attribute
         if primary_key_attribute is not None:
