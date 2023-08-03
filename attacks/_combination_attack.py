@@ -25,7 +25,7 @@ class DeletionSupersetFlipping(Attack):
         strength[0,1]
     """
     def run(self, dataset, primary_key_attribute, strength_superset, strength_flipping, table_metadata,
-            random_state=None):
+            random_state=None, xi=1):
         start = time.time()
 
         superset_attack = SupersetWithDeletion()
@@ -33,7 +33,7 @@ class DeletionSupersetFlipping(Attack):
                                              strength=strength_superset, random_state=random_state,
                                              table_metadata=table_metadata)
         flipping_attack = FlippingAttack()
-        result = flipping_attack.run(dataset=stage1_dataset,strength=strength_flipping,random_state=random_state)
+        result = flipping_attack.run(dataset=stage1_dataset,strength=strength_flipping,xi=xi,random_state=random_state)
         print("Combination attack: " + str(strength_superset) + " (superset with deletion) + " + str(strength_flipping)
               + " (flipping)\n\ttime: " + str(round(time.time() - start, 2)) + " sec.")
         return result
