@@ -6,7 +6,6 @@ __pycache__/
 .ipynb_checkpoints/
 tex-tables/
 architecture/
-evaluation/
 eval/
 models/
 main.py
