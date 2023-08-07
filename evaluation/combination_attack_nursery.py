@@ -27,7 +27,7 @@ from sdv.metadata import SingleTableMetadata
 
 def combination_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/horizontal/nursery')
+    all_experiment_results = os.listdir('robustness/combination/nursery')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -109,7 +109,7 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
                'dataset': 'nursery',
                'fingerprinted_datasets': all_fp_datasets,
                'scheme': 'universal',
-               'attack': 'horizontal subset',
+               'attack': 'combination',
                'modified files': modified_files}
     with open('robustness/run_logs/run_log_{}.json'.format(str(timestamp.replace(' ', '-').replace(':', '-'))),
               'w') as outfile:

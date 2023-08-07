@@ -119,7 +119,24 @@ class RoundingAttack(Attack):
                 # print('---numerical iteration: ' + str(timestamp_numerical-iteration_start))
             altered.at[row, column] = new_value
 
-        print("Flipping attack runtime on " + str(strength * 100) + "% of entries: " +
+        print("Rounding attack runtime on " + str(strength * 100) + "% of entries: " +
               str(round(time.time() - start, 2)) + " sec.")
 
         return altered
+
+    def false_miss_estimation(self, dataset, strength, scheme):
+        # calculates the cumulative binomial probability - estimation of attack SUCCESS
+        # fm = 1- (1 - B(0.5*omega; omega, p=0.5*strenght)); omega = len(dataset)/(gamma*fp_len)
+        if isinstance(dataset, Dataset):
+            data_len = dataset.number_of_rows
+        else:
+            data_len = len(dataset)
+        fp_len = scheme.get_fplen()
+        gamma = scheme.get_gamma()
+        omega = round(data_len / (gamma * fp_len), 0)
+
+        # probability that the attack is successful
+        b = 1 - (binom.cdf(int(0.5 * omega), omega, 0.5*strength * (1 / scheme.get_xi())) -
+                 binom.pmf(int(0.5 * omega), omega, 0.5*strength * (1 / scheme.get_xi())))
+        fm = 1 - pow(1 - b, fp_len)
+        return fm

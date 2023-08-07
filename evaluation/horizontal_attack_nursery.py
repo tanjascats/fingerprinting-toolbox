@@ -167,8 +167,24 @@ def horizontal_check():
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 
+def horizontal_false_miss_estimation():
+    dataset = datasets.Nursery()
+    parameter_grid = {'fp_len': [32, 64, 128],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10]}
+    for fp_len in parameter_grid['fp_len']:
+        for gamma in parameter_grid['gamma']:
+            scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma)
+            false_miss = dict()
+            for strength in np.arange(0.0, 1.1, 0.1):
+                attack = attacks.HorizontalSubsetAttack()
+                false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
+            with open('robustness/horizontal_est/nursery/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+                      'w') as outfile:
+                json.dump(false_miss, outfile)
+
+
 def main():
-    horizontal_attack()
+    horizontal_false_miss_estimation()
 
 
 if __name__ == '__main__':

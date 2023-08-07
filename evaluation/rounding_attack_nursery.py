@@ -23,7 +23,7 @@ import os
 
 def rounding_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/flipping/nursery')
+    all_experiment_results = os.listdir('robustness/rounding/nursery')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -98,7 +98,7 @@ def rounding_attack(overwrite_existing=False): # prerequisite is that the finger
                'dataset': 'nursery',
                'fingerprinted_datasets': all_fp_datasets,
                'scheme': 'universal',
-               'attack': 'flipping subset',
+               'attack': 'rounding',
                'modified files': modified_files}
     with open('robustness/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':', '-')), 'w') as outfile:
         json.dump(run_log, outfile)
