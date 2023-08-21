@@ -4,7 +4,9 @@ from attacks._base import Attack
 import time
 import random
 from sdv.lite import SingleTablePreset
-import datasets
+from datasets import Dataset
+from scipy.stats import binom
+
 
 """
 In this attack, we add synthetic record and remove the same number of original record, such that the size of the 
@@ -54,3 +56,27 @@ class SupersetWithDeletion(Attack):
         return result
 
 
+class Superset(Attack):
+
+    def __init__(self):
+        super().__init__()
+
+    def false_miss_estimation(self, dataset, strength, scheme):
+        # calculates the cumulative binomial probability - estimation of attack SUCCESS
+        # fm = 1- (1 - B(0.5*omega; omega, p=strenght)); omega = len(dataset)/(gamma*fp_len)
+        if isinstance(dataset, Dataset):
+            data_len = dataset.number_of_rows
+        else:
+            data_len = len(dataset)
+        fp_len = scheme.get_fplen()
+        gamma = scheme.get_gamma()
+        omega = round(data_len / (gamma * fp_len), 0)
+
+        extra_data_len = strength*data_len
+        omega_prime = round(extra_data_len / (gamma * fp_len), 0)
+
+        # probability that the attack is successful
+        b = 1 - (binom.cdf(int(0.5 * (omega + omega_prime)) -1 , omega_prime, 0.5) -
+                 binom.pmf(int(0.5 * (omega + omega_prime)) -1 , omega_prime, 0.5))
+        fm = 1 - pow(1 - b, fp_len)
+        return fm
