@@ -63,7 +63,8 @@ def rounding_attack(overwrite_existing=False): # prerequisite is that the finger
         #     baseline -= 1
         #     # this line should not print !
         #     print('Detection went wrong: parameters {},{},{} ......................'.format(fp_len, gamma, xi))
-        strength_grid = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+        # strength_grid = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+        strength_grid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
         false_miss = dict()
         misattribution = dict()
         false_miss[0] = 0
@@ -84,8 +85,11 @@ def rounding_attack(overwrite_existing=False): # prerequisite is that the finger
                         misattribution[strength] += 1
             false_miss[strength] /= 100
             misattribution[strength] /= 100
+            # --------------------- #
             # early stop criteria
-            if false_miss[strength] == 0.0:
+            # IMPORTANT: early stop depends on whether attack strength is descending (0.0) or ascending (1.0)
+            # --------------------- #
+            if false_miss[strength] == 1.0:
                 break
         print(false_miss)
         print(misattribution)
@@ -128,10 +132,10 @@ def rounding_check():
 
 
 def main():
-    horizontal_attack_german_credit.horizontal_attack()
-    horizontal_attack_german_credit.horizontal_false_miss_estimation()
-    vertical_attack_german_credit.vertical_attack()
-    vertical_attack_german_credit.vertical_false_miss_estimation()
+    #horizontal_attack_german_credit.horizontal_attack()
+    #horizontal_attack_german_credit.horizontal_false_miss_estimation()
+    #vertical_attack_german_credit.vertical_attack()
+    #vertical_attack_german_credit.vertical_false_miss_estimation()
     bit_flipping_german_credit.flipping_attack()
     rounding_attack()
 

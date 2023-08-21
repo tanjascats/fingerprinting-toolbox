@@ -60,7 +60,8 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
         #     baseline -= 1
         #     # this line should not print !
         #     print('Detection went wrong: parameters {},{},{} ......................'.format(fp_len, gamma, xi))
-        strength_grid = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+        #strength_grid = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+        strength_grid = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
         false_miss = dict()
         misattribution = dict()
         false_miss[0] = 0
@@ -81,8 +82,11 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
                         misattribution[strength] += 1
             false_miss[strength] /= 100
             misattribution[strength] /= 100
+            # --------------------- #
             # early stop criteria
-            if false_miss[strength] == 0.0:
+            # IMPORTANT: early stop depends on whether attack strength is descending (0.0) or ascending (1.0)
+            # --------------------- #
+            if false_miss[strength] == 1.0:
                 break
         print(false_miss)
         print(misattribution)
@@ -101,7 +105,7 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
                'scheme': 'universal',
                'attack': 'flipping subset',
                'modified files': modified_files}
-    with open('robustness/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':','-')), 'w') as outfile:
+    with open('robustness/run_logs/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':','-')), 'w') as outfile:
         json.dump(run_log, outfile)
 
 
@@ -124,9 +128,26 @@ def flipping_check():
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 
+def flipping_false_miss_estimation():
+    dataset = datasets.GermanCredit()
+    parameter_grid = {'fp_len': [32, 64, 128],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
+                      'xi': [1, 2, 4]}
+    for fp_len in parameter_grid['fp_len']:
+        for gamma in parameter_grid['gamma']:
+            for xi in parameter_grid['xi']:
+                scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma, xi=xi)
+                false_miss = dict()
+                for strength in np.arange(0.0, 1.1, 0.1):
+                    attack = attacks.FlippingAttack()
+                    false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
+                with open('robustness/flipping_est/german_credit/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi),
+                          'w') as outfile:
+                    json.dump(false_miss, outfile)
+
+
 def main():
-    vertical_attack_german_credit.vertical_attack()
-    flipping_attack()
+    flipping_false_miss_estimation()
 
 
 if __name__ == '__main__':

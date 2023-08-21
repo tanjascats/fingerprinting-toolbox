@@ -94,8 +94,26 @@ def flipping_check():
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 
+def flipping_false_miss_estimation():
+    dataset = datasets.BreastCancerWisconsin()
+    parameter_grid = {'fp_len': [32, 64, 128],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
+                      'xi': [1, 2, 4]}
+    for fp_len in parameter_grid['fp_len']:
+        for gamma in parameter_grid['gamma']:
+            for xi in parameter_grid['xi']:
+                scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma, xi=xi)
+                false_miss = dict()
+                for strength in np.arange(0.0, 1.1, 0.1):
+                    attack = attacks.FlippingAttack()
+                    false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
+                with open('robustness/flipping_est/breast_cancer_w/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi),
+                          'w') as outfile:
+                    json.dump(false_miss, outfile)
+
+
 def main():
-    flipping_attack()
+    flipping_false_miss_estimation()
 
 
 if __name__ == '__main__':

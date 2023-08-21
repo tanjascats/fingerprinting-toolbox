@@ -157,7 +157,7 @@ def vertical_false_miss_estimation():
 
 
 def main():
-    vertical_attack()
+    vertical_false_miss_estimation()
 
 
 if __name__ == '__main__':

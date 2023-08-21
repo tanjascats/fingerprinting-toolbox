@@ -384,5 +384,8 @@ class Universal(Scheme):
     def get_xi(self):
         return self.xi
 
+    def get_fplen(self):
+        return self.fingerprint_bit_length
+
     def to_string(self):
         return 'universal'

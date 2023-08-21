@@ -66,7 +66,7 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
         #     baseline -= 1
         #     # this line should not print !
         #     print('Detection went wrong: parameters {},{},{} ......................'.format(fp_len, gamma, xi))
-        strength_grid = np.arange(0.1, 1.1, 0.1)
+        strength_grid = np.arange(0.1, 1.0, 0.1)
         strength_grid = [round(1.0 - s, 1) for s in strength_grid] # we reverse strength grid to speed up the experiment
         false_miss = dict()
         misattribution = dict()
