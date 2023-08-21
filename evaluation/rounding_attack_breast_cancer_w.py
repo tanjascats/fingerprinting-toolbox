@@ -35,7 +35,7 @@ def rounding_attack(): # prerequisite is that the fingerprinted datasets are ava
                                       target_attribute='class', primary_key_attribute='sample-code-number')
         a, b, c, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
-        # if xi == 1: continue # skip already obtained results
+        if xi != 1: continue  # xi doesnt affect the rounding attack
         # sanity check
         scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma, xi=xi)
         # suspect = scheme.detection(fp_dataset, secret_key=secret_key)
@@ -94,8 +94,24 @@ def rounding_check():
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 
+def rounding_false_miss_estimation():
+    dataset = datasets.BreastCancerWisconsin()
+    parameter_grid = {'fp_len': [32, 64, 128],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10]}
+    for fp_len in parameter_grid['fp_len']:
+        for gamma in parameter_grid['gamma']:
+            scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma)
+            false_miss = dict()
+            for strength in np.arange(0.0, 1.1, 0.1):
+                attack = attacks.RoundingAttack()
+                false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
+            with open('robustness/rounding_est/breast_cancer_w/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+                      'w') as outfile:
+                json.dump(false_miss, outfile)
+
+
 def main():
-    rounding_attack()
+    rounding_false_miss_estimation()
 
 
 if __name__ == '__main__':
