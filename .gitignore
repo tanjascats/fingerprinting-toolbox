@@ -1,4 +1,5 @@
 venv/
+venv2/
 Pipfile
 .idea/
 AK/__pycache__/
