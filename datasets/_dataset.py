@@ -8,7 +8,7 @@ class Dataset(ABC):
     """
     Abstract class used to represent the dataset within the toolbox
     """
-    def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None):
+    def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None, na_values=None):
         if path is None and dataframe is None:
             raise ValueError('Error defining a data set! Please provide either a path or a Pandas DataFrame to '
                              'instantiate a data set')
@@ -19,7 +19,7 @@ class Dataset(ABC):
         if self.path is not None and not isinstance(self.path, str):
             raise TypeError('Data set path must be a string value.')
         elif self.path is not None:
-            self.dataframe = pd.read_csv(self.path)
+            self.dataframe = pd.read_csv(self.path, na_values=na_values)
 
         if not isinstance(self.dataframe, pd.DataFrame):
             raise TypeError('Data frame must be type pandas.DataFrame')
@@ -106,7 +106,7 @@ class Dataset(ABC):
             self.target = None
 
     def get_target(self):
-        return self.target
+        return self.dataframe[self.target_attribute]
 
     def get_primary_key_attribute(self):
         return self.primary_key_attribute
@@ -151,6 +151,27 @@ class Dataset(ABC):
     def get_types(self):
         return self.dataframe.dtypes
 
+    def dropna(self):
+        '''
+        Dropping samples (rows) with missing values. Returns the Dataset object.
+        '''
+        self.dataframe = self.dataframe.dropna()
+        return self
+
+    def drop(self, labels, axis=1):
+        '''
+        Equivalent of pandas drop
+        '''
+        if axis == 1:
+            self.dataframe = self.dataframe.drop(labels, axis=1)
+            self.columns = self.dataframe.columns
+            self.number_of_rows, self.number_of_columns = self.dataframe.shape
+            self._set_types()
+        elif axis == 0:
+            self.dataframe = self.dataframe.drop(labels, axis=0)
+            self.number_of_rows, self.number_of_columns = self.dataframe.shape
+        return self
+
 
 class GermanCredit(Dataset):
     def __init__(self):
@@ -167,7 +188,7 @@ class BreastCancerWisconsin(Dataset):
 class Adult(Dataset):
     def __init__(self):
         path = os.path.dirname(os.path.realpath(__file__)) + '/adult.csv'
-        super().__init__(path=path, target_attribute='income')
+        super().__init__(path=path, target_attribute='income', na_values='?')
 
 
 class BreastCancer(Dataset):
