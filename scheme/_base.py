@@ -10,7 +10,11 @@ class Scheme(ABC):
     """
     # todo: default values
     def __init__(self, fingerprint_bit_length=32, number_of_recipients=100):
-        self.fingerprint_bit_length = fingerprint_bit_length
+        if fingerprint_bit_length % 8 == 0:
+            self.fingerprint_bit_length = fingerprint_bit_length
+        else:
+            print('Please provide a fingerprint bit length that is a multiple of 8.')
+            exit(1)
         self.number_of_recipients = number_of_recipients
 
     @abstractmethod

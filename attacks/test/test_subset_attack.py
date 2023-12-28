@@ -168,3 +168,11 @@ class TestHorizontalSubset(unittest.TestCase):
         attacked_data = attack.run(fingerprinted_data)
         self.assertIsNone(attacked_data)
 
+    def test_false_miss_estimation(self):
+        attack = HorizontalSubsetAttack()
+        fingerprinted_data = pd.read_csv('evaluation/fingerprinted_data/breast_cancer_w/'
+                                         'breast_cancer_w_l32_g1.11_x1_4370315727_4.csv')
+        scheme = Universal(gamma=1, fingerprint_bit_length=32)
+        fm = attack.false_miss_estimation(fingerprinted_data, 0.7, scheme)
+        print(fm)
+        self.assertLessEqual(fm, 1)
