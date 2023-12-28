@@ -1,3 +1,4 @@
+import json
 import sys
 import random
 
@@ -5,7 +6,7 @@ from utils import *
 from utils import _read_data
 
 from ._base import Scheme
-
+from pprint import pprint
 
 def _data_preprocess(dataset, exclude=None, include=None):
     '''
@@ -21,12 +22,14 @@ def _data_preprocess(dataset, exclude=None, include=None):
     relation = dataset
     if exclude is not None:
         for attribute in exclude:
+            try:
+                relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
+            except KeyError:
+                print('Warning! Trying to exclude non existing columns:{}'.format(attribute))
             relation.set_dataframe(relation.dataframe.drop(attribute, axis=1))
         include = None
     if include is not None:
         relation.set_dataframe(relation.dataframe[include])
-
-    # reinitialise the Dataset object
     relation.remove_primary_key()
     relation.remove_target()
     relation.columns = relation.dataframe.columns
@@ -86,7 +89,9 @@ class Universal(Scheme):
 
         self._INIT_MESSAGE = "Universal fingerprinting scheme - initialised.\nEmbedding started...\n" \
                              "\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + \
-                             str(self.fingerprint_bit_length)
+                             str(self.fingerprint_bit_length) + "\n\txi: " + str(xi) + \
+                             "\n\t# recipients: " + str(number_of_recipients)
+        self.original_attributes = None
 
     def insertion(self, dataset, recipient_id, secret_key, save=False, exclude=None, include=None,
                   primary_key_attribute=None, target_attribute=None, write_to=None, attributes_weights=None):
@@ -105,15 +110,17 @@ class Universal(Scheme):
         :return: datasets.Dataset instance of fingerprinted data
         '''
         print(self._INIT_MESSAGE)
-
+        print("\n\t(secret key -- for evaluation purposes): " + str(secret_key))
         original_data = _read_data(dataset, target_attribute=target_attribute,
-                                   primary_key_attribute=primary_key_attribute)
+                                  primary_key_attribute=primary_key_attribute)
         # prep data for fingerprinting
 
         # relation is original data but preprocessed
         relation = original_data.clone()
         relation = _data_preprocess(dataset=relation, exclude=exclude, include=include)
         # fingerprinted_relation is a deep copy of an original and will be modified throughout the insertion phase
+        self.original_attributes = relation.columns
+
         fingerprinted_relation = original_data.clone()
         fingerprinted_relation = _data_preprocess(dataset=fingerprinted_relation, exclude=exclude, include=include)
         fingerprint = super().create_fingerprint(recipient_id, secret_key)
@@ -122,13 +129,15 @@ class Universal(Scheme):
         count = count_omega = 0
         count_omega = [0 for i in range(self.fingerprint_bit_length)]
         start = time.time()
+        print('\tInserting a fingerprint into columns: ' + str(relation.dataframe.columns))
+
         for r in relation.dataframe.iterrows():
             # seed = concat(secret_key, primary_key)
             seed = int((secret_key << self.__primary_key_len) + relation.primary_key[r[0]])
             random.seed(seed)
 
             # select the tuple
-            if random.randint(0, sys.maxsize) % self.gamma == 0:
+            if random.choices([0, 1], [1/self.gamma, 1-1/self.gamma]) == [0]:
                 # select attribute (that is not the primary key)
                 if attributes_weights is not None:
                     attr_idx = random.choices(range(relation.number_of_columns), weights=[1-x for x in attributes_weights])[0]
@@ -186,7 +195,7 @@ class Universal(Scheme):
         print("\tsingle fingerprint bit embedded " + str(int(np.mean(count_omega))) + " times (\"amount of "
                                                                                       "redundancy\")")
         if save and write_to is None:
-            fingerprinted_relation.save("ak_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length,
+            fingerprinted_relation.save("universal_scheme_{}_{}_{}.csv".format(self.gamma, self.fingerprint_bit_length,
                                                                         recipient_id))
         elif write_to is not None:
             write_to_dir = "/".join(write_to.split("/")[:-1])
@@ -203,7 +212,7 @@ class Universal(Scheme):
         return fingerprinted_relation
 
     def detection(self, dataset, secret_key, exclude=None, include=None, primary_key_attribute=None,
-                  target_attribute=None, attributes_weights=None):
+                  target_attribute=None, attributes_weights=None, original_attributes=None, save_counts_path=None):
         '''
         Detects the fingerprint from the data and assigns a suspect.
         :param dataset: path, pandas.DataFrame or Dataset instance of the suspicious dataset
@@ -213,18 +222,79 @@ class Universal(Scheme):
         :param primary_key_attribute: optional, name of the primary key attribute
         :param target_attribute: optional; name of the target attribute
         :param attributes_weights: List of attributes weights that should sum up to 1, alter less relevant attributes more; optional
+        :param save_counts_path: path to file where the bit counts will be written
         :return: suspected recipient ID
         '''
         print("Start detection algorithm...")
         print("\tgamma: " + str(self.gamma) + "\n\tfingerprint length: " + str(self.fingerprint_bit_length))
         fingerprinted_data = _read_data(dataset)
         fingerprinted_data_prep = fingerprinted_data.clone()
+        if isinstance(dataset, Dataset):
+            target_attribute = dataset.target_attribute
+            primary_key_attribute = dataset.primary_key_attribute
         if target_attribute is not None:
             fingerprinted_data_prep._set_target_attribute = target_attribute
         if primary_key_attribute is not None:
             fingerprinted_data_prep._set_primary_key(primary_key_attribute)
+        if original_attributes is not None:
+            self.original_attributes = original_attributes
         fingerprinted_data_prep = _data_preprocess(fingerprinted_data_prep, exclude=exclude, include=include)
-
+        # return the original attribute list and fill out the missing with zeroes in case of vertical attack
+        # todo: this is terribly wrong but works for now
+        # print(fingerprinted_data.dataframe)
+        # print(fingerprinted_data.dataframe.drop([primary_key_attribute,target_attribute], axis=1).columns.to_list())
+        # print(self.original_attributes.to_list())
+        if self.original_attributes is not None:
+            if primary_key_attribute is not None:
+                # if not fingerprinted_data.dataframe.drop([primary_key_attribute,target_attribute], axis=1).columns.to_list() == self.original_attributes.to_list():
+                if not len(fingerprinted_data.dataframe.drop([primary_key_attribute, target_attribute],
+                                                         axis=1).columns.to_list()) == len(self.original_attributes):
+                    print('Vertical attack detected. The detection might have a reduced success.')
+                    # try:
+                    if exclude is None:
+                        _exclude = []
+                    else:
+                        _exclude = exclude
+                    difference = set(self.original_attributes).difference(set(_exclude)).difference(
+                        set(fingerprinted_data_prep.columns))
+                    for diff in difference:
+                        fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
+                                                                                  range(
+                                                                                      len(fingerprinted_data_prep.dataframe))])
+                    # original_order = self.original_attributes.to_list()
+                    original_order = self.original_attributes
+                    for el in _exclude:
+                        original_order.remove(el)
+                    fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[original_order])
+                    # except AttributeError:
+                    #    print('\nWARNING!\n\t->Provide the original attribute names, if available, to improve the '
+                    #          'performance of detection algorithm.\n')
+                    # if not relation_orig.columns.equals(relation_fp.columns):
+                    #    print(relation_fp.columns)
+                    #    difference = relation_orig.columns.difference(relation_fp.columns)
+                    #    for diff in difference:
+                    #        relation_fp[diff] = relation_orig[diff]
+                    # bring back the original order of columns
+                    # relation_fp = relation_fp[relation_orig.columns.tolist()]
+            else:
+                if not fingerprinted_data.dataframe.drop([target_attribute],
+                                                         axis=1).columns.to_list() == self.original_attributes.to_list():
+                    print('Vertical attack detected. The detection might have a reduced success.')
+                    # try:
+                    if exclude is None:
+                        _exclude = []
+                    else:
+                        _exclude = exclude
+                    difference = set(self.original_attributes).difference(set(_exclude)).difference(
+                        set(fingerprinted_data_prep.columns))
+                    for diff in difference:
+                        fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
+                                                                                  range(
+                                                                                      len(fingerprinted_data_prep.dataframe))])
+                    original_order = self.original_attributes.to_list()
+                    for el in _exclude:
+                        original_order.remove(el)
+                    fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[original_order])
         start = time.time()
         # init fingerprint template and counts
         # for each of the fingerprint bit the votes if it is 0 or 1
@@ -236,7 +306,8 @@ class Universal(Scheme):
             random.seed(seed)
 
             # this tuple was marked
-            if random.randint(0, sys.maxsize) % self.gamma == 0:
+            if random.choices([0, 1], [1 / self.gamma, 1 - 1 / self.gamma]) == [0]:
+            # if random.randint(0, sys.maxsize) % self.gamma == 0:
                 # this attribute was marked (skip the primary key)
                 if attributes_weights is not None:
                     attr_idx = random.choices(range(fingerprinted_data_prep.number_of_columns), weights=[1-x for x in attributes_weights])[0]
@@ -274,6 +345,7 @@ class Universal(Scheme):
                 # update votes
                 count[fingerprint_idx][fingerprint_bit] += 1
 
+
         # this fingerprint template will be upside-down from the real binary representation
         fingerprint_template = [2] * self.fingerprint_bit_length
         # recover fingerprint
@@ -291,6 +363,12 @@ class Universal(Scheme):
         fingerprint_template_str = ''.join(map(str, fingerprint_template))
         print("Potential fingerprint detected: " + list_to_string(fingerprint_template))
         self.detection_counts = count
+        print('Detection counts:')
+        print(self.detection_counts)#
+        if save_counts_path is not None:
+            with open(save_counts_path, 'w') as outfile:
+                json.dump([self.fingerprint_bit_length, self.gamma, self.xi, secret_key], outfile)
+                json.dump(self.detection_counts, outfile)
 
         recipient_no = super().detect_potential_traitor(fingerprint_template_str, secret_key)
         if recipient_no >= 0:
@@ -300,10 +378,14 @@ class Universal(Scheme):
         print("Runtime: " + str(int(time.time() - start)) + " sec.")
         return recipient_no
 
-    def get_counts(self):
-        """
-        Returns the array of detected marks (evidence) of each fingerprint bit from the last detection execution
-        """
-        if self.detection_counts is None:
-            print("WARNING: Detection not yet executed.")
-        return self.detection_counts
+    def get_gamma(self):
+        return self.gamma
+
+    def get_xi(self):
+        return self.xi
+
+    def get_fplen(self):
+        return self.fingerprint_bit_length
+
+    def to_string(self):
+        return 'universal'
