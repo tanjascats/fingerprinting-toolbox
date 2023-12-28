@@ -19,8 +19,7 @@ from attacks import *
 import numpy as np
 import os
 
-
-def rounding_attack(): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breast_cancer_w
+def vertical_attack(): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breast_cancer_w
     # modify this to a class
     # parameter_grid = {'fp_len': [32, 64, 128],
     #                   'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
@@ -29,13 +28,16 @@ def rounding_attack(): # prerequisite is that the fingerprinted datasets are ava
     baseline = 100
     # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/breast_cancer_w')
+    columns = ['clump-thickness','uniformity-of-cell-size','uniformity-of-cell-shape','marginal-adhesion',
+               'single-epithelial-cell-size','bare-nuclei','bland-chromatin','normal-nucleoli', 'mitoses']
+
+    all_fp_datasets = os.listdir('../fingerprinted_data/breast_cancer_w')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/' + fp_dataset_path,
                                       target_attribute='class', primary_key_attribute='sample-code-number')
         a, b, c, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
-        if xi != 1: continue  # xi doesnt affect the rounding attack
+        if xi == 2 or xi == 4: continue # skip multiple values for xi because xi does not affect the subset attack
         # sanity check
         scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma, xi=xi)
         # suspect = scheme.detection(fp_dataset, secret_key=secret_key)
@@ -43,21 +45,22 @@ def rounding_attack(): # prerequisite is that the fingerprinted datasets are ava
         #     baseline -= 1
         #     # this line should not print !
         #     print('Detection went wrong: parameters {},{},{} ......................'.format(fp_len, gamma, xi))
-        strength_grid = np.arange(0.1, 1.1, 0.1)
         false_miss = dict()
         misattribution = dict()
         false_miss[0] = 0
         misattribution[0] = 0
-        for strength in strength_grid:
+        for strength in range(1, len(columns)):
             false_miss[strength] = 0;   misattribution[strength] = 0
-            # attack x100
+            # attack 100x
             for i in range(100):
-                attack = attacks.RoundingAttack()
-                attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=strength, xi=xi,
-                                                 random_state=i*int(strength*100))
+                attack = attacks.VerticalSubsetAttack()
+                attacked_fp_dataset = attack.run_random(fp_dataset.dataframe, number_of_columns=strength,
+                                                        target_attr='class', primary_key='sample-code-number',
+                                                        random_state=i*strength)
                 attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='class',
                                                        primary_key_attribute='sample-code-number')
-                suspect = scheme.detection(attacked_fp_dataset, secret_key=secret_key)
+                suspect = scheme.detection(attacked_fp_dataset, secret_key=secret_key, original_attributes=columns,
+                                           target_attribute='class', primary_key_attribute='sample-code-number')
                 if suspect != 4:
                     false_miss[strength] += 1
                     if suspect != -1:
@@ -69,32 +72,36 @@ def rounding_attack(): # prerequisite is that the fingerprinted datasets are ava
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/rounding/breast_cancer_w/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/vertical/breast_cancer_w/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
-        with open('robustness/rounding/breast_cancer_w/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/vertical/breast_cancer_w/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
 
 
-def rounding_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x4_4370315727_4.csv',
-                                      target_attribute='class', primary_key_attribute='sample-code-number')
-
+def vertical_check():
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='class', primary_key_attribute='sample-code-number')
+    original_attributes = fp_dataset.columns.drop(['class', 'sample-code-number'])
+    print(original_attributes)
     # sanity check
-    scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=4)
-    suspect = scheme.detection(fp_dataset, secret_key=4370315727)
+    scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)
+    suspect = scheme.detection(fp_dataset, secret_key=4370315727, target_attribute='class')
     if suspect != 4:
         #baseline -= 1
          # this line should not print !
         print('Detection went wrong: parameters {},{},{} ......................'.format(32, 1, 1))
-    attack = attacks.RoundingAttack()
-    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.3, random_state=1, xi=4)
+    attack = attacks.VerticalSubsetAttack()
+    #attacked_fp_dataset = attack.run_random(dataset=fp_dataset.dataframe, number_of_columns=3,
+    #                                        target_attr='class', primary_key='sample-code-number')
+    attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, columns=['uniformity-of-cell-size'])
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
     attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='class', primary_key_attribute='sample-code-number')
-    suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
+    suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727, original_attributes=original_attributes,
+                               target_attribute='class', primary_key_attribute='sample-code-number')
 
 
-def rounding_false_miss_estimation():
+def vertical_false_miss_estimation():
     dataset = datasets.BreastCancerWisconsin()
     parameter_grid = {'fp_len': [32, 64, 128],
                       'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10]}
@@ -103,15 +110,15 @@ def rounding_false_miss_estimation():
             scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma)
             false_miss = dict()
             for strength in np.arange(0.0, 1.1, 0.1):
-                attack = attacks.RoundingAttack()
-                false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
-            with open('robustness/rounding_est/breast_cancer_w/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+                attack = attacks.VerticalSubsetAttack()
+                false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength_rel=strength, scheme=scheme)
+            with open('robustness/vertical_est/breast_cancer_w/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
                       'w') as outfile:
                 json.dump(false_miss, outfile)
 
 
 def main():
-    rounding_false_miss_estimation()
+    vertical_false_miss_estimation()
 
 
 if __name__ == '__main__':

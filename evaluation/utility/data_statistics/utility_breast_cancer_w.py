@@ -10,7 +10,7 @@ def mean_variance():
     mean_dataframe = pd.DataFrame()
     std_dataframe = pd.DataFrame()
     var_dataframe = pd.DataFrame()
-    all_fp_datasets = os.listdir('fingerprinted_data/breast_cancer_w')
+    all_fp_datasets = os.listdir('../../fingerprinted_data/breast_cancer_w')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = Dataset(path='fingerprinted_data/breast_cancer_w/' + fp_dataset_path,
                              target_attribute='class', primary_key_attribute='sample-code-number')

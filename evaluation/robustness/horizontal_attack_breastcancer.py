@@ -48,7 +48,7 @@ def fingerprint_experiment_datasets():
 
 def horizontal_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breast_cancer_w
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/horizontal/breastcancer')
+    all_experiment_results = os.listdir('horizontal/breastcancer')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -65,7 +65,7 @@ def horizontal_attack(overwrite_existing=False): # prerequisite is that the fing
 
     # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/breastcancer')
+    all_fp_datasets = os.listdir('../fingerprinted_data/breastcancer')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/' + fp_dataset_path,
                                       target_attribute='recurrence', primary_key_attribute='Id')

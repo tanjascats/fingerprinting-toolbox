@@ -25,7 +25,7 @@ import horizontal_attack_german_credit
 
 def flipping_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/german_credit
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/flipping/german_credit')
+    all_experiment_results = os.listdir('flipping/german_credit')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -42,7 +42,7 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
 
     # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/german_credit')
+    all_fp_datasets = os.listdir('../fingerprinted_data/german_credit')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = datasets.Dataset(path='fingerprinted_data/german_credit/' + fp_dataset_path,
                                       target_attribute='target', primary_key_attribute='Id')
@@ -110,8 +110,8 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
 
 
 def flipping_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='target', primary_key_attribute='Id')
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='target', primary_key_attribute='Id')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)

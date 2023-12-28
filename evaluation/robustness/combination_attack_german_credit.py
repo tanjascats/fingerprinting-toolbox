@@ -26,7 +26,7 @@ from sdv.metadata import SingleTableMetadata
 
 def combination_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/german_credit
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/combination/german_credit')
+    all_experiment_results = os.listdir('combination/german_credit')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -42,9 +42,9 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
     modified_files = []
 
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/german_credit')
-    sample_fp_dataset = datasets.Dataset(path='fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
-                                  target_attribute='target', primary_key_attribute='Id')
+    all_fp_datasets = os.listdir('../fingerprinted_data/german_credit')
+    sample_fp_dataset = datasets.Dataset(path='../fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
+                                         target_attribute='target', primary_key_attribute='Id')
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(data=sample_fp_dataset.dataframe)
     for fp_dataset_path in all_fp_datasets:
@@ -116,8 +116,8 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
 
 
 def combination_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='target', primary_key_attribute='Id')
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='target', primary_key_attribute='Id')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)

@@ -10,10 +10,8 @@ import json
 import random
 
 import pandas as pd
-from sklearn import datasets
 import time
-from rounding_attack_breastcancer import *
-from superset_attack_breastcancer import *
+from sklearn import datasets
 
 import attacks
 import datasets
@@ -24,10 +22,9 @@ import os
 from sdv.metadata import SingleTableMetadata
 
 
-
-def combination_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breastcancer
+def superset_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breastcancer
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/combination/breastcancer')
+    all_experiment_results = os.listdir('superset/breastcancer')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -42,17 +39,21 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
     # for logging
     modified_files = []
 
-    # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/breastcancer')
-    sample_fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/breastcancer_l32_g1_x1_4370315727_4.csv',
-                                  target_attribute='recurrence', primary_key_attribute='Id')
+    # get a data sample for metadata
+    sample_fp_dataset = datasets.Dataset(path='../fingerprinted_data/breastcancer/breastcancer_l32_g1_x1_4370315727_4.csv',
+                                         target_attribute='recurrence', primary_key_attribute='Id')
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(data=sample_fp_dataset.dataframe)
+
+    # grid search
+    # read all fingerprinted datasets
+    all_fp_datasets = os.listdir('../fingerprinted_data/breastcancer')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/' + fp_dataset_path,
                                       target_attribute='recurrence', primary_key_attribute='Id')
         a, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
+        if xi == 2 or xi == 4: continue # skip multiple values for xi because xi does not affect the subset attack
 
         # skip existing experiments if overwriting flag is not raises
         if not overwrite_existing:
@@ -66,7 +67,7 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
         #     baseline -= 1
         #     # this line should not print !
         #     print('Detection went wrong: parameters {},{},{} ......................'.format(fp_len, gamma, xi))
-        strength_grid = np.arange(0.1, 1.0, 0.1)
+        strength_grid = np.arange(0.1, 1.1, 0.1)
         strength_grid = [round(1.0 - s, 1) for s in strength_grid] # we reverse strength grid to speed up the experiment
         false_miss = dict()
         misattribution = dict()
@@ -76,9 +77,8 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
             false_miss[strength] = 0;   misattribution[strength] = 0
             # attack x100
             for i in range(100):
-                attack = attacks.DeletionSupersetFlipping()
-                attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, strength_flipping=strength,
-                                                 strength_superset=strength, xi=xi,
+                attack = attacks.SupersetWithDeletion()
+                attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, strength=strength,
                                                  primary_key_attribute=fp_dataset.primary_key_attribute,
                                                  table_metadata=metadata,
                                                  random_state=i*int(strength*100))
@@ -96,12 +96,12 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/combination/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/superset/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
-        modified_files.append('robustness/combination/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
-        with open('robustness/combination/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        modified_files.append('robustness/superset/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        with open('robustness/superset/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
-        modified_files.append('robustness/combination/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        modified_files.append('robustness/superset/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
 
     # log the run
     timestamp = time.ctime()
@@ -109,15 +109,16 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
                'dataset': 'breastcancer',
                'fingerprinted_datasets': all_fp_datasets,
                'scheme': 'universal',
-               'attack': 'combination',
+               'attack': 'superset',
                'modified files': modified_files}
     with open('robustness/run_logs/run_log_{}.json'.format(str(timestamp.replace(' ', '-').replace(':', '-'))),
               'w') as outfile:
         json.dump(run_log, outfile)
 
-def combination_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/breastcancer_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='recurrence', primary_key_attribute='Id')
+
+def superset_check():
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/breastcancer/breastcancer_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='recurrence', primary_key_attribute='Id')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)
@@ -126,12 +127,12 @@ def combination_check():
         #baseline -= 1
          # this line should not print !
         print('Detection went wrong: parameters {},{},{} ......................'.format(32, 1, 1))
-    attack = attacks.DeletionSupersetFlipping()
+    attack = attacks.SupersetWithDeletion()
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(data=fp_dataset.dataframe)
+    print(metadata)
     attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe,
-                                     primary_key_attribute=fp_dataset.primary_key_attribute, strength_superset=0.01,
-                                     strength_flipping=0.01,
+                                     primary_key_attribute=fp_dataset.primary_key_attribute, strength=0.2,
                                      table_metadata=metadata, random_state=2)
     # attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.2, random_state=1).sort_index()
     print(attacked_fp_dataset)
@@ -143,7 +144,6 @@ def combination_check():
 
 def main():
     superset_attack()
-    combination_attack()
 
 
 if __name__ == '__main__':

@@ -21,9 +21,9 @@ import numpy as np
 import os
 
 
-def rounding_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
+def rounding_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breastcancer
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/rounding/nursery')
+    all_experiment_results = os.listdir('rounding/breastcancer')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -40,13 +40,13 @@ def rounding_attack(overwrite_existing=False): # prerequisite is that the finger
 
     # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/nursery')
+    all_fp_datasets = os.listdir('../fingerprinted_data/breastcancer')
     for fp_dataset_path in all_fp_datasets:
-        fp_dataset = datasets.Dataset(path='fingerprinted_data/nursery/' + fp_dataset_path,
-                                      target_attribute='target', primary_key_attribute='Id')
+        fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/' + fp_dataset_path,
+                                      target_attribute='recurrence', primary_key_attribute='Id')
         a, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
-
+        if xi != 1: continue  # xi has no effect on categorical data
         # skip existing experiments if overwriting flag is not raises
         if not overwrite_existing:
             if [fp_len, gamma, xi] in existing_results:
@@ -71,7 +71,7 @@ def rounding_attack(overwrite_existing=False): # prerequisite is that the finger
                 attack = attacks.RoundingAttack()
                 attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=strength, xi=xi,
                                                  random_state=i*int(strength*100))
-                attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target',
+                attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='recurrence',
                                                        primary_key_attribute='Id')
                 suspect = scheme.detection(attacked_fp_dataset, secret_key=secret_key)
                 if suspect != 4:
@@ -85,28 +85,28 @@ def rounding_attack(overwrite_existing=False): # prerequisite is that the finger
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/rounding/nursery/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/rounding/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
         modified_files.append('robustness/horizontal/rounding/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
-        with open('robustness/rounding/nursery/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/rounding/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
         modified_files.append('robustness/horizontal/rounding/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
 
     # log the run
     timestamp = time.ctime()
     run_log = {'time': timestamp,
-               'dataset': 'nursery',
+               'dataset': 'breastcancer',
                'fingerprinted_datasets': all_fp_datasets,
                'scheme': 'universal',
                'attack': 'rounding',
                'modified files': modified_files}
-    with open('robustness/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':', '-')), 'w') as outfile:
+    with open('robustness/run_logs/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':', '-')), 'w') as outfile:
         json.dump(run_log, outfile)
 
 
 def rounding_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/nursery/nursery_l32_g1_x4_4370315727_4.csv',
-                                      target_attribute='target', primary_key_attribute='Id')
+    fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/breastcancer_l32_g1_x4_4370315727_4.csv',
+                                      target_attribute='recurrence', primary_key_attribute='Id')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=4)
@@ -119,7 +119,7 @@ def rounding_check():
     attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.3, random_state=1, xi=4)
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
-    attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target', primary_key_attribute='Id')
+    attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='recurrence', primary_key_attribute='Id')
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 

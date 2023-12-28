@@ -21,12 +21,12 @@ import os
 
 
 def fingerprint_experiment_datasets():
-    dataset = datasets.CovTypeNumeric()
+    dataset = datasets.BreastCancerWisconsin()
     # modify this to a class
     parameter_grid = {'fp_len': [32, 64, 128],
                       'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
                       # frequency of marks (100%, 90%, 80%, 70%, 60%, 50%, 40%, 30%, 20%, 10%) -> sometimes it needs more granularity towards small percentages e
-                      'xi': [1]} #, 2, 4]}  # 90 combinations
+                      'xi': [1, 2, 4]}  # 90 combinations
     baseline = 100
     # grid search
     for fp_len in parameter_grid['fp_len']:
@@ -49,12 +49,12 @@ def fingerprint_experiment_datasets():
                           '###################################################')
                 else:
                     # write to files
-                    with open('fingerprinted_data/covtype_numeric/covtype_numeric_l{}_g{}_x{}_{}_4.csv'.format(
+                    with open('fingerprinted_data/breast_cancer_w/breast_cancer_w_l{}_g{}_x{}_{}_4.csv'.format(
                             fp_len, gamma, xi, secret_key), 'wb') as outfile:
                         fp_dataset.dataframe.to_csv(outfile, index=False)
 
 
-def horizontal_attack(): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/covtype_numeric
+def horizontal_attack(): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breast_cancer_w
     # modify this to a class
     # parameter_grid = {'fp_len': [32, 64, 128],
     #                   'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
@@ -63,11 +63,11 @@ def horizontal_attack(): # prerequisite is that the fingerprinted datasets are a
     baseline = 100
     # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/covtype_numeric')
+    all_fp_datasets = os.listdir('../fingerprinted_data/breast_cancer_w')
     for fp_dataset_path in all_fp_datasets:
-        fp_dataset = datasets.Dataset(path='fingerprinted_data/covtype_numeric/' + fp_dataset_path,
-                                      target_attribute='Cover_Type', primary_key_attribute='Id')
-        a, b, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
+        fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/' + fp_dataset_path,
+                                      target_attribute='class', primary_key_attribute='sample-code-number')
+        a, b, c, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
         if xi == 2 or xi == 4: continue # skip multiple values for xi because xi does not affect the subset attack
         # sanity check
@@ -89,8 +89,8 @@ def horizontal_attack(): # prerequisite is that the fingerprinted datasets are a
                 attack = attacks.HorizontalSubsetAttack()
                 attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=strength,
                                                  random_state=i*int(strength*100))
-                attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='Cover_Type',
-                                                       primary_key_attribute='Id')
+                attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='class',
+                                                       primary_key_attribute='sample-code-number')
                 suspect = scheme.detection(attacked_fp_dataset, secret_key=secret_key)
                 if suspect != 4:
                     false_miss[strength] += 1
@@ -103,15 +103,15 @@ def horizontal_attack(): # prerequisite is that the fingerprinted datasets are a
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/horizontal/covtype_numeric/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/horizontal/breast_cancer_w/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
-        with open('robustness/horizontal/covtype_numeric/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/horizontal/breast_cancer_w/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
 
 
 def horizontal_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/covtype_numeric/covtype_numeric_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='Cover_Type', primary_key_attribute='Id')
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='class', primary_key_attribute='sample-code-number')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)
@@ -121,23 +121,31 @@ def horizontal_check():
          # this line should not print !
         print('Detection went wrong: parameters {},{},{} ......................'.format(32, 1, 1))
     attack = attacks.HorizontalSubsetAttack()
-    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.95, random_state=1).sort_index()
+    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.2, random_state=1).sort_index()
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
-    attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='Cover_Type', primary_key_attribute='Id')
+    attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='class', primary_key_attribute='sample-code-number')
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 
-def sanity_check():
-    dataset = datasets.CovTypeNumeric()
-    scheme = Universal(fingerprint_bit_length=64, gamma=2, xi=1)
-    secret_key = 4370315727
-    fp_dataset = scheme.insertion(dataset=dataset, secret_key=secret_key, recipient_id=4)
-    suspect = scheme.detection(fp_dataset, secret_key=secret_key)
+def horizontal_false_miss_estimation():
+    dataset = datasets.BreastCancerWisconsin()
+    parameter_grid = {'fp_len': [32, 64, 128],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10]}
+    for fp_len in parameter_grid['fp_len']:
+        for gamma in parameter_grid['gamma']:
+            scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma)
+            false_miss = dict()
+            for strength in np.arange(0.0, 1.1, 0.1):
+                attack = attacks.HorizontalSubsetAttack()
+                false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
+            with open('robustness/horizontal_est/breast_cancer_w/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+                      'w') as outfile:
+                json.dump(false_miss, outfile)
 
 
 def main():
-    horizontal_attack()
+    horizontal_false_miss_estimation()
 
 
 if __name__ == '__main__':

@@ -30,7 +30,7 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
     baseline = 100
 
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/vertical/breastcancer')
+    all_experiment_results = os.listdir('vertical/breastcancer')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -50,7 +50,7 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
     columns = ['age','menopause','tumor-size','inv-nodes','node-caps','deg-malig','breast','breast-quad','irradiat']
 
 
-    all_fp_datasets = os.listdir('fingerprinted_data/breastcancer')
+    all_fp_datasets = os.listdir('../fingerprinted_data/breastcancer')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/' + fp_dataset_path,
                                       target_attribute='recurrence', primary_key_attribute='Id')
@@ -118,8 +118,8 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
 
 
 def vertical_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/breastcancer_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='recurrence', primary_key_attribute='Id')
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/breastcancer/breastcancer_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='recurrence', primary_key_attribute='Id')
     original_attributes = fp_dataset.columns.drop(['recurrence', 'Id'])
     print(original_attributes)
     # sanity check

@@ -12,8 +12,6 @@ import random
 import pandas as pd
 from sklearn import datasets
 import time
-from rounding_attack_nursery import *
-from superset_attack_nursery import *
 
 import attacks
 import datasets
@@ -21,12 +19,12 @@ from scheme import *
 from attacks import *
 import numpy as np
 import os
-from sdv.metadata import SingleTableMetadata
+import vertical_attack_nursery
+import horizontal_attack_nursery
 
-
-def combination_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
+def flipping_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/combination/nursery')
+    all_experiment_results = os.listdir('flipping/nursery')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -41,12 +39,9 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
     # for logging
     modified_files = []
 
+    # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/nursery')
-    sample_fp_dataset = datasets.Dataset(path='fingerprinted_data/nursery/nursery_l32_g1_x1_4370315727_4.csv',
-                                  target_attribute='target', primary_key_attribute='Id')
-    metadata = SingleTableMetadata()
-    metadata.detect_from_dataframe(data=sample_fp_dataset.dataframe)
+    all_fp_datasets = os.listdir('../fingerprinted_data/nursery')
     for fp_dataset_path in all_fp_datasets:
         fp_dataset = datasets.Dataset(path='fingerprinted_data/nursery/' + fp_dataset_path,
                                       target_attribute='target', primary_key_attribute='Id')
@@ -65,8 +60,7 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
         #     baseline -= 1
         #     # this line should not print !
         #     print('Detection went wrong: parameters {},{},{} ......................'.format(fp_len, gamma, xi))
-        strength_grid = np.arange(0.1, 1.0, 0.1)
-        strength_grid = [round(1.0 - s, 1) for s in strength_grid] # we reverse strength grid to speed up the experiment
+        strength_grid = [0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
         false_miss = dict()
         misattribution = dict()
         false_miss[0] = 0
@@ -75,12 +69,9 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
             false_miss[strength] = 0;   misattribution[strength] = 0
             # attack x100
             for i in range(100):
-                attack = attacks.DeletionSupersetFlipping()
-                attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, strength_flipping=strength,
-                                                 strength_superset=strength, xi=xi,
-                                                 primary_key_attribute=fp_dataset.primary_key_attribute,
-                                                 table_metadata=metadata,
-                                                 random_state=i*int(strength*100))
+                attack = attacks.FlippingAttack()
+                attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=strength,
+                                                 random_state=i*int(strength*100), xi=xi)
                 attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target',
                                                        primary_key_attribute='Id')
                 suspect = scheme.detection(attacked_fp_dataset, secret_key=secret_key)
@@ -95,12 +86,12 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/combination/nursery/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/flipping/nursery/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
-        modified_files.append('robustness/combination/nursery/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
-        with open('robustness/combination/nursery/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        modified_files.append('robustness/horizontal/flipping/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        with open('robustness/flipping/nursery/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
-        modified_files.append('robustness/combination/nursery/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        modified_files.append('robustness/horizontal/flipping/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
 
     # log the run
     timestamp = time.ctime()
@@ -108,16 +99,15 @@ def combination_attack(overwrite_existing=False): # prerequisite is that the fin
                'dataset': 'nursery',
                'fingerprinted_datasets': all_fp_datasets,
                'scheme': 'universal',
-               'attack': 'combination',
+               'attack': 'flipping subset',
                'modified files': modified_files}
-    with open('robustness/run_logs/run_log_{}.json'.format(str(timestamp.replace(' ', '-').replace(':', '-'))),
-              'w') as outfile:
+    with open('robustness/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':','-')), 'w') as outfile:
         json.dump(run_log, outfile)
 
 
-def combination_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/nursery/nursery_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='target', primary_key_attribute='Id')
+def flipping_check():
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/nursery/nursery_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='target', primary_key_attribute='Id')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)
@@ -126,24 +116,32 @@ def combination_check():
         #baseline -= 1
          # this line should not print !
         print('Detection went wrong: parameters {},{},{} ......................'.format(32, 1, 1))
-    attack = attacks.DeletionSupersetFlipping()
-    metadata = SingleTableMetadata()
-    metadata.detect_from_dataframe(data=fp_dataset.dataframe)
-    attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe,
-                                     primary_key_attribute=fp_dataset.primary_key_attribute, strength_superset=0.7,
-                                     strength_flipping=0.7,
-                                     table_metadata=metadata, random_state=2)
-    # attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.2, random_state=1).sort_index()
+    attack = attacks.FlippingAttack()
+    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.5, random_state=1)
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
-    attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target',
-                                           primary_key_attribute='Id')
+    attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target', primary_key_attribute='Id')
     suspect = scheme.detection(attacked_fp_dataset, secret_key=4370315727)
 
 
+def flipping_false_miss_estimation():
+    dataset = datasets.Nursery()
+    parameter_grid = {'fp_len': [32, 64, 128],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10]}
+    for fp_len in parameter_grid['fp_len']:
+        for gamma in parameter_grid['gamma']:
+            scheme = Universal(fingerprint_bit_length=fp_len, gamma=gamma)
+            false_miss = dict()
+            for strength in np.arange(0.0, 1.1, 0.1):
+                attack = attacks.FlippingAttack()
+                false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
+            with open('robustness/flipping_est/nursery/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+                      'w') as outfile:
+                json.dump(false_miss, outfile)
+
+
 def main():
-    # superset_attack()
-    combination_attack()
+    flipping_false_miss_estimation()
 
 
 if __name__ == '__main__':

@@ -30,9 +30,9 @@ def superset_attack(): # prerequisite is that the fingerprinted datasets are ava
     #                   'xi': [1, 2, 4]}  # 90 combinations
     # grid search
     # read all fingerprinted datasets
-    all_fp_datasets = os.listdir('fingerprinted_data/breast_cancer_w')
-    sample_fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
-                                  target_attribute='class', primary_key_attribute='sample-code-number')
+    all_fp_datasets = os.listdir('../fingerprinted_data/breast_cancer_w')
+    sample_fp_dataset = datasets.Dataset(path='../fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
+                                         target_attribute='class', primary_key_attribute='sample-code-number')
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(data=sample_fp_dataset.dataframe)
     for fp_dataset_path in all_fp_datasets:
@@ -83,8 +83,8 @@ def superset_attack(): # prerequisite is that the fingerprinted datasets are ava
 
 
 def superset_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='class', primary_key_attribute='sample-code-number')
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/breast_cancer_w/breast_cancer_w_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='class', primary_key_attribute='sample-code-number')
 
     # sanity check
     scheme = Universal(fingerprint_bit_length=32, gamma=1, xi=1)

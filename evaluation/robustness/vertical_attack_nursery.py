@@ -21,7 +21,7 @@ import os
 import time
 
 
-def vertical_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/german_credit
+def vertical_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/nursery
     # modify this to a class
     # parameter_grid = {'fp_len': [32, 64, 128],
     #                   'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
@@ -30,7 +30,7 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
     baseline = 100
 
     # read existing experiments
-    all_experiment_results = os.listdir('robustness/vertical/german_credit')
+    all_experiment_results = os.listdir('vertical/nursery')
     existing_results = []
     for exp_path in all_experiment_results:
         file_name = exp_path.split('_')
@@ -47,18 +47,13 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
 
     # grid search
     # read all fingerprinted datasets
-    columns = ['checking_account', 'duration', 'credit_hist', 'purpose',
-       'credit_amount', 'savings', 'employment_since', 'installment_rate',
-       'sex_status', 'debtors', 'residence_since', 'property', 'age',
-       'installment_other', 'housing', 'existing_credits', 'job',
-       'liable_people', 'tel', 'foreign']
+    columns = ['parents','has_nurs','form','children','housing','finance','social','health']
 
-
-    all_fp_datasets = os.listdir('fingerprinted_data/german_credit')
+    all_fp_datasets = os.listdir('../fingerprinted_data/nursery')
     for fp_dataset_path in all_fp_datasets:
-        fp_dataset = datasets.Dataset(path='fingerprinted_data/german_credit/' + fp_dataset_path,
+        fp_dataset = datasets.Dataset(path='fingerprinted_data/nursery/' + fp_dataset_path,
                                       target_attribute='target', primary_key_attribute='Id')
-        a, b, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
+        a, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
         if xi == 2 or xi == 4: continue # skip multiple values for xi because xi does not affect the subset attack
 
@@ -102,17 +97,17 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/vertical/german_credit/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('robustness/vertical/nursery/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
-        modified_files.append('robustness/vertical/german_credit/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
-        with open('robustness/vertical/german_credit/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        modified_files.append('robustness/vertical/nursery/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        with open('robustness/vertical/nursery/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
-        modified_files.append('robustness/vertical/german_credit/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        modified_files.append('robustness/vertical/nursery/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
 
     # log the run
     timestamp = time.ctime()
     run_log = {'time': timestamp,
-               'dataset': 'german_credit',
+               'dataset': 'nursery',
                'fingerprinted_datasets': all_fp_datasets,
                'scheme': 'universal',
                'attack': 'vertical subset',
@@ -122,8 +117,8 @@ def vertical_attack(overwrite_existing=False): # prerequisite is that the finger
 
 
 def vertical_check():
-    fp_dataset = datasets.Dataset(path='fingerprinted_data/german_credit/german_credit_l32_g1_x1_4370315727_4.csv',
-                                      target_attribute='target', primary_key_attribute='Id')
+    fp_dataset = datasets.Dataset(path='../fingerprinted_data/nursery/nursery_l32_g1_x1_4370315727_4.csv',
+                                  target_attribute='target', primary_key_attribute='Id')
     original_attributes = fp_dataset.columns.drop(['target', 'Id'])
     print(original_attributes)
     # sanity check
@@ -136,8 +131,7 @@ def vertical_check():
     attack = attacks.VerticalSubsetAttack()
     #attacked_fp_dataset = attack.run_random(dataset=fp_dataset.dataframe, number_of_columns=3,
     #                                        target_attr='target', primary_key='Id')
-    attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, columns=['employment_since', 'installment_rate',
-       'sex_status'])
+    attacked_fp_dataset = attack.run(dataset=fp_dataset.dataframe, columns=['parents','children','housing','finance','social','health'])
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
     attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='target', primary_key_attribute='Id')
@@ -146,7 +140,7 @@ def vertical_check():
 
 
 def vertical_false_miss_estimation():
-    dataset = datasets.GermanCredit()
+    dataset = datasets.Nursery()
     parameter_grid = {'fp_len': [32, 64, 128],
                       'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10]}
     for fp_len in parameter_grid['fp_len']:
@@ -156,13 +150,13 @@ def vertical_false_miss_estimation():
             for strength in np.arange(0.0, 1.1, 0.1):
                 attack = attacks.VerticalSubsetAttack()
                 false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength_rel=strength, scheme=scheme)
-            with open('robustness/vertical_est/german_credit/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+            with open('robustness/vertical_est/nursery/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
                       'w') as outfile:
                 json.dump(false_miss, outfile)
 
 
 def main():
-    vertical_attack()
+    vertical_false_miss_estimation()
 
 
 if __name__ == '__main__':
