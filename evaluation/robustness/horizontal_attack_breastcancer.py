@@ -16,8 +16,8 @@ import os
 def fingerprint_experiment_datasets():
     dataset = datasets.BreastCancer()
     # modify this to a class
-    parameter_grid = {'fp_len': [32, 64],
-                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3.33, 5, 10],
+    parameter_grid = {'fp_len': [16, 32, 64],
+                      'gamma': [1, 1.11, 1.25, 1.43, 1.67, 2, 2.5, 3, 3.33, 5, 10],
                       'xi': [1]}  # everything is categorical, xi has no effect
 
     # grid search
@@ -41,7 +41,7 @@ def fingerprint_experiment_datasets():
                           '###################################################')
                 else:
                     # write to files
-                    with open('fingerprinted_data/breastcancer/breastcancer_l{}_g{}_x{}_{}_4.csv'.format(
+                    with open('../fingerprinted_data/breastcancer/breastcancer_l{}_g{}_x{}_{}_4.csv'.format(
                             fp_len, gamma, xi, secret_key), 'wb') as outfile:
                         fp_dataset.dataframe.to_csv(outfile, index=False)
 
@@ -67,7 +67,7 @@ def horizontal_attack(overwrite_existing=False): # prerequisite is that the fing
     # read all fingerprinted datasets
     all_fp_datasets = os.listdir('../fingerprinted_data/breastcancer')
     for fp_dataset_path in all_fp_datasets:
-        fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/' + fp_dataset_path,
+        fp_dataset = datasets.Dataset(path='../fingerprinted_data/breastcancer/' + fp_dataset_path,
                                       target_attribute='recurrence', primary_key_attribute='Id')
         a, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
@@ -112,12 +112,12 @@ def horizontal_attack(overwrite_existing=False): # prerequisite is that the fing
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/horizontal/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('horizontal/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
         modified_files.append('robustness/horizontal/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
-        with open('robustness/horizontal/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('horizontal/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
-        modified_files.append('robustness/horizontal/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        modified_files.append('horizontal/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
 
     # log the run
     timestamp = time.ctime()
@@ -127,7 +127,7 @@ def horizontal_attack(overwrite_existing=False): # prerequisite is that the fing
                'scheme': 'universal',
                'attack': 'horizontal subset',
                'modified files': modified_files}
-    with open('robustness/run_logs/run_log_{}.json'.format(str(timestamp.replace(' ', '-').replace(':','-'))), 'w') as outfile:
+    with open('run_logs/run_log_{}.json'.format(str(timestamp.replace(' ', '-').replace(':','-'))), 'w') as outfile:
         json.dump(run_log, outfile)
 
 
@@ -142,13 +142,13 @@ def horizontal_false_miss_estimation():
             for strength in np.arange(0.0, 1.1, 0.1):
                 attack = attacks.HorizontalSubsetAttack()
                 false_miss[strength] = attack.false_miss_estimation(dataset=dataset, strength=strength, scheme=scheme)
-            with open('robustness/horizontal_est/breastcancer/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
+            with open('horizontal_est/breastcancer/false_miss_l{}_g{}_x1.json'.format(fp_len, gamma),
                       'w') as outfile:
                 json.dump(false_miss, outfile)
 
 
 def main():
-    horizontal_false_miss_estimation()
+    horizontal_attack()
 
 
 if __name__ == '__main__':

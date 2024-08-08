@@ -22,6 +22,7 @@ import os
 import vertical_attack_breastcancer
 import horizontal_attack_breastcancer
 
+
 def flipping_attack(overwrite_existing=False): # prerequisite is that the fingerprinted datasets are available fingerprinted_data/breastcancer
     # read existing experiments
     all_experiment_results = os.listdir('flipping/breastcancer')
@@ -43,7 +44,7 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
     # read all fingerprinted datasets
     all_fp_datasets = os.listdir('../fingerprinted_data/breastcancer')
     for fp_dataset_path in all_fp_datasets:
-        fp_dataset = datasets.Dataset(path='fingerprinted_data/breastcancer/' + fp_dataset_path,
+        fp_dataset = datasets.Dataset(path='../fingerprinted_data/breastcancer/' + fp_dataset_path,
                                       target_attribute='recurrence', primary_key_attribute='Id')
         a, fp_len, gamma, xi, secret_key, r = fp_dataset_path.split('_')
         fp_len = int(fp_len[1:]); gamma = float(gamma[1:]); xi = int(xi[1:]); secret_key = int(secret_key)
@@ -86,12 +87,12 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
                 break
         print(false_miss)
         print(misattribution)
-        with open('robustness/flipping/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        with open('flipping/breastcancer/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(false_miss, outfile)
-        modified_files.append('robustness/horizontal/flipping/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
-        with open('robustness/flipping/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
+        modified_files.append('flipping/false_miss_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        with open('flipping/breastcancer/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi), 'w') as outfile:
             json.dump(misattribution, outfile)
-        modified_files.append('robustness/horizontal/flipping/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
+        modified_files.append('flipping/misattribution_l{}_g{}_x{}.json'.format(fp_len, gamma, xi))
 
     # log the run
     timestamp = time.ctime()
@@ -101,7 +102,7 @@ def flipping_attack(overwrite_existing=False): # prerequisite is that the finger
                'scheme': 'universal',
                'attack': 'flipping subset',
                'modified files': modified_files}
-    with open('robustness/run_log_{}.json'.format(timestamp.replace(' ', '').replace(':','-')), 'w') as outfile:
+    with open('run_logs/run_log_{}.json'.format(str(timestamp.replace(' ', '').replace(':','-'))), 'w') as outfile:
         json.dump(run_log, outfile)
 
 
@@ -117,7 +118,7 @@ def flipping_check():
          # this line should not print !
         print('Detection went wrong: parameters {},{},{} ......................'.format(32, 1, 1))
     attack = attacks.FlippingAttack()
-    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.5, random_state=1)
+    attacked_fp_dataset = attack.run(fp_dataset.dataframe, strength=0.1, random_state=1)
     print(attacked_fp_dataset)
     print(fp_dataset.dataframe)
     attacked_fp_dataset = datasets.Dataset(dataframe=attacked_fp_dataset, target_attribute='recurrence', primary_key_attribute='Id')
@@ -141,7 +142,7 @@ def flipping_false_miss_estimation():
 
 
 def main():
-    flipping_false_miss_estimation()
+    flipping_attack()
 
 
 if __name__ == '__main__':

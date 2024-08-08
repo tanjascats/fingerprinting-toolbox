@@ -278,7 +278,7 @@ class Universal(Scheme):
                     # relation_fp = relation_fp[relation_orig.columns.tolist()]
             else:
                 if not fingerprinted_data.dataframe.drop([target_attribute],
-                                                         axis=1).columns.to_list() == self.original_attributes.to_list():
+                                                         axis=1).columns.to_list() == list(self.original_attributes):  # self.original_attributes.to_list()
                     print('Vertical attack detected. The detection might have a reduced success.')
                     # try:
                     if exclude is None:
@@ -291,7 +291,7 @@ class Universal(Scheme):
                         fingerprinted_data_prep.dataframe[diff] = pd.Series(data=[0 for i in
                                                                                   range(
                                                                                       len(fingerprinted_data_prep.dataframe))])
-                    original_order = self.original_attributes.to_list()
+                    original_order = list(self.original_attributes)  # self.original_attributes.to_list()
                     for el in _exclude:
                         original_order.remove(el)
                     fingerprinted_data_prep.set_dataframe(fingerprinted_data_prep.dataframe[original_order])
