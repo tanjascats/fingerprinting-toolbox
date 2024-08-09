@@ -10,9 +10,16 @@ The list below outlines the methods and open-source solutions if available and t
 | [AHK (pioneer)](https://courses.cs.washington.edu/courses/cse590q/03au/watermarking_vldbj.pdf) | Agrawal et al. | 2002 | - | Horizontal subset, Vertical subset, Bit-flipping (deterministic, randomised), Mix-and-match, Additive | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (int) |
 | [**LSJ (pioneer)**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2070&context=sis_research) | Li et al. | 2005 | - | Misdiagnosis fh, Bit-flipping, Horizontal subset, Superset attack, Invertibility, Collusion | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (int) |
 | [**Block**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=1562&context=sis_research) | Liu et al. | 2005 | - | Bit-flipping, Horizontal subset, _Vertical subset_, _Collusion_, _Additive_ | - | - |
+| [**Twice-embedding**](https://dl.acm.org/doi/pdf/10.1145/1141277.1141391) | Guo et al. | 2006 | - | Horizontal Subset, Mix-and-match, Bit-flipping | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (5000 rows, 1st int attr.) |
+| [**Watermill**](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=264e04de2fdc26f28c234df6f44d5fcb2ff0a3b1) | Lafaye et al. | 2008 | [Java source](http://watermill.sourceforge.net) | |
+| [**ThumbPrint**](https://www.mdpi.com/2079-9292/9/7/1093) | Al Solami et al. | 2020 | |
+| [**Corr-Preserving**]() | Sarcevic et al. | 2019 |
+| [**Corr-Posprocessing**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10644290/pdf/nihms-1802599.pdf)] | Ji et al. | 2021 | - | | |
+| [**Probabilistic-FP**](https://arxiv.org/pdf/2001.09555) | Yilmaz et al. | 2021 |
+| [**Private-FP**](https://www.ndss-symposium.org/wp-content/uploads/2023/02/ndss2023_f693_paper.pdf) | Ji et al. | 2023 |
 
-<span style="font-size:0.5em;">_Bolded are the fingerprinting methods._</span>
 
+<span style="font-size:0.5em;">_Bolded are the fingerprinting methods._</span>\
 <span style="font-size:0.5em;">_Italic are the attacks dicussed but not analysed._</span>
 
 
@@ -20,6 +27,7 @@ Challenges (per method):
 - AHK - marks only numerical attributes, PK dependent, skips null values
 - LSJ - marks only numerical attributes, PK dependent, attribute order-dependent
 - Block - not collusion resistant, PK dependent, attribute order-dependent
+- Twice-embedding - PK dependent
 
 Extensions (per method):
 - AHK
