@@ -9,7 +9,7 @@ The list below outlines the methods and open-source solutions if available and t
 | :-------- | :-----  | :--- | :---------- | :--------- | :------ | :--------- |
 | [AHK (pioneer)](https://courses.cs.washington.edu/courses/cse590q/03au/watermarking_vldbj.pdf) | Agrawal et al. | 2002 | - | Horizontal subset, Vertical subset, Bit-flipping (deterministic, randomised), Mix-and-match, Additive | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (int) |
 | [**LSJ (pioneer)**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2070&context=sis_research) | Li et al. | 2005 | - | Misdiagnosis fh, Bit-flipping, Horizontal subset, Superset attack, Invertibility, Collusion | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (int) |
-| [**Block**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=1562&context=sis_research) | Liu et al. | 2005 | - | Bit-flipping, Horizontal subset, _Vertical subset_, _Collusion_, _Additive_ | - | 
+| [**Block**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=1562&context=sis_research) | Liu et al. | 2005 | - | Bit-flipping, Horizontal subset, _Vertical subset_, _Collusion_, _Additive_ | - | - |
 
 <span style="font-size:0.5em;">_Bolded are the fingerprinting methods._</span>
 
