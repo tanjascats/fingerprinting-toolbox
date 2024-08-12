@@ -11,7 +11,7 @@ The list below outlines the methods and open-source solutions if available and t
 | [**LSJ (pioneer)**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2070&context=sis_research) | Li et al. | 2005 | - | Misdiagnosis fh, Bit-flipping, Horizontal subset, Superset attack, Invertibility, Collusion | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (int) |
 | [**Block**](https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=1562&context=sis_research) | Liu et al. | 2005 | - | Bit-flipping, Horizontal subset, _Vertical subset_, _Collusion_, _Additive_ | - | - |
 | [**Twice-embedding**](https://dl.acm.org/doi/pdf/10.1145/1141277.1141391) | Guo et al. | 2006 | - | Horizontal Subset, Mix-and-match, Bit-flipping | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (5000 rows, 1st int attr.) |
-| [**Watermill**](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=264e04de2fdc26f28c234df6f44d5fcb2ff0a3b1) | Lafaye et al. | 2008 | [Java source](http://watermill.sourceforge.net) | |
+| [**Watermill**](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=264e04de2fdc26f28c234df6f44d5fcb2ff0a3b1) | Lafaye et al. | 2008 | [Java source](http://watermill.sourceforge.net) | Random data alteration (Flipping), Data loss (Horizontal subset), Mix-and-match | | synthetic, [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (aspect, elevation) |
 | [**ThumbPrint**](https://www.mdpi.com/2079-9292/9/7/1093) | Al Solami et al. | 2020 | |
 | [**Corr-Preserving**]() | Sarcevic et al. | 2019 |
 | [**Corr-Posprocessing**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10644290/pdf/nihms-1802599.pdf)] | Ji et al. | 2021 | - | | |
@@ -28,6 +28,7 @@ Challenges (per method):
 - LSJ - marks only numerical attributes, PK dependent, attribute order-dependent
 - Block - not collusion resistant, PK dependent, attribute order-dependent
 - Twice-embedding - PK dependent
+- Watermill - marks only numerical attributes, PK dependent, all recipients have to share the same constraints
 
 Extensions (per method):
 - AHK
