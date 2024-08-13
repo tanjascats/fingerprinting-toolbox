@@ -14,7 +14,7 @@ The list below outlines the methods and open-source solutions if available and t
 | [**Watermill**](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=264e04de2fdc26f28c234df6f44d5fcb2ff0a3b1) | Lafaye et al. | 2008 | [Java source](http://watermill.sourceforge.net) | Random data alteration (Flipping), Data loss (Horizontal subset), Mix-and-match | Constraints (by design) | synthetic, [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (aspect, elevation) |
 | [**Corr-Preserving**](https://inria.hal.science/hal-03440847/document) | Sarcevic et al. | 2019 | [Python 3](https://github.com/tanjascats/nn-fingerprinting-scheme) | Horizontal subset, Vertical subset, Flipping attack | ML utility | [Breast Cancer](https://archive.ics.uci.edu/ml/datasets/breast+cancer), [Nursery](https://archive.ics.uci.edu/ml/datasets/nursery) |
 | [**ThumbPrint**](https://www.mdpi.com/2079-9292/9/7/1093) | Al Solami et al. | 2020 | - | _Collusion_, Horizontal Subset, Superset, Flipping, Mix-and-match | Histogram (single value) | [Rail ticket pricing](https://www.kaggle.com/datasets/thegurusteam/spanish-high-speed-rail-system-ticket-pricing) |
-| [**Corr-Posprocessing**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10644290/pdf/nihms-1802599.pdf)] | Ji et al. | 2021 | - | | |
+| [**Corr-Posprocessing**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10644290/pdf/nihms-1802599.pdf)] | Ji et al. | 2021 | - | Random bit-flipping, Horizontal subset, Superset, Correlation attacks (column-wise, row-wise) | Accuracy of data, Preservation of column-wise correlations, Preservation of row-wise correlations, Preservation of empirical covariance mtx | [Adult Census](https://archive.ics.uci.edu/ml/datasets/adult) (train) |
 | [**Probabilistic-FP**](https://arxiv.org/pdf/2001.09555) | Yilmaz et al. | 2021 |
 | [**Private-FP**](https://www.ndss-symposium.org/wp-content/uploads/2023/02/ndss2023_f693_paper.pdf) | Ji et al. | 2023 |
 | [**RAPG**](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8065765) | Ahmad et al. | 2017 |
@@ -31,7 +31,8 @@ Challenges (per method):
 - Block - not collusion resistant, PK dependent, attribute order-dependent
 - Twice-embedding - PK dependent
 - Watermill - marks only numerical attributes, PK dependent, all recipients have to share the same constraints
-
+- Thumbprint - not _really_ collusion resistant, marks only numerical attributes, unclear procedure for marking more than one attribute, PK dependent
+ 
 Extensions (per method):
 - AHK
     - varying the marking rates for attributes, user-specified (i.e. the attribute weights in marking)
@@ -42,3 +43,4 @@ Extensions (per method):
     - adapted BoSh codes for collusion ("c-secure with eps-error", i.e. it enables the capture of a member of a coalition of at most c members with probability at least 1-eps; i.e. eps is an error)
     - the possibility of adapting Guth Pfitzmann codes for collusion and flipping detection, from Guth & Pfitzmann "Error and collusion-secure fingerprinting for digital data"
     - tracing shortened and corrupted fingerprints from Safavi-Naini & Wang "Traitor tracing for shortened and corrupted fingerprints"
+- Corr-Postprocessing - use word embedding technique to encode categorical values
