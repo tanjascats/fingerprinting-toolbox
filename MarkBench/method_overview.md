@@ -13,10 +13,12 @@ The list below outlines the methods and open-source solutions if available and t
 | [**Twice-embedding**](https://dl.acm.org/doi/pdf/10.1145/1141277.1141391) | Guo et al. | 2006 | - | Horizontal Subset, Mix-and-match, Bit-flipping | Mean, Var | [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (5000 rows, 1st int attr.) |
 | [**Watermill**](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=264e04de2fdc26f28c234df6f44d5fcb2ff0a3b1) | Lafaye et al. | 2008 | [Java source](http://watermill.sourceforge.net) | Random data alteration (Flipping), Data loss (Horizontal subset), Mix-and-match | Constraints (by design) | synthetic, [Forest CoverType](kdd.ics.uci.edu/databases/covertype/covertype.html) (aspect, elevation) |
 | [**Corr-Preserving**](https://inria.hal.science/hal-03440847/document) | Sarcevic et al. | 2019 | [Python 3](https://github.com/tanjascats/nn-fingerprinting-scheme) | Horizontal subset, Vertical subset, Flipping attack | ML utility | [Breast Cancer](https://archive.ics.uci.edu/ml/datasets/breast+cancer), [Nursery](https://archive.ics.uci.edu/ml/datasets/nursery) |
-| [**ThumbPrint**](https://www.mdpi.com/2079-9292/9/7/1093) | Al Solami et al. | 2020 | _Collusion_, Horizontal Subset, Superset, Flipping, Mix-and-match | Histogram (single value) | [Rail ticket pricing](https://www.kaggle.com/datasets/thegurusteam/spanish-high-speed-rail-system-ticket-pricing) |
+| [**ThumbPrint**](https://www.mdpi.com/2079-9292/9/7/1093) | Al Solami et al. | 2020 | - | _Collusion_, Horizontal Subset, Superset, Flipping, Mix-and-match | Histogram (single value) | [Rail ticket pricing](https://www.kaggle.com/datasets/thegurusteam/spanish-high-speed-rail-system-ticket-pricing) |
 | [**Corr-Posprocessing**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10644290/pdf/nihms-1802599.pdf)] | Ji et al. | 2021 | - | | |
 | [**Probabilistic-FP**](https://arxiv.org/pdf/2001.09555) | Yilmaz et al. | 2021 |
 | [**Private-FP**](https://www.ndss-symposium.org/wp-content/uploads/2023/02/ndss2023_f693_paper.pdf) | Ji et al. | 2023 |
+| [**RAPG**](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8065765) | Ahmad et al. | 2017 |
+| [**Distorion Minimization**](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7155929) | Mohanpurkar & Joshi | 2015 |
 
 
 <span style="font-size:0.5em;">_Bolded are the fingerprinting methods._</span>\
